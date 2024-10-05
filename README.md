@@ -1,12 +1,18 @@
 #Social-networking-website-VietBlog-Full-Stack-project
-It is a printing website which is made using spring boot, Thymeleaf and servlet.
+Đây là dự án Mạng Xã Hội tên VietBlog, xây dựng bằng Spring Boot, Thymeleaf và các thư viện trực thuộc Java.
 
 #springboot-sample-app
 
-## Requirements
-For building and running the application you need:
+## Yêu cầu
 JDK 17
+Spring Boot 3.3.2
 
-## Running  the application locally
-
-There are serveral ways to run a Spring Boot application on local machine. One way is to excute the 'main' method in the 'com.VietBlog.VietBlogApplication.java
+# Chỗ này để note lại các thay đổi
+Bất kỳ thay đổi nào về POM, về Code, hãy ghi theo cấu trúc sau.
+### Tên file đã sửa + thao tác đã sửa
+```
+Code đã sửa
+```
+Thêm file mới vào thì ghi tên, ngày sửa, tên file, mô tả chức năng để làm gì.
+Ghi tiêu đề thì dùng "#", càng nhiều dấu thăng, tiêu đề càng nhỏ.
+Code thì để ở trong cặp ký tự "``` ```" (3 dấu `, nút nằm ở cuối cùng, tay trái hàng phím số)
