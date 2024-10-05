@@ -1,0 +1,168 @@
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Căn chỉnh tổng thể login-container */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 900px;
+    padding: 50px; /* Tạo khoảng cách để shadow đẹp hơn */
+    background-color: white;
+    border-radius: 15px; /* Tạo bo tròn góc */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Shadow lớn bao bọc container */
+}
+
+
+/* Khung đăng nhập bên phải */
+.login-box {
+    flex: 1;
+    background-color: white;
+    padding: 20px; /* Giảm padding để làm khung nhỏ lại */
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 230px; /* Giảm kích thước khung đăng nhập */
+}
+
+.brand h1 {
+    font-size: 40px; /* Phóng to chữ Facebook */
+    color: #0066cc; /* Màu xanh đậm */
+    font-weight: bold;
+    margin-right: 50px;
+    text-align: end;
+}
+
+/* Chữ nhỏ bên dưới */
+.brand p {
+    font-size: 16px; /* Giảm kích thước chữ nhỏ */
+    color: #555; /* Màu xám nhạt */
+    margin-top: 10px;
+    margin-right: 50px;
+    line-height: 1.5; /* Tăng khoảng cách giữa các dòng */
+    font-style: italic; /* Làm chữ nghiêng */
+    text-align: end;
+}
+
+/* Chữ Facebook bên trái */
+.brand {
+    flex: 1;
+}
+
+/*  */
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 22px;
+    color: #333;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    font-size: 14px;
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+.options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.chung {
+    display: flex;
+    gap: 10px;
+    flex-wrap: nowrap;
+}
+
+.input-half {
+    width: 50%; /* Mỗi phần chiếm 50% chiều rộng */
+    margin-bottom: 15px; /* Thêm khoảng cách giữa các khung nhập liệu */
+}
+
+.input-half label {
+    display: block;
+    /* margin-bottom: 5px; */
+    font-size: 14px;
+    color: #333;
+}
+
+.input-half input,
+.input-half select {
+    width: 100%; /* Input và select chiếm toàn bộ chiều rộng */
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+
+.options a {
+    font-size: 12px;
+    color: #1877F2;
+    text-decoration: none;
+}
+
+.options a:hover {
+    text-decoration: underline;
+}
+
+.btn {
+    background-color: #28a745;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #218838;
+}
+
+.signup {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.signup a {
+    color: #1877F2;
+    text-decoration: none;
+}
+
+.signup a:hover {
+    text-decoration: underline;
+}
