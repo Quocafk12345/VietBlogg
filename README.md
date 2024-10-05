@@ -4,8 +4,7 @@
 #springboot-sample-app
 
 ## Yêu cầu
-JDK 17
-Spring Boot 3.3.2
+JDK 17, Spring Boot 3.3.2
 
 # Chỗ này để note lại các thay đổi
 Bất kỳ thay đổi nào về POM, về Code, hãy ghi theo cấu trúc sau.
