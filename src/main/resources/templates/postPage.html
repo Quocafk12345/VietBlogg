@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>CKEditor Integration</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- CKEditor 5 CDN -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js"></script>
+
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .create-post-form {
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+        }
+
+        .post-tabs {
+            display: flex;
+            list-style: none;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eaeaea;
+            padding: 0;
+        }
+
+        .post-tabs li {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .post-tabs .active {
+            border-bottom: 2px solid #0079D3;
+            color: #0079D3;
+        }
+
+        .account-select {
+            border-radius: 25px;
+            border: 1px solid #eaeaea;
+            padding: 12px;
+            width: 30%;
+        }
+
+        .account-select select {
+            border-radius: 25px;
+            border: 1px solid #eaeaea;
+        }
+
+        .post-content input {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            border: 1px solid #eaeaea;
+            border-radius: 25px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .add-tags {
+            margin-bottom: 10px;
+            display: inline-block;
+            background-color: #F2F3F5;
+            padding: 8px 12px;
+            border-radius: 20px;
+            color: #333;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .post-content textarea {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #eaeaea;
+            border-radius: 8px;
+            height: 150px;
+            box-sizing: border-box;
+            resize: vertical;
+            outline: none;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .post-actions button {
+            background-color: #0079D3;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .post-actions button.save-draft {
+            background-color: #F2F3F5;
+            color: #333;
+        }
+
+        /* Tab content styling */
+        .tabcontent {
+            display: none;
+        }
+
+        /* File upload input styles */
+        .file-upload {
+            border: 2px dashed #ccc;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 8px;
+            color: #999;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="" class="create-post-form">
+        <div class="account-select">
+            <select name="" id="">
+                <option value="">
+                    <span id="selectedUser">u/New-Entertainer</span>
+                </option>
+            </select>
+        </div>
+
+        <u
+            <div class="dropdown-list" id="dropdownList">
+                <div onclick="selectUser('u/Entertainer01', 'https://via.placeholder.com/30')">
+                    <img src="https://via.placeholder.com/30" alt="Avatar" />
+                    <span>u/Entertainer01</span>
+                </div>
+                <div onclick="selectUser('u/Entertainer02', 'https://via.placeholder.com/30')">
+                    <img src="https://via.placeholder.com/30" alt="Avatar" />
+                    <span>u/Entertainer02</span>
+                </div>
+                <div onclick="selectUser('u/Entertainer03', 'https://via.placeholder.com/30')">
+                    <img src="https://via.placeholder.com/30" alt="Avatar" />
+                    <span>u/Entertainer03</span>
+                </div>
+            </div>i class="active tablinks" onclick="openTabs(event,'Post')">Text</li>
+            <li class="tablinks" onclick="openTabs(event,'ImageVideo')">Images & Video</li>
+            <li class="tablinks" onclick="openTabs(event,'Link')">Link</li>
+        </ul>
+
+        <!-- Text tab content -->
+        <div id="Post" class="tabcontent" style="display: block;">
+            <div class="post-content">
+                <input type="text" placeholder="Title*" maxlength="300" />
+            </div>
+            <div class="add-tags">Add tags</div>
+            <div class="post-content">
+                <div class="mb-3">
+                    <label for="" class="form-label"></label>
+                    <textarea class="form-control" name="content" id="editor" rows="3" placeholder="Body"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Image & Video tab content -->
+        <div id="ImageVideo" class="tabcontent">
+            <input type="file" id="fileInput" multiple style="display: none;" />
+            <div class="file-preview" id="filePreview"></div>
+            <div class="post-content">
+                <input type="text" placeholder="Title*" maxlength="300" />
+            </div>
+            <div class="add-tags">Add tags</div>
+            <div class="post-content">
+                <div class="file-upload" id="fileDropZone">
+                    Drag and Drop or upload media
+                </div>
+            </div>
+        </div>
+
+        <!-- Link tab content -->
+        <div id="Link" class="tabcontent">
+            <div class="post-content">
+                <input type="text" placeholder="Title*" maxlength="300" />
+            </div>
+            <div class="add-tags">Add tags</div>
+            <div class="post-content">
+                <input type="text" placeholder="URL" />
+            </div>
+        </div>
+
+        <!-- Post actions -->
+        <div class="post-actions">
+            <button type="button" class="save-draft">Save Draft</button>
+            <button type="submit">Post</button>
+        </div>
+    </form>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+
+    <!-- CKEditor Initialization -->
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#editor'))
+            .catch(error => {
+                console.error(error);
+            });
+
+        function openTabs(evt, tabsName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabsName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+    <script>
+        const dropZone = document.getElementById('fileDropZone');
+        const fileInput = document.getElementById('fileInput');
+        const filePreview = document.getElementById('filePreview');
+
+        // Highlight the drop area when an item is dragged over it
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        // Remove highlight when item is dragged away
+        dropZone.addEventListener('dragleave', (e) => {
+            dropZone.classList.remove('dragover');
+        });
+
+        // Handle file drop
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            handleFiles(files)
+        });
+
+        // Click event to trigger file input
+        dropZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Handle files when selected via input
+        fileInput.addEventListener('change', (e) => {
+            const files = e.target.files;
+            handleFiles(files);
+        });
+
+        // Function to handle files and preview
+        function handleFiles(files) {
+            filePreview.innerHTML = ''; // Clear the preview section
+            Array.from(files).forEach(file => {
+                const fileType = file.type;
+                const reader = new FileReader();
+
+                reader.onload = (e) => {
+                    if (fileType.startsWith('image/')) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        filePreview.appendChild(img);
+                    } else if (fileType.startsWith('video/')) {
+                        const video = document.createElement('video');
+                        video.src = e.target.result;
+                        video.controls = true;
+                        filePreview.appendChild(video);
+                    }
+                };
+
+                reader.readAsDataURL(file);
+            });
+        }
+    </script>
+</body>
+
+</html>
