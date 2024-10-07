@@ -27,6 +27,8 @@ public class UserService {
     public boolean isEmailExists(String email) {
         return userRepository.findByEmail(email).isPresent();
     }
-
+    public User findByDienThoai(String dienThoai) {
+        return userRepository.findByDienThoai(dienThoai).orElse(null);
+    }
 }
 

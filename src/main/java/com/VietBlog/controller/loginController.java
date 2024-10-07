@@ -17,17 +17,25 @@ public class loginController {
     private UserService userService;
 
     @PostMapping("/login")
-    public String loginUser(@RequestParam("email") String email,
+    public String loginUser(@RequestParam("identifier") String identifier,
                             @RequestParam("password") String password,
                             Model model) {
-        User user = userService.findByEmail(email); // Tìm người dùng theo email
-        if (user != null && user.getMatKhau().equals(password)) {
-            // Kiểm tra mật khẩu chính xác, chuyển hướng tới trang chủ
-            return "redirect:/home"; // Chuyển đến trang chủ nếu đăng nhập thành công
+        User user = null;
+
+        // Check if the identifier is an email or phone number
+        if (identifier.contains("@")) {
+            user = userService.findByEmail(identifier); // Search by email
         } else {
-            // Nếu sai email hoặc mật khẩu, hiển thị lỗi
-            model.addAttribute("error", "Email hoặc mật khẩu không chính xác");
-            return "login"; // Trả về trang login.html với thông báo lỗi
+            user = userService.findByDienThoai(identifier); // Search by phone number
+        }
+
+        if (user != null && user.getMatKhau().equals(password)) {
+            // If password is correct, redirect to the home page
+            return "redirect:/home";
+        } else {
+            // If login fails, show an error message
+            model.addAttribute("error", "Email/Số điện thoại hoặc mật khẩu không chính xác");
+            return "login"; // Return to login page with an error message
         }
     }
 
