@@ -40,23 +40,19 @@ public class CaiDatController {
 
 	@PostMapping("/CaiDat/capNhatHinhAnh")
 	public String capNhatHinhAnh(@RequestParam("hinhAnh") MultipartFile hinhAnh, @RequestParam("userId") Long userId,
-								 Model model) {
-		try {
-			if (!hinhAnh.isEmpty()) {
-				// Cập nhật thông tin người dùng với tên hình ảnh mới
-				User user = userService.findById(userId);
+								 Model model) throws IOException {
+        if (!hinhAnh.isEmpty()) {
+            // Cập nhật thông tin người dùng với tên hình ảnh mới
+            User user = userService.findById(userId);
 
-				// Lưu hình ảnh vào database
-				userService.luuHinhAnh(hinhAnh, user);
+            // Lưu hình ảnh vào database
+            userService.luuHinhAnh(hinhAnh, user);
 
-				model.addAttribute("message", "Cập nhật hình ảnh thành công!");
-			} else {
-				model.addAttribute("error", "Vui lòng chọn hình ảnh để tải lên.");
-			}
-		} catch (IOException e) {
-			model.addAttribute("error", "Có lỗi xảy ra khi tải lên hình ảnh.");
-		}
-		return "redirect:/CaiDat";
+            model.addAttribute("message", "Cập nhật hình ảnh thành công!");
+        } else {
+            model.addAttribute("error", "Vui lòng chọn hình ảnh để tải lên.");
+        }
+        return "redirect:/CaiDat";
 	}
 
 	@PostMapping("/CaiDat/capNhat")
@@ -116,7 +112,7 @@ public class CaiDatController {
 			java.sql.Date ngaySinhSql = java.sql.Date.valueOf(ngaySinh);
 			User user = userService.findById(userId);
 			user.setDienThoai(dienThoai);
-			user.setNgaySinh(ngaySinhSql);
+			user.setNgaySinh(ngaySinhSql.toLocalDate());
 			user.setGioiTinh(gioiTinh); // Cập nhật giới tính
 			userService.updateUser(user);
 

@@ -23,6 +23,10 @@ public class UserService {
         return userRepository.findByEmail(email).orElse(null);
     }
 
+    public User findByDienThoai(String dienThoai) {
+        return userRepository.findByDienThoai(dienThoai).orElse(null);
+    }
+
     public User saveUser(User user) {
         user.setNgayTao(LocalDate.now());
         return userRepository.save(user);
@@ -35,7 +39,7 @@ public class UserService {
     @Transactional
     public void updateUser(User user) {
         if (user.getId() != null) {
-            User existingUser = userRepository.findById(Long.valueOf(user.getId())).orElse(null);
+            User existingUser = userRepository.findById(user.getId()).orElse(null);
             if (existingUser != null) {
                 if (user.getTenNguoiDung() != null && !user.getTenNguoiDung().isEmpty()) {
                     existingUser.setTenNguoiDung(user.getTenNguoiDung());
@@ -58,11 +62,10 @@ public class UserService {
     public void luuHinhAnh(MultipartFile file, User user) {
         String tenHinhAnh = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         user.setHinhDaiDien(tenHinhAnh);
-
         userRepository.save(user);
     }
 
     public User findById(Long userId) {
-        return userRepository.findById(userId).orElse(null);
+        return userRepository.findById(Math.toIntExact(userId)).orElse(null);
     }
 }
