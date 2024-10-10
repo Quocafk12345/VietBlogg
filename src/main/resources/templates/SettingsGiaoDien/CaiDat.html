@@ -33,7 +33,7 @@
                     <div class="tab-pane fade active show" id="account-general">
                         <form th:action="@{/CaiDat/capNhatHinhAnh}" method="post"
                               enctype="multipart/form-data">
-                            <input type="hidden" th:value="${user.userId}" name="userId">
+                            <input type="hidden" th:value="${user.id}" name="userId">
                             <div class="card-body media align-items-center">
                                 <img id="anhDaiDien"
                                      th:src="@{'data:image/jpeg;base64,' + ${user.hinhDaiDien}}"
@@ -54,7 +54,7 @@
                         <hr class="border-light m-0">
                         <div class="card-body">
                             <form th:action="@{/CaiDat/capNhat}" method="post">
-                                <input type="hidden" th:value="${user.userId}" name="userId">
+                                <input type="hidden" th:value="${user.id}" name="userId">
                                 <div class="form-group">
                                     <label class="form-label">Tên người dùng</label> <input
                                         type="text" class="form-control mb-1"
@@ -104,7 +104,7 @@
                                 <textarea class="form-control" rows="5">gfgfnfnngmhjmjk,kl.jlklj.hjhmghnfngdhdgndghnfghyngfmhikịhlhọ.lhkl.kl.kl;kjl.kjl.k</textarea>
                             </div>
                             <form th:action="@{/CaiDat/capNhatThongTinCaNhan}" method="post">
-                                <input type="hidden" th:value="${user.userId}" name="userId">
+                                <input type="hidden" th:value="${user.id}" name="userId">
 
                                 <div class="form-group">
                                     <label class="form-label">Số điện thoại</label> <input

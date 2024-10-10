@@ -25,13 +25,13 @@ public class CaiDatController {
 	@GetMapping("/CaiDat")
 	public String hienThiCaiDat(Model model) {
 		try {
-			User user = userService.findByEmail("user1@example.com");
+			User user = userService.findById(1L);
 			if (user == null) {
 				model.addAttribute("errorMessage", "Không tìm thấy thông tin người dùng.");
 				return "error";
 			}
 			model.addAttribute("user", user);
-			return "CaiDat";
+			return "SettingsGiaoDien/CaiDat";
 		} catch (Exception e) {
 			model.addAttribute("errorMessage", "Có lỗi xảy ra khi xử lý yêu cầu.");
 			return "error";

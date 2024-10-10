@@ -19,7 +19,5 @@ public class LuotLike_BaiViet_ID implements Serializable {
 
     @Column(name = "Id_Bai_Viet")
     private Long idBaiViet;
-
-    // Constructors, getters và setters, equals và hashCode
 }
 
