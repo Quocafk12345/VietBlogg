@@ -1,100 +1,60 @@
 package com.VietBlog.entity;
 
-import java.util.Date;
-
-import org.springframework.format.annotation.DateTimeFormat;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Entity
-@NoArgsConstructor
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.List;
+
 @Data
-@AllArgsConstructor
+@Entity
 @Table(name = "Users")
-public class User {
+public class User implements Serializable {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
     @Id
+    @Column(name = "User_Id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Integer id;
 
-    private String tenDangNhap;
-    private String tenNguoiDung;
-    private String email;
-    private String matKhau;
-    private String dienThoai;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private java.sql.Date ngayTao;
-    private java.sql.Date ngaySinh;
-    private String vaiTro;
     @Column(name = "Gioi_Tinh")
-    private Boolean gioiTinh;
-    private String hinhDaiDien;
-    public Long getUserId() {
-        return userId;
-    }
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-    public String getTenDangNhap() {
-        return tenDangNhap;
-    }
-    public void setTenDangNhap(String tenDangNhap) {
-        this.tenDangNhap = tenDangNhap;
-    }
-    public String getTenNguoiDung() {
-        return tenNguoiDung;
-    }
-    public void setTenNguoiDung(String tenNguoiDung) {
-        this.tenNguoiDung = tenNguoiDung;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public String getMatKhau() {
-        return matKhau;
-    }
-    public void setMatKhau(String matKhau) {
-        this.matKhau = matKhau;
-    }
-    public String getDienThoai() {
-        return dienThoai;
-    }
-    public void setDienThoai(String dienThoai) {
-        this.dienThoai = dienThoai;
-    }
-    public java.sql.Date getNgayTao() {
-        return ngayTao;
-    }
-    public void setNgayTao(java.sql.Date ngayTao) {
-        this.ngayTao = ngayTao;
-    }
-    public java.sql.Date getNgaySinh() {
-        return ngaySinh;
-    }
-    public void setNgaySinh(java.sql.Date ngaySinh) {
-        this.ngaySinh = ngaySinh;
-    }
-    public String getVaiTro() {
-        return vaiTro;
-    }
-    public void setVaiTro(String vaiTro) {
-        this.vaiTro = vaiTro;
-    }
-    public Boolean getGioiTinh() {
-        return gioiTinh;
-    }
-    public void setGioiTinh(Boolean gioiTinh) {
-        this.gioiTinh = gioiTinh;
-    }
-    public String getHinhDaiDien() {
-        return hinhDaiDien;
-    }
-    public void setHinhDaiDien(String hinhDaiDien) {
-        this.hinhDaiDien = hinhDaiDien;
-    }
+    private boolean gioiTinh;
+
+    @NotBlank(message = "Hãy điền email")
+    @Column(name = "Email", nullable = false, length = 255)
+    private String email;
+
+    @Column(name = "Dien_Thoai", length = 15)
+    private String dienThoai;
+
+    @NotBlank(message = "Hãy điền mật khẩu")
+    @Column(name = "Mat_Khau", nullable = false, columnDefinition = "NVARCHAR(MAX)")
+    private String matKhau;
+
+    @NotBlank(message = "Hãy điền tên đăng nhập")
+    @Column(name = "Ten_Dang_Nhap", nullable = false, length = 255)
+    private String tenDangNhap;
+
+    @NotBlank(message = "Hãy điền tên người dùng")
+    @Column(name = "Ten_Nguoi_Dung", nullable = false, length = 255)
+    private String tenNguoiDung;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "Ngay_Tao", nullable = false)
+    private LocalDate ngayTao;
+
+    @Column(name = "Vai_Tro", nullable = false, length = 255)
+    private String vaiTro;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BaiViet> baiViet;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ThanhVien> thanhVien;
 }

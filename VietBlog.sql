@@ -22,15 +22,6 @@ CREATE TABLE Users
 );
 GO
 
--- Tạo bảng Nhom trước
-CREATE TABLE Nhom
-(
-    Id_Nhom INT IDENTITY(1, 1) NOT NULL,
-    Ten NVARCHAR(255) NOT NULL,
-    Gioi_Thieu NVARCHAR(MAX) NOT NULL,
-    PRIMARY KEY (Id_Nhom)
-);
-GO
 
 -- Bài viết của người dùng
 CREATE TABLE Bai_Viet
@@ -62,7 +53,7 @@ CREATE TABLE Thong_Bao
 );
 GO
 
--- Bình luận và phản hồi bình luận  
+-- Bình luận và phản hồi bình luận
 CREATE TABLE Binh_Luan
 (
     Id_Binh_Luan INT IDENTITY(1,1) NOT NULL,
@@ -79,7 +70,14 @@ CREATE TABLE Binh_Luan
 );
 GO
 
-
+CREATE TABLE Nhom
+(
+    Id_Nhom INT IDENTITY(1, 1) NOT NULL,
+    Ten NVARCHAR(255) NOT NULL,
+    Gioi_Thieu NVARCHAR(MAX) NOT NULL,
+    PRIMARY KEY (Id_Nhom)
+);
+GO
 
 CREATE TABLE Thanh_Vien
 (
@@ -109,7 +107,6 @@ CREATE TABLE Luot_Follow
     PRIMARY KEY (User_Id, Follower_Id),
     FOREIGN KEY (User_Id) REFERENCES Users(User_Id),
     FOREIGN KEY (Follower_Id) REFERENCES Users(User_Id)
-
 );
 GO
 
@@ -133,18 +130,12 @@ CREATE TABLE Luot_Like_Binh_Luan
 );
 GO
 
--- Thêm dữ liệu mẫu cho bảng Users (có thêm Ngay_Sinh)
-INSERT INTO Users (Gioi_Tinh, Email, Dien_Thoai, Mat_Khau, Ten_Dang_Nhap, Ten_Nguoi_Dung, Ngay_Tao, Vai_Tro, Ngay_Sinh) VALUES
-(1, 'admin@vietblog.com', '0123456789', 'admin123', 'admin', 'Admin VietBlog', '2024-10-03', 'Admin', '2002-08-10'), -- Thêm ngày sinh cho admin
-(0, 'user1@example.com', '0987654321', 'user123', 'user1', N'Nguyễn Văn A', '2024-10-03', 'User', '1995-04-22'), -- Thêm ngày sinh cho user1
-(1, 'user2@example.com', '0976543210', 'user456', 'user2', N'Trần Thị B', '2024-10-02', 'User', '1998-12-03'), -- Thêm ngày sinh cho user2
-(0, 'user3@example.com', '0965432109', 'user789', 'user3', N'Phạm Văn C', '2024-10-01', 'User', '2001-06-18'); -- Thêm ngày sinh cho user3
-GO
-
--- Thêm dữ liệu mẫu cho bảng Nhom
-INSERT INTO Nhom (Ten, Gioi_Thieu) VALUES
-(N'Nhóm Công nghệ', N'Nhóm thảo luận về công nghệ'),
-(N'Nhóm Du lịch', N'Nhóm chia sẻ kinh nghiệm du lịch');
+-- Thêm dữ liệu mẫu cho bảng Users
+INSERT INTO Users (Gioi_Tinh, Email, Dien_Thoai, Mat_Khau, Ten_Dang_Nhap, Ten_Nguoi_Dung, Ngay_Tao, Vai_Tro) VALUES
+(1, 'admin@vietblog.com', '0123456789', 'admin123', 'admin', 'Admin VietBlog', '2024-10-03', 'Admin'),
+(0, 'user1@example.com', '0987654321', 'user123', 'user1', N'Nguyễn Văn A', '2024-10-03', 'User'),
+(1, 'user2@example.com', '0976543210', 'user456', 'user2', N'Trần Thị B', '2024-10-02', 'User'),
+(0, 'user3@example.com', '0965432109', 'user789', 'user3', N'Phạm Văn C', '2024-10-01', 'User');
 GO
 
 -- Thêm dữ liệu mẫu cho bảng Bai_Viet
@@ -159,13 +150,22 @@ INSERT INTO Thong_Bao (Noi_Dung, Duong_Dan, User_Id) VALUES
 (N'Chào mừng bạn đến với VietBlog!', '/trang-chu', 2),
 (N'Bạn có một thông báo mới!', '/thong-bao', 3);
 GO
+
 -- Thêm dữ liệu mẫu cho bảng Binh_Luan
 INSERT INTO Binh_Luan (Noi_Dung, Id_BL_Cha, Ngay_Tao, Id_Bai_Viet, User_Id, Level_Binh_Luan) VALUES
-(N'Bình luận 2', NULL, '2024-10-02 15:00:00', 2, 1, 1); 
+(N'Bình luận 1', NULL, '2024-10-03 11:00:00', 1, 2, 1), -- Chèn bình luận gốc trước
+(N'Bình luận 2', NULL, '2024-10-02 15:00:00', 2, 1, 1); -- Chèn bình luận gốc trước
+GO
 
 -- Sau đó mới chèn phản hồi
 INSERT INTO Binh_Luan (Noi_Dung, Id_BL_Cha, Ngay_Tao, Id_Bai_Viet, User_Id, Level_Binh_Luan) VALUES
-    (N'Phản hồi cho bình luận 1', 1, '2024-10-03 11:30:00', 1, 3, 2);
+(N'Phản hồi cho bình luận 1', 1, '2024-10-03 11:30:00', 1, 3, 2);
+GO
+
+-- Thêm dữ liệu mẫu cho bảng Nhom
+INSERT INTO Nhom (Ten, Gioi_Thieu) VALUES
+(N'Nhóm Công nghệ', N'Nhóm thảo luận về công nghệ'),
+(N'Nhóm Du lịch', N'Nhóm chia sẻ kinh nghiệm du lịch');
 GO
 
 -- Thêm dữ liệu mẫu cho bảng Thanh_Vien
@@ -198,23 +198,3 @@ INSERT INTO Luot_Like_Binh_Luan (User_Id, Id_Binh_Luan) VALUES
 (1, 1),
 (2, 2);
 GO
-
--- Cập nhật thêm thuộc tính Ngày Sinh cho bảng User dành cho các bạn đã chạy sql khi không thích xoá tạo lại db
-ALTER TABLE Users
-    ADD Ngay_Sinh DATE;
-
-UPDATE Users
-SET Ngay_Sinh = '2000-01-15'
-WHERE User_Id = 1;
-
-UPDATE Users
-SET Ngay_Sinh = '1998-05-20'
-WHERE User_Id = 2;
-
-UPDATE Users
-SET Ngay_Sinh = '1999-11-10'
-WHERE User_Id = 3;
-
-UPDATE Users
-SET Ngay_Sinh = '2001-07-05'
-WHERE User_Id = 4;
