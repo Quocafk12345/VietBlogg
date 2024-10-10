@@ -40,7 +40,7 @@ public class CaiDatController {
 
 	@PostMapping("/CaiDat/capNhatHinhAnh")
 	public String capNhatHinhAnh(@RequestParam("hinhAnh") MultipartFile hinhAnh, @RequestParam("userId") Long userId,
-			Model model) {
+								 Model model) {
 		try {
 			if (!hinhAnh.isEmpty()) {
 				// Cập nhật thông tin người dùng với tên hình ảnh mới
@@ -72,8 +72,8 @@ public class CaiDatController {
 
 	@PostMapping("/CaiDat/thayDoiMatKhau")
 	public String thayDoiMatKhau(@ModelAttribute User user, @RequestParam("matKhauHienTai") String matKhauHienTai,
-			@RequestParam("matKhauMoi") String matKhauMoi, @RequestParam("xacNhanMatKhauMoi") String xacNhanMatKhauMoi,
-			Model model) {
+								 @RequestParam("matKhauMoi") String matKhauMoi, @RequestParam("xacNhanMatKhauMoi") String xacNhanMatKhauMoi,
+								 Model model) {
 		try {
 			// Lấy thông tin người dùng từ session (hoặc từ database)
 			User existingUser = userService.findByEmail("user1@example.com"); // Thay bằng cách lấy từ session
@@ -109,9 +109,9 @@ public class CaiDatController {
 
 	@PostMapping("/CaiDat/capNhatThongTinCaNhan")
 	public String capNhatThongTinCaNhan(@RequestParam("userId") Long userId,
-			@RequestParam("dienThoai") String dienThoai, @RequestParam("ngaySinh") String ngaySinh,
-			@RequestParam(value = "gioiTinh", required = false) Boolean gioiTinh, // Thêm tham số gioiTinh
-			Model model) {
+										@RequestParam("dienThoai") String dienThoai, @RequestParam("ngaySinh") String ngaySinh,
+										@RequestParam(value = "gioiTinh", required = false) Boolean gioiTinh, // Thêm tham số gioiTinh
+										Model model) {
 		try {
 			java.sql.Date ngaySinhSql = java.sql.Date.valueOf(ngaySinh);
 			User user = userService.findById(userId);
