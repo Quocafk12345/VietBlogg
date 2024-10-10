@@ -2,7 +2,6 @@ package com.VietBlog.controller;
 
 import com.VietBlog.entity.BaiViet;
 import com.VietBlog.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +17,10 @@ public class BaiVietController {
     LuuBaiVietRepository luuBaiVietRepository;
     UserRepository userRepository;
 
+    /*
+     * lấy tất cả bài đăng
+     *
+     * */
     @GetMapping()
     public ResponseEntity<List<BaiViet>> findAll() {
         return ResponseEntity.ok(baiVietRepository.findAll());

@@ -52,6 +52,13 @@ public class User implements Serializable {
     @Column(name = "Vai_Tro", nullable = false, length = 255)
     private String vaiTro;
 
+    @Column(name = "Hinh_Dai_Dien")
+    private String hinhDaiDien;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "Ngay_Sinh", nullable = false)
+    private LocalDate ngaySinh;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BaiViet> baiViet;
 

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Data
@@ -36,7 +36,7 @@ public class BaiViet implements Serializable {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "Ngay_Tao", nullable = false)
-    private LocalDateTime ngayTao;
+    private Timestamp ngayTao;
 
     @Column(name = "Trang_Thai", length = 255, nullable = false)
     private String trangThai;

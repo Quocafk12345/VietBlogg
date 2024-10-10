@@ -3,17 +3,15 @@ package com.VietBlog.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.VietBlog.entity.User;
 import com.VietBlog.repository.UserRepository;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Service
 public class UserService {
@@ -26,7 +24,7 @@ public class UserService {
     }
 
     public User saveUser(User user) {
-        user.setNgayTao(java.sql.Date.valueOf(LocalDate.now()));
+        user.setNgayTao(LocalDate.now());
         return userRepository.save(user);
     }
 
@@ -36,8 +34,8 @@ public class UserService {
 
     @Transactional
     public void updateUser(User user) {
-        if (user.getUserId() != null) {
-            User existingUser = userRepository.findById(user.getUserId()).orElse(null);
+        if (user.getId() != null) {
+            User existingUser = userRepository.findById(Long.valueOf(user.getId())).orElse(null);
             if (existingUser != null) {
                 if (user.getTenNguoiDung() != null && !user.getTenNguoiDung().isEmpty()) {
                     existingUser.setTenNguoiDung(user.getTenNguoiDung());
@@ -57,10 +55,10 @@ public class UserService {
         }
     }
 
-    public void luuHinhAnh(MultipartFile file, User user) throws IOException {
-        byte[] hinhAnhBytes = file.getBytes();
-        String base64Image = java.util.Base64.getEncoder().encodeToString(hinhAnhBytes);
-        user.setHinhDaiDien(base64Image);
+    public void luuHinhAnh(MultipartFile file, User user) {
+        String tenHinhAnh = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+        user.setHinhDaiDien(tenHinhAnh);
+
         userRepository.save(user);
     }
 
