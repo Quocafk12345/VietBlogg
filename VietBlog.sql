@@ -75,6 +75,7 @@ CREATE TABLE Nhom
     Id_Nhom INT IDENTITY(1, 1) NOT NULL,
     Ten NVARCHAR(255) NOT NULL,
     Gioi_Thieu NVARCHAR(MAX) NOT NULL,
+    Hinh_Dai_Dien NVARCHAR(MAX),
     PRIMARY KEY (Id_Nhom)
 );
 GO
