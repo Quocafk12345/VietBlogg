@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BinhLuanRepository extends JpaRepository<BinhLuan, Integer> {
-
+    Integer countBinhLuanByBaiVietId(Integer idBaiViet);
 }

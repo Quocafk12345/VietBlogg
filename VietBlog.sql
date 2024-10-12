@@ -28,7 +28,7 @@ CREATE TABLE Bai_Viet
 (
     Tieu_De NVARCHAR(MAX) NOT NULL,
     Thumbnail NVARCHAR(MAX),
-    Noi_Dung NVARCHAR(MAX) NOT NULL,
+    Noi_Dung NVARCHAR(MAX),
     Id_Bai_Viet INT IDENTITY(1, 1) NOT NULL,
     Ngay_Tao DATETIME NOT NULL,
     Id_Nhom INT,
@@ -199,3 +199,4 @@ INSERT INTO Luot_Like_Binh_Luan (User_Id, Id_Binh_Luan) VALUES
 (1, 1),
 (2, 2);
 GO
+

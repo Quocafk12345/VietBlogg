@@ -1,17 +1,21 @@
 package com.VietBlog.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Nationalized;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "Nhom")
 public class Nhom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +34,11 @@ public class Nhom {
     @Column(name = "Gioi_Thieu", nullable = false)
     private String gioiThieu;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "nhom")
     private List<ThanhVien> thanhVien;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "nhom", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BaiViet> baiViet;
 }

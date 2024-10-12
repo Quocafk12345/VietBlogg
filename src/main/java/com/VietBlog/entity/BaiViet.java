@@ -3,7 +3,9 @@ package com.VietBlog.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -11,6 +13,8 @@ import java.util.List;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "Bai_Viet")
 public class BaiViet implements Serializable {
     /**
@@ -48,6 +52,11 @@ public class BaiViet implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "baiViet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BinhLuan> binhLuan;
+
+    // Khóa ngoại cho bảng Nhom
+    @ManyToOne
+    @JoinColumn(name = "Id_Nhom")  // Tên cột tham chiếu theo bảng SQL Server
+    private Nhom nhom; // Tên class tương ứng với bảng Nhom
 
     @JsonIgnore
     @OneToMany(mappedBy = "baiViet", cascade = CascadeType.ALL, orphanRemoval = true)

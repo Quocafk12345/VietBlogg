@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LuotLike_BaiViet_Repository extends JpaRepository<LuotLike_BaiViet, LuotLike_BaiViet_ID> {
-
+    Integer countLuotLike_BaiVietByBaiVietId(Integer idBaiViet);
 }

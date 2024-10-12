@@ -1,12 +1,16 @@
 package com.VietBlog.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "Luu_Bai_Viet")
 public class LuuBaiViet implements Serializable {
 
