@@ -1,9 +1,7 @@
 package com.VietBlog.service;
 
 
-import java.time.LocalDate;
 import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.VietBlog.entity.User;
@@ -15,10 +13,12 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+//    private BaiVietRepository baiVietRepository;
+    
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null); // Trả về null nếu không tìm thấy
     }
-
+    
     public User saveUser(User user) {
         user.setNgayTao(new Date()); // Gán ngày tạo là ngày hiện tại
         return userRepository.save(user);
@@ -30,5 +30,11 @@ public class UserService {
     public User findByDienThoai(String dienThoai) {
         return userRepository.findByDienThoai(dienThoai).orElse(null);
     }
+
+
+    public User findById(Long userId) {
+        return userRepository.findById(userId).orElse(null);
+    }
+    
 }
 
