@@ -1,19 +1,18 @@
 package com.VietBlog.entity;
 
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.util.Date;
-import java.util.List;
 
 @Entity
-@Table(name = "Users")
-@Data
 @NoArgsConstructor
+@Data
 @AllArgsConstructor
+@Table(name = "Users")
 public class User {
 
     @Id
@@ -25,18 +24,10 @@ public class User {
     private String email;
     private String matKhau;
     private String dienThoai;
-    private String hinhDaiDien;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd") // Định dạng ngày theo chuẩn từ form
     private Date ngayTao;
     private String vaiTro;
     private Boolean gioiTinh;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<BaiViet> baiViets;
-
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//    private List<ThongBao> thongBaos;
-//
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//    private List<BinhLuan> binhLuans;
+    // Constructors, getters, and setters
 }

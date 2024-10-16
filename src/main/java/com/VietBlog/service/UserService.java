@@ -30,9 +30,5 @@ public class UserService {
     public User findByDienThoai(String dienThoai) {
         return userRepository.findByDienThoai(dienThoai).orElse(null);
     }
-
-    public User findById(Long userId) {
-        return userRepository.findById(userId).orElse(null);
-    }
 }
 
