@@ -17,18 +17,23 @@ import java.util.List;
 @CrossOrigin("*")
 @RequestMapping("/api/bai-viet")
 public class BaiVietController {
+
+    private final BaiVietRepository baiVietRepository;
+    private final BinhLuanRepository binhLuanRepository;
+    private final LuotLike_BaiViet_Repository luotLikeRepository;
+    private final LuuBaiVietRepository luuBaiVietRepository;
+    private final UserRepository userRepository;
+
     @Autowired
-    BaiVietRepository baiVietRepository;
-    @Autowired
-    BinhLuanRepository binhLuanRepository;
-    @Autowired
-    LuotLike_BaiViet_Repository luotLikeRepository;
-    @Autowired
-    LuuBaiVietRepository luuBaiVietRepository;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    ThanhVienRepository thanhVienRepository;
+    public BaiVietController(BaiVietRepository baiVietRepository, BinhLuanRepository binhLuanRepository,
+                             LuotLike_BaiViet_Repository luotLikeRepository, LuuBaiVietRepository luuBaiVietRepository,
+                             UserRepository userRepository) {
+        this.baiVietRepository = baiVietRepository;
+        this.binhLuanRepository = binhLuanRepository;
+        this.luotLikeRepository = luotLikeRepository;
+        this.luuBaiVietRepository = luuBaiVietRepository;
+        this.userRepository = userRepository;
+    }
 
     /**
      * Phương thức lấy tất cả bài đăng
@@ -113,7 +118,6 @@ public class BaiVietController {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
-
         }
     }
 
@@ -123,11 +127,11 @@ public class BaiVietController {
      *
      */
     @GetMapping("/{id}/luot-like")
-    public ResponseEntity<Integer> countLuotLike(@PathVariable Integer id) {
+    public ResponseEntity<Integer> demLuotThich(@PathVariable Integer id) {
         Integer luotLike = luotLikeRepository.countLuotLike_BaiVietByBaiVietId(id);
         return ResponseEntity.ok(luotLike);
     }
-
+ 
     /**
      * Phương thức đếm số lượt bình luận của một bài viết
      * @param id: Id của bài viết
