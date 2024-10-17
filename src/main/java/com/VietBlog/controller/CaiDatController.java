@@ -23,14 +23,20 @@ public class CaiDatController {
 	private UserService userService;
 
 	@GetMapping("/CaiDat")
-	public String hienThiCaiDat(Model model) {
+	public String hienThiCaiDat(Model model, HttpServletRequest request) {
 		try {
-			User user = userService.findByEmail("user1@example.com");
+			User user = userService.findByEmail("user1@example.com"); // Thay bằng cách lấy từ session
 			if (user == null) {
 				model.addAttribute("errorMessage", "Không tìm thấy thông tin người dùng.");
 				return "error";
 			}
+
+			// Thêm thông tin giao diện vào model
 			model.addAttribute("user", user);
+			model.addAttribute("mauNen", user.getMauNen());
+			model.addAttribute("fontChu", user.getFontChu());
+			model.addAttribute("coChu", user.getCoChu());
+
 			return "CaiDat";
 		} catch (Exception e) {
 			model.addAttribute("errorMessage", "Có lỗi xảy ra khi xử lý yêu cầu.");
@@ -124,6 +130,19 @@ public class CaiDatController {
 		} catch (Exception e) {
 			model.addAttribute("error", "Có lỗi xảy ra khi cập nhật thông tin cá nhân.");
 		}
+		return "redirect:/CaiDat";
+	}
+
+	@PostMapping("/CaiDat/luuGiaoDien")
+	public String luuGiaoDien(@RequestParam("userId") Long userId, @RequestParam("mauNen") String mauNen,
+							  @RequestParam("fontChu") String fontChu, @RequestParam("coChu") String coChu) {
+
+		User user = userService.findById(userId);
+		user.setMauNen(mauNen);
+		user.setFontChu(fontChu);
+		user.setCoChu(coChu);
+		userService.updateUser(user);
+
 		return "redirect:/CaiDat";
 	}
 }

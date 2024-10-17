@@ -31,70 +31,10 @@ public class User {
     @Column(name = "Gioi_Tinh")
     private Boolean gioiTinh;
     private String hinhDaiDien;
-    public Long getUserId() {
-        return userId;
-    }
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-    public String getTenDangNhap() {
-        return tenDangNhap;
-    }
-    public void setTenDangNhap(String tenDangNhap) {
-        this.tenDangNhap = tenDangNhap;
-    }
-    public String getTenNguoiDung() {
-        return tenNguoiDung;
-    }
-    public void setTenNguoiDung(String tenNguoiDung) {
-        this.tenNguoiDung = tenNguoiDung;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public String getMatKhau() {
-        return matKhau;
-    }
-    public void setMatKhau(String matKhau) {
-        this.matKhau = matKhau;
-    }
-    public String getDienThoai() {
-        return dienThoai;
-    }
-    public void setDienThoai(String dienThoai) {
-        this.dienThoai = dienThoai;
-    }
-    public java.sql.Date getNgayTao() {
-        return ngayTao;
-    }
-    public void setNgayTao(java.sql.Date ngayTao) {
-        this.ngayTao = ngayTao;
-    }
-    public java.sql.Date getNgaySinh() {
-        return ngaySinh;
-    }
-    public void setNgaySinh(java.sql.Date ngaySinh) {
-        this.ngaySinh = ngaySinh;
-    }
-    public String getVaiTro() {
-        return vaiTro;
-    }
-    public void setVaiTro(String vaiTro) {
-        this.vaiTro = vaiTro;
-    }
-    public Boolean getGioiTinh() {
-        return gioiTinh;
-    }
-    public void setGioiTinh(Boolean gioiTinh) {
-        this.gioiTinh = gioiTinh;
-    }
-    public String getHinhDaiDien() {
-        return hinhDaiDien;
-    }
-    public void setHinhDaiDien(String hinhDaiDien) {
-        this.hinhDaiDien = hinhDaiDien;
-    }
+    @Column(name = "Mau_Nen")
+    private String mauNen;
+    @Column(name = "Font_Chu")
+    private String fontChu;
+    @Column(name = "Co_Chu")
+    private String coChu;
 }

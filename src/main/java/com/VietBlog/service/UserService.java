@@ -53,6 +53,15 @@ public class UserService {
                 if (user.getMatKhau() != null && !user.getMatKhau().isEmpty()) {
                     existingUser.setMatKhau(user.getMatKhau());
                 }
+                if (user.getMauNen() != null) {
+                    existingUser.setMauNen(user.getMauNen());
+                }
+                if (user.getFontChu() != null) {
+                    existingUser.setFontChu(user.getFontChu());
+                }
+                if (user.getCoChu() != null) {
+                    existingUser.setCoChu(user.getCoChu());
+                }
             }
         }
     }
@@ -67,4 +76,6 @@ public class UserService {
     public User findById(Long userId) {
         return userRepository.findById(userId).orElse(null);
     }
+
+
 }
