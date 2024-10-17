@@ -212,6 +212,7 @@ INSERT INTO Luot_Like_Binh_Luan (User_Id, Id_Binh_Luan) VALUES
 (2, 2);
 GO
 
+
 -- Cập nhật các thuộc tính Mau_Nen, Font_Chu, Co_Chu cho bảng Users
 ALTER TABLE Users ADD Mau_Nen VARCHAR(255);
 ALTER TABLE Users ADD Font_Chu VARCHAR(255);
