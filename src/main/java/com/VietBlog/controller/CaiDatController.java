@@ -136,7 +136,6 @@ public class CaiDatController {
 	@PostMapping("/CaiDat/luuGiaoDien")
 	public String luuGiaoDien(@RequestParam("userId") Long userId, @RequestParam("mauNen") String mauNen,
 							  @RequestParam("fontChu") String fontChu, @RequestParam("coChu") String coChu) {
-
 		User user = userService.findById(userId);
 		user.setMauNen(mauNen);
 		user.setFontChu(fontChu);
