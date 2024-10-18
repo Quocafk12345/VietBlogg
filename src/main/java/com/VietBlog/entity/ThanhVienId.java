@@ -6,18 +6,20 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Getter
 @Setter
 @Embeddable
 public class ThanhVienId implements Serializable {
+    @Serial
     private static final long serialVersionUID = 8103918728952252262L;
     @NotNull
     @Column(name = "Id_Nhom", nullable = false)
-    private Integer idNhom;
+    private Long idNhom;
 
     @NotNull
     @Column(name = "User_Id", nullable = false)
-    private Integer userId;
+    private Long userId;
 }

@@ -2,15 +2,13 @@ package com.VietBlog.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 @Entity
 @Table(name = "Luot_Like_Binh_Luan")
 public class LuotLike_BinhLuan {
 	@EmbeddedId
-	private LuotLikeBinhLuanId id;
+	private LuotLike_BinhLuan_ID id;
 
 	@MapsId("userId")
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)

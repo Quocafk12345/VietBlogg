@@ -21,8 +21,9 @@ public class LuotFollow implements Serializable {
     @JoinColumn(name = "User_Id", nullable = false)
     private User user;
 
-    @MapsId("followerId")
+    @MapsId
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "Follower_Id", nullable = false)
-    private User follower;
+    @JoinColumn(name = "User_Follow_Id", nullable = false)
+    private User userFollow;
+
 }

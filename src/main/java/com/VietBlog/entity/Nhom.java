@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Nationalized;
 
+import java.time.Instant;
 import java.util.List;
 
 @Data
@@ -20,7 +21,7 @@ public class Nhom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id_Nhom", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Size(max = 255)
     @NotNull
@@ -41,4 +42,14 @@ public class Nhom {
     @JsonIgnore
     @OneToMany(mappedBy = "nhom", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BaiViet> baiViet;
+
+	@Nationalized
+	@Lob
+	@Column(name = "Hinh_Dai_Dien")
+	private String hinhDaiDien;
+
+	@NotNull
+	@Column(name = "Ngay_Tao", nullable = false)
+	private Instant ngayTao;
+
 }

@@ -6,16 +6,14 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
-import java.time.Instant;
-
 @Getter
 @Setter
 @Entity
-@Table(name = "Thong_Bao")
-public class ThongBao {
+@Table(name = "DS_Luat_Nhom")
+public class DS_LuatNhom {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "Id_Thong_Bao", nullable = false)
+	@Column(name = "Id_Luat", nullable = false)
 	private Long id;
 
 	@NotNull
@@ -24,22 +22,15 @@ public class ThongBao {
 	@Column(name = "Noi_Dung", nullable = false)
 	private String noiDung;
 
+	@NotNull
 	@Nationalized
 	@Lob
-	@Column(name = "Duong_Dan")
-	private String duongDan;
+	@Column(name = "Ten", nullable = false)
+	private String ten;
 
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "User_Id", nullable = false)
-	private User user;
-
-	@NotNull
-	@Column(name = "Da_Doc", nullable = false)
-	private Boolean daDoc = false;
-
-	@NotNull
-	@Column(name = "Ngay_Tao", nullable = false)
-	private Instant ngayTao;
+	@JoinColumn(name = "Id_Nhom", nullable = false)
+	private Nhom idNhom;
 
 }

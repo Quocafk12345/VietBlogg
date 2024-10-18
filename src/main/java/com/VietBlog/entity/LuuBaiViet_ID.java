@@ -4,8 +4,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.hibernate.Hibernate;
 
+import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Embeddable
 @NoArgsConstructor
@@ -15,13 +18,26 @@ public class LuuBaiViet_ID implements Serializable {
     /**
      *
      */
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Column(name = "User_Id")
-    private Integer userId;
+    private Long userId;
 
     @Column(name = "Id_Bai_Viet")
-    private Integer idBaiViet;
+    private Long idBaiViet;
 
-    // Constructors, getters và setters, equals và hashCode
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LuuBaiViet_ID entity = (LuuBaiViet_ID) o;
+        return Objects.equals(this.idBaiViet, entity.idBaiViet) &&
+                Objects.equals(this.userId, entity.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idBaiViet, userId);
+    }
 }

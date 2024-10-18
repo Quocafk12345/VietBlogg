@@ -18,7 +18,7 @@ public class BinhLuan implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id_Binh_Luan")
-    private Integer id;
+    private Long id;
 
     /**
      * Đây là cột để xếp thứ tự cho bình luận.
@@ -42,18 +42,19 @@ public class BinhLuan implements Serializable {
      *   <li>KHÁC: ID của bình luận được phản hồi</li>
      * </ul>
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Id_BL_Cha")
     private BinhLuan binhLuanCha;
 
     @Column(name = "Ngay_Tao", nullable = false)
     private LocalDate ngayTao;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Id_Bai_Viet", nullable = false)
     private BaiViet baiViet;
 
     @ManyToOne
     @JoinColumn(name = "User_Id", nullable = false)
     private User user;
+
 }

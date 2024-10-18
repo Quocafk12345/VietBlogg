@@ -9,9 +9,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Nationalized;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -22,19 +25,17 @@ public class BaiViet implements Serializable {
     /**
      *
      */
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name = "Id_Bai_Viet")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @NotBlank(message = "Hãy viết tiêu đề cho bài")
     @Column(name = "Tieu_De", nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String tieuDe;
-
-    @Column(name = "Thumbnail", columnDefinition = "NVARCHAR(MAX)")
-    private String thumbnail;
 
     @NotNull
     @Nationalized
@@ -47,7 +48,7 @@ public class BaiViet implements Serializable {
     @Column(name = "Ngay_Tao", nullable = false)
     private Timestamp ngayTao;
 
-    @Column(name = "Trang_Thai", length = 255, nullable = false)
+    @Column(name = "Trang_Thai", nullable = false)
     private String trangThai;
 
     @ManyToOne
@@ -70,4 +71,13 @@ public class BaiViet implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "baiViet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LuotLike_BaiViet> luotLikeBaiViet;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Id_Bai_Viet_Chia_Se")
+    private BaiViet baiVietChiaSe;
+
+    @OneToMany(mappedBy = "idBaiViet", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<DaPhuongTien> daPhuongTien = new LinkedHashSet<>();
+
+
 }
