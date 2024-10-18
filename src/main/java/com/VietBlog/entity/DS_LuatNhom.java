@@ -31,6 +31,6 @@ public class DS_LuatNhom {
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "Id_Nhom", nullable = false)
-	private Nhom idNhom;
+	private Nhom nhom;
 
 }

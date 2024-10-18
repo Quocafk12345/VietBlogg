@@ -19,7 +19,7 @@ public class DaPhuongTien {
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "Id_Bai_Viet", nullable = false)
-	private BaiViet idBaiViet;
+	private BaiViet baiViet;
 
 	@NotNull
 	@Nationalized
