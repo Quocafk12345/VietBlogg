@@ -3,9 +3,11 @@ package com.VietBlog.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Nationalized;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -34,6 +36,9 @@ public class BaiViet implements Serializable {
     @Column(name = "Thumbnail", columnDefinition = "NVARCHAR(MAX)")
     private String thumbnail;
 
+    @NotNull
+    @Nationalized
+    @Lob
     @NotBlank(message = "Hãy viết nội dung cho bài")
     @Column(name = "Noi_Dung", nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String noiDung;

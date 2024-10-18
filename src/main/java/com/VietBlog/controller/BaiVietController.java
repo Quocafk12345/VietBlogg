@@ -6,6 +6,7 @@ import com.VietBlog.entity.LuuBaiViet_ID;
 import com.VietBlog.entity.User;
 import com.VietBlog.exception.MyResourceNotFoundException;
 import com.VietBlog.repository.*;
+import com.VietBlog.service.BaiVietService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,17 +19,17 @@ import java.util.List;
 @RequestMapping("/api/bai-viet")
 public class BaiVietController {
 
-    private final BaiVietRepository baiVietRepository;
+    private final BaiVietService baiVietService;
     private final BinhLuanRepository binhLuanRepository;
     private final LuotLike_BaiViet_Repository luotLikeRepository;
     private final LuuBaiVietRepository luuBaiVietRepository;
     private final UserRepository userRepository;
 
     @Autowired
-    public BaiVietController(BaiVietRepository baiVietRepository, BinhLuanRepository binhLuanRepository,
+    public BaiVietController(BaiVietService baiVietService, BinhLuanRepository binhLuanRepository,
                              LuotLike_BaiViet_Repository luotLikeRepository, LuuBaiVietRepository luuBaiVietRepository,
                              UserRepository userRepository) {
-        this.baiVietRepository = baiVietRepository;
+        this.baiVietService = baiVietService;
         this.binhLuanRepository = binhLuanRepository;
         this.luotLikeRepository = luotLikeRepository;
         this.luuBaiVietRepository = luuBaiVietRepository;
@@ -39,18 +40,17 @@ public class BaiVietController {
      * Phương thức lấy tất cả bài đăng
      *
      */
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<BaiViet>> findAll() {
-        return ResponseEntity.ok(baiVietRepository.findAll());
+        return ResponseEntity.ok(baiVietService.getAllBaiViet());
     }
-
     /**
      * Phương thức tìm kiếm bài đăng bằng từ khóa (tên người dùng, nội dung, tiêu đề bài viết)
      * @param keyword: từ khóa cần tìm
      */
     @GetMapping("/tim-kiem")
     public ResponseEntity<List<BaiViet>> findByKeyword(@RequestParam String keyword) {
-        List<BaiViet> list = baiVietRepository.findByKeyword(keyword);
+        List<BaiViet> list = baiVietService.getBaiVietByKeyword(keyword); // Sử dụng BaiVietService
         if (list.isEmpty()) {
             return ResponseEntity.notFound().build();
         } else return ResponseEntity.ok(list);
@@ -64,8 +64,8 @@ public class BaiVietController {
     @Transactional
     public ResponseEntity<BaiViet> dangBaiViet(@RequestBody BaiViet baiViet) {
         try {
-            baiVietRepository.save(baiViet);
-            return ResponseEntity.ok(baiViet);
+            BaiViet baiVietMoi = baiVietService.themBaiViet(baiViet); // Sử dụng BaiVietService
+            return ResponseEntity.ok(baiVietMoi);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build(); // Hoặc trả về thông báo lỗi cụ thể hơn
         }
@@ -94,12 +94,14 @@ public class BaiVietController {
     @Transactional
     @PutMapping("{id}")
     public ResponseEntity<BaiViet> update(@PathVariable Integer id, @RequestBody BaiViet baiViet) {
-        if (!baiVietRepository.existsById(id)) {
+        try {
+            BaiViet baiVietCapNhat = baiVietService.capNhatBaiViet(id, baiViet); // Sử dụng BaiVietService
+            return ResponseEntity.ok(baiVietCapNhat);
+        } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
-        baiViet.setTrangThai("Đã chỉnh sửa");
-        baiVietRepository.save(baiViet);
-        return ResponseEntity.ok(baiViet);
     }
     /**
      * Phương thức xóa bài
@@ -110,11 +112,9 @@ public class BaiVietController {
     @Transactional
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         try {
-            BaiViet baiViet = baiVietRepository.findById(id)
-                    .orElseThrow(() -> new MyResourceNotFoundException("Bài viết không tồn tại"));
-            baiVietRepository.delete(baiViet);
+            baiVietService.xoaBaiViet(id); // Sử dụng BaiVietService
             return ResponseEntity.ok().build();
-        } catch (MyResourceNotFoundException e) {
+        } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();

@@ -43,7 +43,7 @@ public class ProfileController {
             model.addAttribute("daysSinceRegistration", daysSinceRegistration);
 
             // Get total number of posts by user
-            int totalBaiViet = baiVietService.getTotalBaiVietByUserId(userId);
+            int totalBaiViet = baiVietService.countBaiVietByUserId(userId);
             model.addAttribute("totalBaiViet", totalBaiViet);
 
             // Get the list of user's posts
