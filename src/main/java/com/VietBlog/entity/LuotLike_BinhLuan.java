@@ -18,6 +18,6 @@ public class LuotLike_BinhLuan {
 	@MapsId("idBinhLuan")
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "Id_Binh_Luan", nullable = false)
-	private BinhLuan idBinhLuan;
+	private BinhLuan binhLuan;
 
 }

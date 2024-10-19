@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ThanhVienRepository extends JpaRepository<ThanhVien, Integer> {
+public interface ThanhVienRepository extends JpaRepository<ThanhVien, Long> {
     List<ThanhVien> findByUser_Id(Integer UserId);
 
 }

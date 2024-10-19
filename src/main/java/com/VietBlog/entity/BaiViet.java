@@ -76,7 +76,7 @@ public class BaiViet implements Serializable {
     @JoinColumn(name = "Id_Bai_Viet_Chia_Se")
     private BaiViet baiVietChiaSe;
 
-    @OneToMany(mappedBy = "idBaiViet", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "baiViet", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<DaPhuongTien> daPhuongTien = new LinkedHashSet<>();
 
 

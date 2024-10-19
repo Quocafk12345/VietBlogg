@@ -15,20 +15,16 @@ import java.util.List;
 public class BinhLuanService {
 
 	private final BinhLuanRepository binhLuanRepository;
-	private final BaiVietRepository baiVietRepository;
-	private final UserRepository userRepository;
 
 	@Autowired
-	public BinhLuanService(BinhLuanRepository binhLuanRepository, BaiVietRepository baiVietRepository, UserRepository userRepository) {
+	public BinhLuanService(BinhLuanRepository binhLuanRepository) {
 		this.binhLuanRepository = binhLuanRepository;
-		this.baiVietRepository = baiVietRepository;
-		this.userRepository = userRepository;
+
 	}
 
 	// Thêm bình luận mới
 	@Transactional
 	public BinhLuan themBinhLuan(BinhLuan binhLuan) {
-		// Kiểm tra level bình luận (tối đa là 2)
 		if (binhLuan.getLevel() != null && binhLuan.getLevel() > 2) {
 			throw new IllegalArgumentException("Level bình luận không hợp lệ (tối đa là 2)");
 		}
@@ -44,34 +40,32 @@ public class BinhLuanService {
 		} else {
 			binhLuan.setLevel(0); // Bình luận gốc
 		}
-
 		binhLuan.setNgayTao(LocalDate.now());
 		return binhLuanRepository.save(binhLuan);
 	}
 
 	// Lấy danh sách bình luận theo bài viết
-	public List<BinhLuan> layDanhSachBinhLuanTheoBaiViet(Integer baiVietId) {
+	public List<BinhLuan> getBinhLuanCuaBaiViet(Integer baiVietId) {
 		return binhLuanRepository.findByBaiVietId(baiVietId);
 	}
 
 	// Lấy danh sách bình luận theo người dùng
-	public List<BinhLuan> layDanhSachBinhLuanTheoNguoiDung(Integer userId) {
+	public List<BinhLuan> getBinhLuanByUserId(Integer userId) {
 		return binhLuanRepository.findByUserId(userId);
 	}
 
 	// Xóa bình luận
 	@Transactional
-	public void xoaBinhLuan(Integer binhLuanId) {
+	public void xoaBinhLuan(Long binhLuanId) {
 		binhLuanRepository.deleteById(binhLuanId);
 	}
 
 	// Cập nhật bình luận
 	@Transactional
-	public BinhLuan capNhatBinhLuan(Integer binhLuanId, BinhLuan binhLuan) {
+	public BinhLuan capNhatBinhLuan(Long binhLuanId, BinhLuan binhLuan) {
 		BinhLuan existingBinhLuan = binhLuanRepository.findById(binhLuanId)
 				.orElseThrow(() -> new RuntimeException("Bình luận không tồn tại"));
 		existingBinhLuan.setNoiDung(binhLuan.getNoiDung());
-		// ... cập nhật các thuộc tính khác (nếu cần)
 		return binhLuanRepository.save(existingBinhLuan);
 	}
 

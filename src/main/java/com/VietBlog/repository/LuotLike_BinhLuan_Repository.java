@@ -18,10 +18,10 @@ public interface LuotLike_BinhLuan_Repository extends JpaRepository<LuotLike_Bin
 	boolean existsById(@NonNull LuotLike_BinhLuan_ID id);
 
 	// Đếm số lượng lượt like của một bình luận
-	int countByIdBinhLuan(Long idBinhLuan);
+	int countByBinhLuan_Id(Long id);
 
 	// Lấy danh sách bình luận mà một người dùng đã like
-	@Query("SELECT llbl.idBinhLuan FROM LuotLike_BinhLuan llbl WHERE llbl.id.userId = :userId")
+	@Query("SELECT llbl.binhLuan FROM LuotLike_BinhLuan llbl WHERE llbl.user.id = :userId")
 	List<BinhLuan> findBinhLuanByUserId(@Param("userId") Long userId);
 
 	// Xóa một lượt like bình luận

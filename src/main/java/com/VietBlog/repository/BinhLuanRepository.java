@@ -9,15 +9,15 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BinhLuanRepository extends JpaRepository<BinhLuan, Integer> {
+public interface BinhLuanRepository extends JpaRepository<BinhLuan, Long> {
     // Đếm số lượng bình luận theo bài viết (đã có sẵn)
-    Integer countBinhLuanByBaiVietId(Integer idBaiViet);
+    Integer countBinhLuanByBaiVietId(Long idBaiViet);
 
     // Lấy danh sách bình luận theo bài viết (đã có sẵn)
-    List<BinhLuan> findBinhLuanByBaiViet_Id(Integer idBaiViet);
+    List<BinhLuan> findBinhLuanByBaiViet_Id(Long idBaiViet);
 
     // Tìm bình luận theo Id_BL_Cha
-    List<BinhLuan> findByBinhLuanChaId(Integer idBLCha);
+    List<BinhLuan> findByBinhLuanChaId(Long idBLCha);
 
     // Tìm bình luận theo Id_BaiViet (đã có sẵn, nhưng có thể sử dụng tên phương thức rõ ràng hơn)
     List<BinhLuan> findByBaiVietId(Integer idBaiViet);

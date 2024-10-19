@@ -35,7 +35,7 @@ public class BaiVietService {
 	}
 
 	// Cập nhật bài viết
-	public BaiViet capNhatBaiViet(Integer id, BaiViet baiViet) {
+	public BaiViet capNhatBaiViet(Long id, BaiViet baiViet) {
 		Optional<BaiViet> optionalBaiViet = baiVietRepository.findById(id);
 		if (optionalBaiViet.isPresent()) {
 			BaiViet existingBaiViet = optionalBaiViet.get();
@@ -48,12 +48,12 @@ public class BaiVietService {
 	}
 
 	// Xóa bài viết
-	public void xoaBaiViet(Integer id) {
+	public void xoaBaiViet(Long id) {
 		baiVietRepository.deleteById(id);
 	}
 
 	// Lấy bài viết theo ID
-	public BaiViet getBaiVietById(Integer id) {
+	public BaiViet getBaiVietById(Long id) {
 		return baiVietRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Bài viết không tồn tại"));
 	}
@@ -64,7 +64,7 @@ public class BaiVietService {
 	}
 
 	// Kiểm tra sự tồn tại của bài viết
-	public boolean existsById(Integer id) {
+	public boolean existsById(Long id) {
 		return baiVietRepository.existsById(id);
 	}
 

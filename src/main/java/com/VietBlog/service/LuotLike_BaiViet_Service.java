@@ -28,7 +28,7 @@ public class LuotLike_BaiViet_Service {
 
 	// Thêm lượt like
 	@Transactional
-	public LuotLike_BaiViet themLuotLike(Integer userId, Integer baiVietId) {
+	public LuotLike_BaiViet themLuotLike(Long userId, Long baiVietId) {
 		LuotLike_BaiViet_ID id = new LuotLike_BaiViet_ID(userId, baiVietId);
 		if (luotLikeRepository.existsById(id)) {
 			throw new RuntimeException("Người dùng đã like bài viết này rồi");
@@ -41,7 +41,7 @@ public class LuotLike_BaiViet_Service {
 
 	// Xóa lượt like
 	@Transactional
-	public void xoaLuotLike(Integer userId, Integer baiVietId) {
+	public void xoaLuotLike(Long userId, Long baiVietId) {
 		LuotLike_BaiViet_ID id = new LuotLike_BaiViet_ID(userId, baiVietId);
 		if (!luotLikeRepository.existsById(id)) {
 			throw new RuntimeException("Người dùng chưa like bài viết này");
@@ -50,17 +50,17 @@ public class LuotLike_BaiViet_Service {
 	}
 
 	// Đếm số lượt like theo bài viết
-	public int demLuotLikeTheoBaiViet(Integer baiVietId) {
+	public int demLuotLikeTheoBaiViet(Long baiVietId) {
 		return luotLikeRepository.countLuotLike_BaiVietByBaiVietId(baiVietId);
 	}
 
 	// Đếm số lượt like theo người dùng
-	public int demLuotLikeTheoNguoiDung(Integer userId) {
+	public int demLuotLikeTheoNguoiDung(Long userId) {
 		return luotLikeRepository.countLuotLike_BaiVietByUserId(userId);
 	}
 
 	// Kiểm tra xem một người dùng đã like một bài viết chưa
-	public boolean daLikeBaiViet(Integer userId, Integer baiVietId) {
+	public boolean daLikeBaiViet(Long userId, Long baiVietId) {
 		LuotLike_BaiViet_ID id = new LuotLike_BaiViet_ID(userId, baiVietId);
 		return luotLikeRepository.existsById(id);
 	}

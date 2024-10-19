@@ -18,19 +18,19 @@ public interface LuotFollowRepository extends JpaRepository<LuotFollow, LuotFoll
 	boolean existsById(@NonNull LuotFollowId luotFollowId);
 
 	// Đếm số lượng người dùng mà một người dùng đang follow
-	@Query("SELECT COUNT(lf.id.userFollow_Id) FROM LuotFollow lf WHERE lf.id.userId = :userId")
+	@Query("SELECT COUNT(lf) FROM LuotFollow lf WHERE lf.id = :userId")
 	int countFollowingByUserId(@Param("userId") Long userId);
 
 	// Đếm số lượng người dùng follow của một người dùng
-	@Query("SELECT COUNT(lf.id.userId) FROM LuotFollow lf WHERE lf.id.userFollow_Id = :userId")
+	@Query("SELECT COUNT(lf) FROM LuotFollow lf WHERE lf.user.id = :userId")
 	int countFollowersByUserId(@Param("userId") Long userId);
 
 	// Lấy danh sách người dùng mà một người dùng đang follow
-	@Query("SELECT lf.userFollow FROM LuotFollow lf WHERE lf.id.userId = :userId")
+	@Query("SELECT lf.userFollow FROM LuotFollow lf WHERE lf.user.id = :userId")
 	List<User> findFollowingByUserId(@Param("userId") Long userId);
 
 	// Lấy danh sách người dùng đang follow một người dùng
-	@Query("SELECT lf.user FROM LuotFollow lf WHERE lf.id.userFollow_Id = :userId")
+	@Query("SELECT lf.user FROM LuotFollow lf WHERE lf.user.id = :userId")
 	List<User> findFollowersByUserId(@Param("userId") Long userId);
 
 	// Xóa một mối quan hệ follow
