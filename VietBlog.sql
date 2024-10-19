@@ -1,4 +1,7 @@
-﻿CREATE DATABASE VietBlog
+﻿USE master
+GO
+
+CREATE DATABASE VietBlog
 GO
 
 USE VietBlog

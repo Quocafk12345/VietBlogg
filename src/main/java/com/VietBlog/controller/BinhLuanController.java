@@ -25,7 +25,7 @@ public class BinhLuanController {
     private UserRepository userRepository;
 
     @GetMapping()
-    public ResponseEntity<List<BinhLuan>> hienBinhLuanTheoBaiViet(@PathVariable Integer idBaiViet) {
+    public ResponseEntity<List<BinhLuan>> hienBinhLuanTheoBaiViet(@PathVariable Long idBaiViet) {
         List<BinhLuan> listBL = binhLuanRepository.findBinhLuanByBaiViet_Id(idBaiViet);
         return ResponseEntity.ok(listBL);
     }
