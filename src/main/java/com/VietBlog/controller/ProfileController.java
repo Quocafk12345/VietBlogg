@@ -38,7 +38,7 @@ public class ProfileController {
             model.addAttribute("user", user);
 
             // Calculate days since registration
-            LocalDate registrationDate = user.getNgayTao().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+            LocalDate registrationDate = user.getNgayTao();
             long daysSinceRegistration = ChronoUnit.DAYS.between(registrationDate, LocalDate.now());
             model.addAttribute("daysSinceRegistration", daysSinceRegistration);
 

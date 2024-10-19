@@ -1,6 +1,7 @@
 package com.VietBlog.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,15 +24,21 @@ public class CaiDatController {
 	private UserService userService;
 
 	@GetMapping("/CaiDat")
-	public String hienThiCaiDat(Model model) {
+	public String hienThiCaiDat(Model model, HttpServletRequest request) {
 		try {
-			User user = userService.findById(1L);
+			User user = userService.findByEmail("user1@example.com"); // Thay bằng cách lấy từ session
 			if (user == null) {
 				model.addAttribute("errorMessage", "Không tìm thấy thông tin người dùng.");
 				return "error";
 			}
+
+			// Thêm thông tin giao diện vào model
 			model.addAttribute("user", user);
-			return "SettingsGiaoDien/CaiDat";
+			model.addAttribute("mauNen", user.getMauNen());
+			model.addAttribute("fontChu", user.getFontChu());
+			model.addAttribute("coChu", user.getCoChu());
+
+			return "CaiDat";
 		} catch (Exception e) {
 			model.addAttribute("errorMessage", "Có lỗi xảy ra khi xử lý yêu cầu.");
 			return "error";
@@ -41,18 +48,18 @@ public class CaiDatController {
 	@PostMapping("/CaiDat/capNhatHinhAnh")
 	public String capNhatHinhAnh(@RequestParam("hinhAnh") MultipartFile hinhAnh, @RequestParam("userId") Long userId,
 								 Model model) throws IOException {
-        if (!hinhAnh.isEmpty()) {
-            // Cập nhật thông tin người dùng với tên hình ảnh mới
-            User user = userService.findById(userId);
+		if (!hinhAnh.isEmpty()) {
+			// Cập nhật thông tin người dùng với tên hình ảnh mới
+			User user = userService.findById(userId);
 
-            // Lưu hình ảnh vào database
-            userService.luuHinhAnh(hinhAnh, user);
+			// Lưu hình ảnh vào database
+			userService.luuHinhAnh(hinhAnh, user);
 
-            model.addAttribute("message", "Cập nhật hình ảnh thành công!");
-        } else {
-            model.addAttribute("error", "Vui lòng chọn hình ảnh để tải lên.");
-        }
-        return "redirect:/CaiDat";
+			model.addAttribute("message", "Cập nhật hình ảnh thành công!");
+		} else {
+			model.addAttribute("error", "Vui lòng chọn hình ảnh để tải lên.");
+		}
+		return "redirect:/CaiDat";
 	}
 
 	@PostMapping("/CaiDat/capNhat")
@@ -105,14 +112,13 @@ public class CaiDatController {
 
 	@PostMapping("/CaiDat/capNhatThongTinCaNhan")
 	public String capNhatThongTinCaNhan(@RequestParam("userId") Long userId,
-										@RequestParam("dienThoai") String dienThoai, @RequestParam("ngaySinh") String ngaySinh,
+										@RequestParam("dienThoai") String dienThoai, @RequestParam("ngaySinh") LocalDate ngaySinh,
 										@RequestParam(value = "gioiTinh", required = false) Boolean gioiTinh, // Thêm tham số gioiTinh
 										Model model) {
 		try {
-			java.sql.Date ngaySinhSql = java.sql.Date.valueOf(ngaySinh);
 			User user = userService.findById(userId);
 			user.setDienThoai(dienThoai);
-			user.setNgaySinh(ngaySinhSql.toLocalDate());
+			user.setNgaySinh(ngaySinh);
 			user.setGioiTinh(gioiTinh); // Cập nhật giới tính
 			userService.updateUser(user);
 
@@ -122,4 +128,17 @@ public class CaiDatController {
 		}
 		return "redirect:/CaiDat";
 	}
+
+	@PostMapping("/CaiDat/luuGiaoDien")
+	public String luuGiaoDien(@RequestParam("userId") Long userId, @RequestParam("mauNen") String mauNen,
+							  @RequestParam("fontChu") String fontChu, @RequestParam("coChu") String coChu) {
+		User user = userService.findById(userId);
+		user.setMauNen(mauNen);
+		user.setFontChu(fontChu);
+		user.setCoChu(coChu);
+		userService.updateUser(user);
+
+		return "redirect:/CaiDat";
+	}
+
 }

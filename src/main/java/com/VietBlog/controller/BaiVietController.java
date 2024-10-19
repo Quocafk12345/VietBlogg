@@ -94,7 +94,7 @@ public class BaiVietController {
 
     @Transactional
     @PutMapping("{id}")
-    public ResponseEntity<BaiViet> update(@PathVariable Integer id, @RequestBody BaiViet baiViet) {
+    public ResponseEntity<BaiViet> update(@PathVariable Long id, @RequestBody BaiViet baiViet) {
         try {
             BaiViet baiVietCapNhat = baiVietService.capNhatBaiViet(id, baiViet); // Sử dụng BaiVietService
             return ResponseEntity.ok(baiVietCapNhat);
@@ -111,7 +111,7 @@ public class BaiVietController {
      */
     @DeleteMapping("{id}")
     @Transactional
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         try {
             baiVietService.xoaBaiViet(id); // Sử dụng BaiVietService
             return ResponseEntity.ok().build();
@@ -128,7 +128,7 @@ public class BaiVietController {
      *
      */
     @GetMapping("/{id}/luot-like")
-    public ResponseEntity<Integer> demLuotThich(@PathVariable Integer id) {
+    public ResponseEntity<Integer> demLuotThich(@PathVariable Long id) {
         Integer luotLike = luotLikeRepository.countLuotLike_BaiVietByBaiVietId(id);
         return ResponseEntity.ok(luotLike);
     }
@@ -139,7 +139,7 @@ public class BaiVietController {
      *
      */
     @GetMapping("/{id}/luot-binh-luan")
-    public ResponseEntity<Integer> getLuotBLByIdBaiViet(@PathVariable Integer id) {
+    public ResponseEntity<Integer> getLuotBLByIdBaiViet(@PathVariable Long id) {
         Integer luotBL = binhLuanRepository.countBinhLuanByBaiVietId(id);
         return ResponseEntity.ok(luotBL);
     }

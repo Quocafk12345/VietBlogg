@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết bài viết - VietBlog</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Custom CSS -->
+    <style>
+        .post-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .post-meta {
+            font-size: 0.9rem;
+            color: gray;
+            margin-bottom: 30px;
+        }
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .post-content p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+        .interaction-buttons {
+            margin-top: 20px;
+        }
+        .comments-section {
+            max-height: 400px;
+            overflow-y: auto; /* Cuộn nếu quá nhiều bình luận */
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .related-posts {
+            margin-top: 30px;
+        }
+        .comment-action {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+        .comment-input {
+            margin-top: 20px;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .user-info img {
+            border-radius: 50%;
+            width: 40px; /* Chiều rộng ảnh đại diện */
+            height: 40px; /* Chiều cao ảnh đại diện */
+            margin-right: 10px; /* Khoảng cách giữa ảnh đại diện và tên người dùng */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Cột trái: Nội dung bài viết -->
+            <div class="col-lg-8">
+                <div class="post-details">
+                    <!-- Tiêu đề bài viết -->
+                    <h1 class="post-title">Tiêu đề bài viết</h1>
+                    <!-- Thông tin bài viết: Tên người dùng, thời gian đăng -->
+                    <p class="post-meta">Người đăng: Nguyễn Văn A - 2 giờ trước</p>
+                    <!-- Ảnh trong bài viết -->
+                    <div class="post-content">
+                        <img src="https://via.placeholder.com/800x400" alt="Post Image">
+                        <!-- Nội dung bài viết -->
+                        <p class="mt-4">Đây là nội dung chi tiết của bài viết. Bài viết này có thể bao gồm rất nhiều nội dung, từ văn bản, hình ảnh, và các yếu tố khác. Nội dung này được thể hiện đầy đủ để người dùng có thể xem chi tiết hơn so với phiên bản rút gọn trên trang bảng tin.</p>
+                        <p>Đây là đoạn văn tiếp theo trong bài viết. Bạn có thể thêm nhiều đoạn văn, hình ảnh hoặc video theo nhu cầu của mình.</p>
+                    </div>
+                    <!-- Tương tác bài viết -->
+                    <div class="interaction-buttons d-flex justify-content-between">
+                        <!-- Bên trái: Thích, Bình luận -->
+                        <div>
+                            <button class="btn btn-light me-2"><i class="bi bi-hand-thumbs-up"></i> Thích</button>
+                            <button class="btn btn-light"><i class="bi bi-chat-left-text"></i> Bình luận</button>
+                        </div>
+                        <!-- Bên phải: Chia sẻ, Lưu -->
+                        <div>
+                            <button class="btn btn-light me-2"><i class="bi bi-share"></i> Chia sẻ</button>
+                            <button class="btn btn-light"><i class="bi bi-bookmark"></i> Lưu</button>
+                        </div>
+                    </div>
+                    <!-- Kết thúc tương tác bài viết -->
+                </div>
+            </div>
+
+            <!-- Cột phải: Bình luận -->
+            <div class="col-lg-4">
+                <h4>Bình luận</h4>
+                <div class="comments-section">
+                    <!-- Thông tin tác giả bình luận -->
+                    <div class="user-info">
+                        <img src="https://via.placeholder.com/40" alt="User Avatar">
+                        <div>
+                            <h6 class="mb-0">Tác giả bình luận: Trần Thị B</h6>
+                            <small class="text-muted">1 giờ trước</small>
+                        </div>
+                    </div>
+                    <!-- Một bình luận -->
+                    <div class="comment mb-4">
+                        <div class="d-flex">
+                            <img src="https://via.placeholder.com/50" class="rounded-circle me-3" alt="User Avatar">
+                            <div>
+                                <h6 class="mb-0">Trần Thị B</h6>
+                                <small class="text-muted">1 giờ trước</small>
+                                <p class="mt-2">Bài viết này rất hữu ích. Cảm ơn bạn đã chia sẻ!</p>
+                                <div class="comment-action">
+                                    <div>
+                                        <button class="btn btn-link btn-sm">Thích</button>
+                                        <button class="btn btn-link btn-sm">Trả lời</button>
+                                        <button class="btn btn-link btn-sm">Báo cáo</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Một bình luận khác -->
+                    <div class="comment mb-4">
+                        <div class="d-flex">
+                            <img src="https://via.placeholder.com/50" class="rounded-circle me-3" alt="User Avatar">
+                            <div>
+                                <h6 class="mb-0">Phạm Văn C</h6>
+                                <small class="text-muted">30 phút trước</small>
+                                <p class="mt-2">Mình rất thích cách bạn viết bài, rất chi tiết và rõ ràng.</p>
+                                <div class="comment-action">
+                                    <div>
+                                        <button class="btn btn-link btn-sm">Thích</button>
+                                        <button class="btn btn-link btn-sm">Trả lời</button>
+                                        <button class="btn btn-link btn-sm">Báo cáo</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Phần thêm bình luận của bạn -->
+                <div class="comment-input">
+                    <h5>Thêm bình luận của bạn:</h5>
+                    <textarea class="form-control" rows="3" placeholder="Nhập bình luận của bạn..."></textarea>
+                    <button class="btn btn-primary mt-2">Gửi bình luận</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bài viết liên quan -->
+        <div class="related-posts">
+            <h5>Các bài viết khác</h5>
+            <ul class="list-group">
+                <li class="list-group-item"><a href="#">Bài viết 1</a></li>
+                <li class="list-group-item"><a href="#">Bài viết 2</a></li>
+                <li class="list-group-item"><a href="#">Bài viết 3</a></li>
+                <li class="list-group-item"><a href="#">Bài viết 4</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
