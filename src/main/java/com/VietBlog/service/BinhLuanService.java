@@ -42,6 +42,8 @@ public class BinhLuanService {
 		return binhLuanRepository.save(binhLuan);
 	}
 
+
+
 	// Lấy danh sách bình luận theo bài viết
 	public List<BinhLuan> getBinhLuanCuaBaiViet(Long baiVietId) {
 		return binhLuanRepository.findByBaiVietId(baiVietId);
