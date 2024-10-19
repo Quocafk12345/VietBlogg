@@ -43,12 +43,12 @@ public class BinhLuanService {
 	}
 
 	// Lấy danh sách bình luận theo bài viết
-	public List<BinhLuan> getBinhLuanCuaBaiViet(Integer baiVietId) {
+	public List<BinhLuan> getBinhLuanCuaBaiViet(Long baiVietId) {
 		return binhLuanRepository.findByBaiVietId(baiVietId);
 	}
 
 	// Lấy danh sách bình luận theo người dùng
-	public List<BinhLuan> getBinhLuanByUserId(Integer userId) {
+	public List<BinhLuan> getBinhLuanByUserId(Long userId) {
 		return binhLuanRepository.findByUserId(userId);
 	}
 
