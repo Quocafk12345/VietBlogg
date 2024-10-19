@@ -23,27 +23,6 @@ public class CaiDatController {
 	@Autowired
 	private UserService userService;
 
-	@GetMapping("/CaiDat")
-	public String hienThiCaiDat(Model model, HttpServletRequest request) {
-		try {
-			User user = userService.findByEmail("lehoangbao232@gmail.com"); // Thay bằng cách lấy từ session
-			if (user == null) {
-				model.addAttribute("errorMessage", "Không tìm thấy thông tin người dùng.");
-				return "error";
-			}
-
-			// Thêm thông tin giao diện vào model
-			model.addAttribute("user", user);
-			model.addAttribute("mauNen", user.getMauNen());
-			model.addAttribute("fontChu", user.getFontChu());
-			model.addAttribute("coChu", user.getCoChu());
-
-			return "CaiDat";
-		} catch (Exception e) {
-			model.addAttribute("errorMessage", "Có lỗi xảy ra khi xử lý yêu cầu.");
-			return "error";
-		}
-	}
 
 	@PostMapping("/CaiDat/capNhatHinhAnh")
 	public String capNhatHinhAnh(@RequestParam("hinhAnh") MultipartFile hinhAnh, @RequestParam("userId") Long userId,

@@ -4,6 +4,7 @@ import com.VietBlog.entity.BaiViet;
 import com.VietBlog.entity.User;
 import com.VietBlog.service.BaiVietService;
 import com.VietBlog.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,6 +54,28 @@ public class Giao_Dien_Controller {
         return "home";
     }
 
+
+    @GetMapping("/CaiDat")
+    public String hienThiCaiDat(Model model, HttpServletRequest request) {
+        try {
+            User user = (User) model.getAttribute("user"); // Thay bằng cách lấy từ session
+            if (user == null) {
+                model.addAttribute("errorMessage", "Không tìm thấy thông tin người dùng.");
+                return "error";
+            }
+
+            // Thêm thông tin giao diện vào model
+            model.addAttribute("user", user);
+            model.addAttribute("mauNen", user.getMauNen());
+            model.addAttribute("fontChu", user.getFontChu());
+            model.addAttribute("coChu", user.getCoChu());
+
+            return "CaiDat";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Có lỗi xảy ra khi xử lý yêu cầu.");
+            return "error";
+        }
+    }
     // Profile page
     @GetMapping("/profilepage")
     public String showProfile(@RequestParam(value = "userId", required = false) Long userId, Model model) {

@@ -35,7 +35,7 @@
                     <div class="tab-pane fade active show" id="account-general">
                         <form th:action="@{/CaiDat/capNhatHinhAnh}" method="post"
                               enctype="multipart/form-data">
-                            <input type="hidden" th:value="${user.userId}" name="userId">
+                            <input type="hidden" th:value="${user.getId()}" name="userId">
                             <div class="card-body media align-items-center">
                                 <img id="anhDaiDien"
                                      th:src="@{'data:image/jpeg;base64,' + ${user.hinhDaiDien}}"
@@ -56,7 +56,7 @@
                         <hr class="border-light m-0">
                         <div class="card-body">
                             <form th:action="@{/CaiDat/capNhat}" method="post">
-                                <input type="hidden" th:value="${user.userId}" name="userId">
+                                <input type="hidden" th:value="${user.getId()}" name="userId">
                                 <div class="form-group">
                                     <label class="form-label">Tên người dùng</label> <input
                                         type="text" class="form-control mb-1"
@@ -106,7 +106,7 @@
                                 <textarea class="form-control" rows="5">gfgfnfnngmhjmjk,kl.jlklj.hjhmghnfngdhdgndghnfghyngfmhikịhlhọ.lhkl.kl.kl;kjl.kjl.k</textarea>
                             </div>
                             <form th:action="@{/CaiDat/capNhatThongTinCaNhan}" method="post">
-                                <input type="hidden" th:value="${user.userId}" name="userId">
+                                <input type="hidden" th:value="${user.getId()}" name="userId">
 
                                 <div class="form-group">
                                     <label class="form-label">Số điện thoại</label> <input
@@ -116,7 +116,7 @@
                                 <div class="form-group">
                                     <label class="form-label">Ngày sinh</label> <input type="date"
                                                                                        class="form-control" name="ngaySinh"
-                                                                                       th:value="${#dates.format(user.ngaySinh, 'yyyy-MM-dd')}">
+                                                                                       th:value="${#temporals.format(user.getNgaySinh(), 'yyyy-MM-dd')}">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Giới tính</label>
@@ -265,55 +265,54 @@
         src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
+		src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
 
 </script>
 <script>
-    document
-        .getElementById('hinhAnh')
-        .addEventListener(
-            'change',
-            function(e) {
-                var file = e.target.files[0];
-                var reader = new FileReader();
-
-                reader.onload = function(e) {
-                    document.getElementById('anhDaiDien').src = e.target.result; // Cập nhật src với data URL
-                }
-
-                reader.readAsDataURL(file);
-            });
+	document
+			.getElementById('hinhAnh')
+			.addEventListener(
+					'change',
+					function(e) {
+						var file = e.target.files[0];
+						var reader = new FileReader();
+						
+						reader.onload = function(e) {
+							document.getElementById('anhDaiDien').src = e.target.result; // Cập nhật src với data URL
+						}
+						
+						reader.readAsDataURL(file);
+					});
 </script>
 
 <script>
-    const namCheckbox = document.getElementById('nam');
-    const nuCheckbox = document.getElementById('nu');
-
-    namCheckbox.addEventListener('change', function() {
-        if (this.checked) {
-            nuCheckbox.checked = false;
-        }
-    });
-
-    nuCheckbox.addEventListener('change', function() {
-        if (this.checked) {
-            namCheckbox.checked = false;
-        }
-    });
+	const namCheckbox = document.getElementById('nam');
+	const nuCheckbox = document.getElementById('nu');
+	
+	namCheckbox.addEventListener('change', function() {
+		if (this.checked) {
+			nuCheckbox.checked = false;
+		}
+	});
+	
+	nuCheckbox.addEventListener('change', function() {
+		if (this.checked) {
+			namCheckbox.checked = false;
+		}
+	});
 </script>
 
 <script th:inline="javascript">
-    /*<![CDATA[*/
-    const mauNen = /*[[${user.mauNen} ? ${user.mauNen} : '#f8f9fa']]*/'#f8f9fa';
-    const fontChu = /*[[${user.fontChu} ? ${user.fontChu} : 'Arial']]*/'Arial';
-    const coChu = /*[[${user.coChu} ? ${user.coChu} : '16px']]*/'16px';
-
-    document.body.style.backgroundColor = mauNen;
-    document.body.style.fontFamily = fontChu;
-    document.body.style.fontSize = coChu;
-    /*]]>*/
+	/*<![CDATA[*/
+	const mauNen = /*[[${user.mauNen} ? ${user.mauNen} : '#f8f9fa']]*/'#f8f9fa';
+	const fontChu = /*[[${user.fontChu} ? ${user.fontChu} : 'Arial']]*/'Arial';
+	const coChu = /*[[${user.coChu} ? ${user.coChu} : '16px']]*/'16px';
+	
+	document.body.style.backgroundColor = mauNen;
+	document.body.style.fontFamily = fontChu;
+	document.body.style.fontSize = coChu;
+	/*]]>*/
 </script>
-
 </body>
 </html>
