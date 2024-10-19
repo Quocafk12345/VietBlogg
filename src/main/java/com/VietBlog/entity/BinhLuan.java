@@ -1,5 +1,6 @@
 package com.VietBlog.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -49,6 +50,7 @@ public class BinhLuan implements Serializable {
     @Column(name = "Ngay_Tao", nullable = false)
     private LocalDate ngayTao;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Id_Bai_Viet", nullable = false)
     private BaiViet baiViet;
@@ -56,5 +58,6 @@ public class BinhLuan implements Serializable {
     @ManyToOne
     @JoinColumn(name = "User_Id", nullable = false)
     private User user;
+
 
 }
