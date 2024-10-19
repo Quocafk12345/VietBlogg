@@ -1,6 +1,5 @@
 package com.VietBlog.service;
 
-import com.VietBlog.controller.BaiVietController;
 import com.VietBlog.entity.BaiViet;
 import com.VietBlog.repository.BaiVietRepository;
 import org.springframework.beans.factory.annotation.Autowired;

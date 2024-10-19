@@ -1,9 +1,7 @@
 package com.VietBlog.service;
 
 import com.VietBlog.entity.BinhLuan;
-import com.VietBlog.repository.BaiVietRepository;
 import com.VietBlog.repository.BinhLuanRepository;
-import com.VietBlog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

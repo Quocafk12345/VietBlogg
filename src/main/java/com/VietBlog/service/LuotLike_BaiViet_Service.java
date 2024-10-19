@@ -34,7 +34,7 @@ public class LuotLike_BaiViet_Service {
 			throw new RuntimeException("Người dùng đã like bài viết này rồi");
 		}
 		LuotLike_BaiViet luotLike = new LuotLike_BaiViet(id,
-				userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng")),
+				userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng")),
 				baiVietRepository.findById(baiVietId).orElseThrow(() -> new RuntimeException("Không tìm thấy bài viết")));
 		return luotLikeRepository.save(luotLike);
 	}

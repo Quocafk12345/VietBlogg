@@ -20,10 +20,10 @@ public interface BinhLuanRepository extends JpaRepository<BinhLuan, Long> {
     List<BinhLuan> findByBinhLuanChaId(Long idBLCha);
 
     // Tìm bình luận theo Id_BaiViet (đã có sẵn, nhưng có thể sử dụng tên phương thức rõ ràng hơn)
-    List<BinhLuan> findByBaiVietId(Integer idBaiViet);
+    List<BinhLuan> findByBaiVietId(Long idBaiViet);
 
     // Tìm bình luận theo User_Id
-    List<BinhLuan> findByUserId(Integer userId);
+    List<BinhLuan> findByUserId(Long userId);
 
     // Tìm bình luận gốc của một bài viết (level = 0)
     @Query("SELECT bl FROM BinhLuan bl WHERE bl.baiViet.id = :baiVietId AND bl.level = 0")

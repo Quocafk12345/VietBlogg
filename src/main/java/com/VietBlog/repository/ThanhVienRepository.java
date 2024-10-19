@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ThanhVienRepository extends JpaRepository<ThanhVien, Long> {
-    List<ThanhVien> findByUser_Id(Integer UserId);
+    List<ThanhVien> findByUser_Id(Long UserId);
 
 }
