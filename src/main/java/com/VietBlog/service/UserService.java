@@ -23,15 +23,16 @@ public class UserService {
         return userRepository.findByEmail(email).orElse(null);
     }
 
-    public User saveUser(User user) {
-        user.setNgayTao(LocalDate.now()); // Gán ngày tạo là ngày hiện tại
-        return userRepository.save(user);
-    }
+	public User saveUser(User user) {
+		user.setNgayTao(LocalDate.now()); // Gán ngày tạo là ngày hiện tại
+		return userRepository.save(user);
+	}
 
-    public boolean isEmailExists(String email) {
-        return userRepository.findByEmail(email).isPresent();
-    }
-    public User findByDienThoai(String dienThoai) {
+	public boolean isEmailExists(String email) {
+		return userRepository.findByEmail(email).isPresent();
+	}
+
+	public User findByDienThoai(String dienThoai) {
         return userRepository.findByDienThoai(dienThoai).orElse(null);
     }
 
