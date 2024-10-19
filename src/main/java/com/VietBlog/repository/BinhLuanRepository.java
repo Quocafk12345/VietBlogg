@@ -13,8 +13,6 @@ public interface BinhLuanRepository extends JpaRepository<BinhLuan, Long> {
     // Đếm số lượng bình luận theo bài viết (đã có sẵn)
     Integer countBinhLuanByBaiVietId(Long idBaiViet);
 
-    // Lấy danh sách bình luận theo bài viết (đã có sẵn)
-    List<BinhLuan> findBinhLuanByBaiViet_Id(Long idBaiViet);
 
     // Tìm bình luận theo Id_BL_Cha
     List<BinhLuan> findByBinhLuanChaId(Long idBLCha);
@@ -27,10 +25,10 @@ public interface BinhLuanRepository extends JpaRepository<BinhLuan, Long> {
 
     // Tìm bình luận gốc của một bài viết (level = 0)
     @Query("SELECT bl FROM BinhLuan bl WHERE bl.baiViet.id = :baiVietId AND bl.level = 0")
-    List<BinhLuan> findRootCommentsByBaiVietId(@Param("baiVietId") Integer baiVietId);
+    List<BinhLuan> findRootCommentsByBaiVietId(@Param("baiVietId") Long baiVietId);
 
     // Tìm tất cả bình luận con của một bình luận cha (bao gồm cả bình luận con của bình luận con)
     @Query("SELECT bl FROM BinhLuan bl WHERE bl.binhLuanCha.id = :idBLCha")
-    List<BinhLuan> findAllChildCommentsByParentId(@Param("idBLCha") Integer idBLCha);
+    List<BinhLuan> findAllChildCommentsByParentId(@Param("idBLCha") Long idBLCha);
 
 }

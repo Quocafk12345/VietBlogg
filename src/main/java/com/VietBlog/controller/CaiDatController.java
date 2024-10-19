@@ -26,7 +26,7 @@ public class CaiDatController {
 	@GetMapping("/CaiDat")
 	public String hienThiCaiDat(Model model, HttpServletRequest request) {
 		try {
-			User user = userService.findByEmail("user1@example.com"); // Thay bằng cách lấy từ session
+			User user = userService.findByEmail("lehoangbao232@gmail.com"); // Thay bằng cách lấy từ session
 			if (user == null) {
 				model.addAttribute("errorMessage", "Không tìm thấy thông tin người dùng.");
 				return "error";

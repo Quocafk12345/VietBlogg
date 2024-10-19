@@ -4,7 +4,6 @@ import com.VietBlog.entity.BaiViet;
 import com.VietBlog.entity.LuuBaiViet;
 import com.VietBlog.entity.LuuBaiViet_ID;
 import com.VietBlog.entity.User;
-import com.VietBlog.exception.MyResourceNotFoundException;
 import com.VietBlog.repository.*;
 import com.VietBlog.service.BaiVietService;
 import jakarta.transaction.Transactional;
@@ -44,6 +43,29 @@ public class BaiVietController {
     public ResponseEntity<List<BaiViet>> findAll() {
         return ResponseEntity.ok(baiVietService.getAllBaiViet());
     }
+
+    /**
+     * Phương thức đếm số lượt like của một bài viết
+     * @param id: Id của bài viết
+     *
+     */
+    @GetMapping("/{id}/luot-like")
+    public ResponseEntity<Integer> demLuotThich(@PathVariable Long id) {
+        Integer luotLike = luotLikeRepository.countLuotLike_BaiVietByBaiVietId(id);
+        return ResponseEntity.ok(luotLike);
+    }
+
+    /**
+     * Phương thức đếm số lượt bình luận của một bài viết
+     * @param idBaiViet: Id của bài viết
+     *
+     */
+    @GetMapping("/{id}/luot-binh-luan")
+    public ResponseEntity<Integer> demBinhLuan(@PathVariable Long idBaiViet) {
+        Integer luotBL = binhLuanRepository.countBinhLuanByBaiVietId(idBaiViet);
+        return ResponseEntity.ok(luotBL);
+    }
+
     /**
      * Phương thức tìm kiếm bài đăng bằng từ khóa (tên người dùng, nội dung, tiêu đề bài viết)
      * @param keyword: từ khóa cần tìm
@@ -119,27 +141,5 @@ public class BaiVietController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
-    }
-
-    /**
-     * Phương thức đếm số lượt like của một bài viết
-     * @param id: Id của bài viết
-     *
-     */
-    @GetMapping("/{id}/luot-like")
-    public ResponseEntity<Integer> demLuotThich(@PathVariable Long id) {
-        Integer luotLike = luotLikeRepository.countLuotLike_BaiVietByBaiVietId(id);
-        return ResponseEntity.ok(luotLike);
-    }
- 
-    /**
-     * Phương thức đếm số lượt bình luận của một bài viết
-     * @param id: Id của bài viết
-     *
-     */
-    @GetMapping("/{id}/luot-binh-luan")
-    public ResponseEntity<Integer> getLuotBLByIdBaiViet(@PathVariable Long id) {
-        Integer luotBL = binhLuanRepository.countBinhLuanByBaiVietId(id);
-        return ResponseEntity.ok(luotBL);
     }
 }

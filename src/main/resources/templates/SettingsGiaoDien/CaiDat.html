@@ -25,6 +25,8 @@
                         class="list-group-item list-group-item-action" data-toggle="list"
                         href="#account-social-links">Liên kết xã hội</a> <a
                         class="list-group-item list-group-item-action" data-toggle="list"
+                        href="#account-designs">Thay đổi giao diện</a> <a
+                        class="list-group-item list-group-item-action" data-toggle="list"
                         href="#account-connections">Kết nối</a>
                 </div>
             </div>
@@ -143,6 +145,7 @@
                     </div>
 
 
+
                     <div class="tab-pane fade" id="account-social-links">
                         <div class="card-body pb-2">
                             <div class="form-group">
@@ -167,6 +170,55 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="tab-pane fade" id="account-designs">
+                        <div class="card-body">
+                            <form th:action="@{/CaiDat/luuGiaoDien}" method="post">
+                                <input type="hidden" th:value="${user.userId}" name="userId">
+                                <div class="form-group">
+                                    <label for="mauNen">Màu nền:</label> <select
+                                        class="form-control" id="mauNen" name="mauNen">
+                                    <option value="#f8f9fa" th:selected="${mauNen == '#f8f9fa'}">Xám
+                                        nhạt</option>
+                                    <option value="#ffffff" th:selected="${mauNen == '#ffffff'}">Trắng</option>
+                                    <option value="#e9ecef" th:selected="${mauNen == '#e9ecef'}">Xám</option>
+                                    <option value="#ffc107" th:selected="${mauNen == '#ffc107'}">Vàng
+                                        đậm</option>
+                                    <option value="#f8d9da" th:selected="${mauNen == '#f8d9da'}">Hồng
+                                        nhạt</option>
+                                </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="fontChu">Font chữ:</label> <select
+                                        class="form-control" id="fontChu" name="fontChu">
+                                    <option value="Arial"
+                                            th:selected="${user.fontChu == 'Arial'}">Arial</option>
+                                    <option value="Roboto"
+                                            th:selected="${user.fontChu == 'Roboto'}">Roboto</option>
+                                    <option value="Times New Roman"
+                                            th:selected="${user.fontChu == 'Times New Roman'}">Times
+                                        New Roman</option>
+                                    <option value="Courier New"
+                                            th:selected="${user.fontChu == 'Courier New'}">Courier
+                                        New</option>
+                                </select>
+                                </div>
+                                <div class="form-group">
+                                      <label for="coChu">Cỡ chữ:</label> <select
+                                        class="form-control" id="coChu" name="coChu">
+                                    <option value="14px" th:selected="${coChu == '14px'}">14px</option>
+                                    <option value="16px" th:selected="${coChu == '16px'}">16px</option>
+                                    <option value="18px" th:selected="${coChu == '18px'}">18px</option>
+                                    <option value="20px" th:selected="${coChu == '20px'}">20px</option>
+                                    <option value="22px" th:selected="${coChu == '22px'}">22px</option>
+                                </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Lưu thay
+                                    đổi</button>
+                            </form>
+                        </div>
+                    </div>
+
                     <div class="tab-pane fade" id="account-connections">
                         <div class="card-body">
                             <button type="button" class="btn btn-twitter">
@@ -176,7 +228,8 @@
                         <hr class="border-light m-0">
                         <div class="card-body">
                             <h5 class="mb-2">
-                                <a href="#" class="float-right text-muted text-tiny"><i
+                                <a href="javascript:void(0)"
+                                   class="float-right text-muted text-tiny"><i
                                         class="ion ion-md-close"></i> Remove</a> <i
                                     class="ion ion-logo-google text-google"></i> Bạn đã kết nối
                                 với Google:
@@ -232,7 +285,7 @@
                 reader.readAsDataURL(file);
             });
 </script>
-<!--Checkbox Nam Nữ-->
+
 <script>
     const namCheckbox = document.getElementById('nam');
     const nuCheckbox = document.getElementById('nu');
@@ -249,5 +302,18 @@
         }
     });
 </script>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const mauNen = /*[[${user.mauNen} ? ${user.mauNen} : '#f8f9fa']]*/'#f8f9fa';
+    const fontChu = /*[[${user.fontChu} ? ${user.fontChu} : 'Arial']]*/'Arial';
+    const coChu = /*[[${user.coChu} ? ${user.coChu} : '16px']]*/'16px';
+
+    document.body.style.backgroundColor = mauNen;
+    document.body.style.fontFamily = fontChu;
+    document.body.style.fontSize = coChu;
+    /*]]>*/
+</script>
+
 </body>
 </html>

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.VietBlog.entity.User;
 import com.VietBlog.service.UserService;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 @Controller
 public class loginController {
@@ -28,6 +29,7 @@ public class loginController {
         }
 
         if (user != null && user.getMatKhau().equals(password)) {
+            model.addAttribute("user", user);
             // If password is correct, redirect to the profile page with userId as a query parameter
             return "redirect:/profilepage?userId=" + user.getId();
         } else {
