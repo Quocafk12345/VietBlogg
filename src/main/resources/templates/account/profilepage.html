@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,16 +65,16 @@
 										<h3 class="username" th:text="${user.tenNguoiDung}">MinhTriND</h3>
 									</div>
 									<p class="post-time"
-										th:text="${#temporals.format(baiViet.getNgayTao(), 'HH:mm, dd/MM')}">8
+									   th:text="${baiViet.ngayTao != null ? #temporals.format(baiViet.getNgayTao(), 'HH:mm, dd/MM') : 'N/A'}">8
 										phút trước</p>
 								</div>
 							</div>
 						</div>
 						<div class="post-content">
-							<div class="image-container">
-								<img th:src="@{'/img/' + ${baiViet.thumbnail}}"
-									alt="Thumbnail Image" />
-							</div>
+<!--							<div class="image-container">-->
+<!--								<img th:src="@{'/img/' + ${baiViet.thumbnail}}"-->
+<!--									alt="Thumbnail Image" />-->
+<!--							</div>-->
 							<div class="post-content">
 								<p class="post-text" style="display: inline;">
 									<!-- Văn bản ngắn gọn (150 ký tự) -->
@@ -110,7 +110,7 @@
 								<p class="comment-first">
 									1 <i class="fas fa-heart"></i>
 								</p>
-								<p class="login-prompt" th:if="${user.userId == null}">
+								<p class="login-prompt" th:if="${user.getId()    == null}">
 									<a href="../../../../../../../../../FPT/Final_DEV/TanAn_project/src/main/resources/templates/account/login.html">Đăng nhập một phát, tha hồ bình luận
 										(^ 3 ^)</a>
 								</p>

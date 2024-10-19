@@ -12,6 +12,7 @@ import org.hibernate.annotations.Nationalized;
 import java.io.Serial;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -44,9 +45,9 @@ public class BaiViet implements Serializable {
     @Column(name = "Noi_Dung", nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String noiDung;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @Column(name = "Ngay_Tao", nullable = false)
-    private Timestamp ngayTao;
+    private LocalDate ngayTao;
 
     @Column(name = "Trang_Thai", nullable = false)
     private String trangThai;
