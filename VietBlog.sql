@@ -171,6 +171,10 @@ ALTER TABLE Users ADD Font_Chu VARCHAR(255);
 ALTER TABLE Users ADD Co_Chu VARCHAR(255);
 GO
 
+UPDATE Users
+Set Ngay_Sinh = '2002-10-10'
+GO
+
 -- Giới hạn chia sẻ bài viết thành 1 cấp (không thể chia sẻ bài chia sẻ của người khác)
 CREATE TRIGGER TR_BaiViet_ChiaSe
 ON Bai_Viet
