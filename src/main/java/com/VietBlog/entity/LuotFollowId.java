@@ -3,14 +3,15 @@ package com.VietBlog.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Embeddable
 public class LuotFollowId implements Serializable {
     @Serial
@@ -22,4 +23,5 @@ public class LuotFollowId implements Serializable {
     @NotNull
     @Column(name = "User_Follow_Id", nullable = false)
     private Long userFollow_Id;
+
 }

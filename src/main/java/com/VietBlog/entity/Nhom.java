@@ -9,7 +9,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Nationalized;
 
+import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -49,7 +51,8 @@ public class Nhom {
 	private String hinhDaiDien;
 
 	@NotNull
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "Ngay_Tao", nullable = false)
-	private Instant ngayTao;
+	private Timestamp ngayTao;
 
 }

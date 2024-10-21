@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Nationalized;
 
+import java.time.LocalDate;
+
 @Data
 @Entity
 @NoArgsConstructor
@@ -32,5 +34,9 @@ public class ThanhVien {
     @Nationalized
     @Column(name = "Vai_Tro", nullable = false)
     private String vaiTro;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "Ngay_Tham_Gia")
+    private LocalDate ngayThamGia;
 
 }

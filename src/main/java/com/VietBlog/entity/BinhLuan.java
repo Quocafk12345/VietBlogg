@@ -1,5 +1,6 @@
 package com.VietBlog.entity;
 
+import com.VietBlog.constraints.BinhLuan.Level_Binh_Luan;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,7 +8,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -29,8 +32,9 @@ public class BinhLuan implements Serializable {
      *   <li>2: Phản hồi của một phản hồi khác</li>
      * </ul>
      */
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "Level_Binh_Luan")
-    private Integer level;
+    private Level_Binh_Luan level;
 
 
     @Column(name = "Noi_Dung", nullable = false, columnDefinition = "NVARCHAR(MAX)")
@@ -47,8 +51,9 @@ public class BinhLuan implements Serializable {
     @JoinColumn(name = "Id_BL_Cha")
     private BinhLuan binhLuanCha;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "Ngay_Tao", nullable = false)
-    private LocalDate ngayTao;
+    private Timestamp ngayTao;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

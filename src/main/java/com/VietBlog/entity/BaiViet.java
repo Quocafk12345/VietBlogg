@@ -1,5 +1,6 @@
 package com.VietBlog.entity;
 
+import com.VietBlog.constraints.TrangThai_BaiViet;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -12,7 +13,6 @@ import org.hibernate.annotations.Nationalized;
 import java.io.Serial;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -45,12 +45,13 @@ public class BaiViet implements Serializable {
     @Column(name = "Noi_Dung", nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String noiDung;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "Ngay_Tao", nullable = false)
-    private LocalDate ngayTao;
+    private Timestamp ngayTao;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "Trang_Thai", nullable = false)
-    private String trangThai;
+    private TrangThai_BaiViet trangThai;
 
     @ManyToOne
     @JoinColumn(name = "User_Id", nullable = false)

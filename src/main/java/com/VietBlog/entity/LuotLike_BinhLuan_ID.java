@@ -3,13 +3,17 @@ package com.VietBlog.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.util.Objects;
 
 @Embeddable
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class LuotLike_BinhLuan_ID implements java.io.Serializable {
 	@Serial
 	private static final long serialVersionUID = 5308043125104184209L;

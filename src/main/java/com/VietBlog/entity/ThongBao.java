@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 
 @Getter
@@ -39,7 +40,8 @@ public class ThongBao {
 	private Boolean daDoc = false;
 
 	@NotNull
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "Ngay_Tao", nullable = false)
-	private Instant ngayTao;
+	private Timestamp ngayTao;
 
 }
