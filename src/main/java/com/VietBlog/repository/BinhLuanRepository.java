@@ -13,7 +13,6 @@ public interface BinhLuanRepository extends JpaRepository<BinhLuan, Long> {
     // Đếm số lượng bình luận theo bài viết (đã có sẵn)
     Integer countBinhLuanByBaiVietId(Long idBaiViet);
 
-
     // Tìm bình luận theo Id_BL_Cha
     List<BinhLuan> findByBinhLuanChaId(Long idBLCha);
 
