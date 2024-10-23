@@ -1,8 +1,8 @@
 package com.VietBlog.constraints.User;
 
 public enum VaiTro_User {
-	ADMIN("Quản trị viên"),
-	USER("Người dùng");
+	ADMIN("ADMIN"),
+	USER("USER");
 
 	private final String value;
 

@@ -1,11 +1,11 @@
-package com.VietBlog.constraints;
+package com.VietBlog.constraints.BaiViet;
 
 public enum TrangThai_BaiViet {
-	CHO_DUYET("Chờ duyệt"),
-	DA_DANG("Đã đăng"),
-	NHAP("Nháp"),
-	TU_CHOI("Từ chối"),
-	AN("Ẩn");
+	CHO_DUYET("CHỜ DUYỆT"),
+	DA_DANG("ĐÃ ĐĂNG"),
+	NHAP("NHÁP"),
+	TU_CHOI("TỪ CHỐI"),
+	AN("ẨN");
 
 	private String value;
 
@@ -17,6 +17,3 @@ public enum TrangThai_BaiViet {
 		return value;
 	}
 }
-
-
-

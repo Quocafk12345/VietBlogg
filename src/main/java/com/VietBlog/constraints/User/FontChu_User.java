@@ -1,7 +1,7 @@
 package com.VietBlog.constraints.User;
 
 public enum FontChu_User {
-	ARIAL("Helvetica Neue"),
+	HELVETICA_NEUE("Helvetica Neue"),
 	TIMES_NEW_ROMAN("Times New Roman"),
 	TAHOMA("Tahoma"),
 	VERDANA("Verdana");

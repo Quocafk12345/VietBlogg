@@ -1,10 +1,10 @@
 package com.VietBlog.constraints.User;
 
 public enum MauNen_User {
-	TRANG("Trắng"),
-	DEN("Đen"),
-	XANH_DUONG("Xanh dương"),
-	VANG("Vàng");
+	WHITE("Trắng"),
+	BLACK("Đen"),
+	BLUE("Xanh dương"),
+	YELLOW("Vàng");
 
 	private final String value;
 
