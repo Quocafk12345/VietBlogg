@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -31,14 +33,14 @@ public class NhomService {
 	// Tạo nhóm mới
 	@Transactional
 	public Nhom taoNhom(Nhom nhom, Long userId) {
-		nhom.setNgayTao(Instant.now());
+		nhom.setNgayTao(Timestamp.from(Instant.now()));
 		Nhom nhomMoi = nhomRepository.save(nhom);
 
 		// Thêm người tạo vào nhóm với vai trò "CHỦ NHÓM"
 		ThanhVienId thanhVienId = new ThanhVienId(nhomMoi.getId(), userId);
 		ThanhVien thanhVien = new ThanhVien(thanhVienId, nhomMoi,
 				userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng")),
-				"CHỦ NHÓM");
+				"CHỦ NHÓM", LocalDate.now());
 		thanhVienRepository.save(thanhVien);
 
 		return nhomMoi;
@@ -54,7 +56,7 @@ public class NhomService {
 		ThanhVien thanhVien = new ThanhVien(thanhVienId,
 				nhomRepository.findById(nhomId).orElseThrow(() -> new RuntimeException("Không tìm thấy nhóm")),
 				userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng")),
-				vaiTro);
+				vaiTro, LocalDate.now());
 		return thanhVienRepository.save(thanhVien);
 	}
 

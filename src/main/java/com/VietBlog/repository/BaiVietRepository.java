@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BaiVietRepository extends JpaRepository<BaiViet, Long> {
     // Đếm tổng số lượng bài viết
-    @Query("SELECT COUNT(b.id) FROM BaiViet b")
+    @Query("SELECT COUNT(b) FROM BaiViet b")
     Integer countTotalBaiViet();
     @Query("SELECT COUNT(b) FROM BaiViet b WHERE b.user.id = :userId")
     Integer countBaiVietByUserId(@Param("userId") Long userId);

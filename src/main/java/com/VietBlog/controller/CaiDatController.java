@@ -3,6 +3,9 @@ package com.VietBlog.controller;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import com.VietBlog.constraints.User.CoChu_User;
+import com.VietBlog.constraints.User.FontChu_User;
+import com.VietBlog.constraints.User.MauNen_User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -111,13 +114,20 @@ public class CaiDatController {
 	@PostMapping("/CaiDat/luuGiaoDien")
 	public String luuGiaoDien(@RequestParam("userId") Long userId, @RequestParam("mauNen") String mauNen,
 							  @RequestParam("fontChu") String fontChu, @RequestParam("coChu") String coChu) {
+
 		User user = userService.findById(userId);
-		user.setMauNen(mauNen);
-		user.setFontChu(fontChu);
-		user.setCoChu(coChu);
+
+		// Chuyển đổi giá trị String từ request sang enum
+		MauNen_User mauNen_User = MauNen_User.valueOf(mauNen.toUpperCase().replace(" ", "_"));
+		FontChu_User fontChu_User = FontChu_User.valueOf(fontChu.toUpperCase().replace(" ", "_"));
+		CoChu_User coChu_User = CoChu_User.valueOf(coChu.toUpperCase().replace(" ", "_"));
+
+
+		user.setMauNen(mauNen_User);
+		user.setFontChu(fontChu_User);
+		user.setCoChu(coChu_User);
 		userService.updateUser(user);
 
 		return "redirect:/CaiDat";
 	}
-
 }

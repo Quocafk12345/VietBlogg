@@ -3,55 +3,64 @@ package com.VietBlog.controller;
 import com.VietBlog.entity.BinhLuan;
 import com.VietBlog.repository.BaiVietRepository;
 import com.VietBlog.repository.BinhLuanRepository;
-import com.VietBlog.repository.UserRepository;
+import com.VietBlog.service.BaiVietService;
 import com.VietBlog.service.BinhLuanService;
+import com.VietBlog.service.LuotLike_BinhLuan_Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api/binh-luan/{idBaiViet}")
+@RequestMapping("/api/binh-luan")
 public class BinhLuanController {
 
-    private final BinhLuanRepository binhLuanRepository;
-    private final BaiVietRepository baiVietRepository;
-    private final UserRepository userRepository;
+    private final BaiVietService baiVietService;
     private final BinhLuanService binhLuanService;
+    private final LuotLike_BinhLuan_Service luotLike_BinhLuan_Service;
 
     @Autowired
-    public BinhLuanController(BinhLuanRepository binhLuanRepository, BaiVietRepository baiVietRepository, UserRepository userRepository, BinhLuanService binhLuanService) {
-        this.binhLuanRepository = binhLuanRepository;
-        this.baiVietRepository = baiVietRepository;
-        this.userRepository = userRepository;
+    public BinhLuanController(BaiVietService baiVietService, BinhLuanService binhLuanService, LuotLike_BinhLuan_Service luotLike_BinhLuan_Service) {
+        this.baiVietService = baiVietService;
         this.binhLuanService = binhLuanService;
+        this.luotLike_BinhLuan_Service = luotLike_BinhLuan_Service;
     }
 
-    @GetMapping()
+    @GetMapping("/{idBaiViet}/binh-luan-goc")
     public ResponseEntity<List<BinhLuan>> hienBinhLuanTheoBaiViet(@PathVariable Long idBaiViet) {
-        List<BinhLuan> listBL = binhLuanRepository.findRootCommentsByBaiVietId(idBaiViet);
+        List<BinhLuan> listBL = binhLuanService.layBinhLuanGoc(idBaiViet);
         return ResponseEntity.ok(listBL);
     }
 
-    @PostMapping
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<BinhLuan>> hienBinhLuanTheoUserId(@PathVariable Long userId) {
+        List<BinhLuan> listBL = binhLuanService.getBinhLuanByUserId(userId);
+        return ResponseEntity.ok(listBL);
+    }
+
+    @GetMapping("/{binhLuanChaId}/binh-luan-con")
+    public ResponseEntity<List<BinhLuan>> layBinhLuanCon(@PathVariable Long binhLuanChaId) {
+        List<BinhLuan> binhLuanCon = binhLuanService.layBinhLuanCon(binhLuanChaId);
+        return ResponseEntity.ok(binhLuanCon);
+    }
+
+    @PostMapping("/{idBaiViet}")
     public ResponseEntity<BinhLuan> themBinhLuan(@PathVariable Long idBaiViet, @RequestBody BinhLuan binhLuan) {
         try {
             // Gán bài viết cho bình luận
-            binhLuan.setBaiViet(baiVietRepository.findById(idBaiViet)
-                    .orElseThrow(() -> new RuntimeException("Bài viết không tồn tại")));
-
+            binhLuan.setBaiViet(baiVietService.getBaiVietById(idBaiViet));
             BinhLuan binhLuanMoi = binhLuanService.themBinhLuan(binhLuan);
             return ResponseEntity.ok(binhLuanMoi);
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body(new BinhLuan()); // Trả về bad request nếu level không hợp lệ
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
-
 
     @DeleteMapping("/{idBinhLuan}/xoa")
     public ResponseEntity<Void> xoaBinhLuan(@PathVariable Long idBinhLuan) {

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -36,7 +37,7 @@ public class ThanhVienService {
 		ThanhVien thanhVien = new ThanhVien(thanhVienId,
 				nhomRepository.findById(nhomId).orElseThrow(() -> new RuntimeException("Không tìm thấy nhóm")),
 				userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng")),
-				vaiTro);
+				vaiTro, LocalDate.now());
 		return thanhVienRepository.save(thanhVien);
 	}
 

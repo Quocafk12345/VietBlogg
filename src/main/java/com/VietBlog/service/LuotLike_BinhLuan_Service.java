@@ -49,6 +49,13 @@ public class LuotLike_BinhLuan_Service {
 		luotLikeBinhLuanRepository.deleteById(id);
 	}
 
+	// Xóa lượt like khỏi bình luận
+	@Transactional
+	public void xoaLuotLikeByIdBinhLuan(Long binhLuanId) {
+		List<LuotLike_BinhLuan> luotLike = luotLikeBinhLuanRepository.findByBinhLuan_Id(binhLuanId);
+		luotLikeBinhLuanRepository.deleteAll(luotLike);
+	}
+
 	// Kiểm tra xem một người dùng đã like một bình luận chưa
 	public boolean daLikeBinhLuan(Long userId, Long binhLuanId) {
 		LuotLike_BinhLuan_ID id = new LuotLike_BinhLuan_ID(userId, binhLuanId);

@@ -53,8 +53,7 @@ public class BaiVietService {
 
 	// Lấy bài viết theo ID
 	public BaiViet getBaiVietById(Long id) {
-		return baiVietRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Bài viết không tồn tại"));
+		return baiVietRepository.findById(id).orElseThrow(() -> new RuntimeException("Bài viết không tồn tại"));
 	}
 
 	// Lấy bài viết theo keyword

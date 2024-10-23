@@ -1,5 +1,6 @@
 package com.VietBlog.controller;
 
+import com.VietBlog.constraints.User.VaiTro_User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +17,7 @@ public class registerController {
 
     @PostMapping("/register")
     public String registerUser(@ModelAttribute("user") User user, Model model) {
-        user.setVaiTro("User");
+        user.setVaiTro(VaiTro_User.USER);
         if (userService.isEmailExists(user.getEmail())) {
             model.addAttribute("error", "Email đã tồn tại");
             return "account/register";

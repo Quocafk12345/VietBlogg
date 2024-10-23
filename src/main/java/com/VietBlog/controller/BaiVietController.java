@@ -22,17 +22,14 @@ public class BaiVietController {
     private final BinhLuanRepository binhLuanRepository;
     private final LuotLike_BaiViet_Repository luotLikeRepository;
     private final LuuBaiVietRepository luuBaiVietRepository;
-    private final UserRepository userRepository;
 
     @Autowired
     public BaiVietController(BaiVietService baiVietService, BinhLuanRepository binhLuanRepository,
-                             LuotLike_BaiViet_Repository luotLikeRepository, LuuBaiVietRepository luuBaiVietRepository,
-                             UserRepository userRepository) {
+                             LuotLike_BaiViet_Repository luotLikeRepository, LuuBaiVietRepository luuBaiVietRepository) {
         this.baiVietService = baiVietService;
         this.binhLuanRepository = binhLuanRepository;
         this.luotLikeRepository = luotLikeRepository;
         this.luuBaiVietRepository = luuBaiVietRepository;
-        this.userRepository = userRepository;
     }
 
     /**
@@ -40,7 +37,7 @@ public class BaiVietController {
      *
      */
     @GetMapping
-    public ResponseEntity<List<BaiViet>> findAll() {
+    public ResponseEntity<List<BaiViet>> findAll(){
         return ResponseEntity.ok(baiVietService.getAllBaiViet());
     }
 

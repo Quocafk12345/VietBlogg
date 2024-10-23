@@ -24,6 +24,8 @@ public interface LuotLike_BinhLuan_Repository extends JpaRepository<LuotLike_Bin
 	@Query("SELECT llbl.binhLuan FROM LuotLike_BinhLuan llbl WHERE llbl.user.id = :userId")
 	List<BinhLuan> findBinhLuanByUserId(@Param("userId") Long userId);
 
+	List<LuotLike_BinhLuan> findByBinhLuan_Id(Long idBinhLuan);
+
 	// Xóa một lượt like bình luận
 	void deleteById(@NonNull LuotLike_BinhLuan_ID id);
 }
