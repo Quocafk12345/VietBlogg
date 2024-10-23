@@ -1,5 +1,7 @@
 package com.VietBlog.entity;
 
+import com.VietBlog.constraints.ThanhVien.VaiTro_ThanhVien;
+import com.VietBlog.constraints.ThanhVien.VaiTro_ThanhVien_Converter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -32,8 +34,9 @@ public class ThanhVien {
     @Size(max = 255)
     @NotNull
     @Nationalized
+    @Convert(converter = VaiTro_ThanhVien_Converter.class)
     @Column(name = "Vai_Tro", nullable = false)
-    private String vaiTro;
+    private VaiTro_ThanhVien vaiTro;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "Ngay_Tham_Gia")

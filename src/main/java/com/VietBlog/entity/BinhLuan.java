@@ -1,5 +1,6 @@
 package com.VietBlog.entity;
 
+import com.VietBlog.constraints.BinhLuan.Level_BL_Converter;
 import com.VietBlog.constraints.BinhLuan.Level_Binh_Luan;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -32,7 +33,7 @@ public class BinhLuan implements Serializable {
      *   <li>2: Phản hồi của một phản hồi khác</li>
      * </ul>
      */
-    @Enumerated(EnumType.ORDINAL)
+    @Convert(converter = Level_BL_Converter.class)
     @Column(name = "Level_Binh_Luan")
     private Level_Binh_Luan level;
 
@@ -48,6 +49,7 @@ public class BinhLuan implements Serializable {
      * </ul>
      */
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "Id_BL_Cha")
     private BinhLuan binhLuanCha;
 

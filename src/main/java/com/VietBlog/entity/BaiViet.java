@@ -1,6 +1,7 @@
 package com.VietBlog.entity;
 
-import com.VietBlog.constraints.TrangThai_BaiViet;
+import com.VietBlog.constraints.BaiViet.TrangThai_BaiViet;
+import com.VietBlog.constraints.BaiViet.TrangThai_BaiViet_Converter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -49,7 +50,7 @@ public class BaiViet implements Serializable {
     @Column(name = "Ngay_Tao", nullable = false)
     private Timestamp ngayTao;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = TrangThai_BaiViet_Converter.class)
     @Column(name = "Trang_Thai", nullable = false)
     private TrangThai_BaiViet trangThai;
 
@@ -81,6 +82,5 @@ public class BaiViet implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "baiViet", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<DaPhuongTien> daPhuongTien = new LinkedHashSet<>();
-
 
 }

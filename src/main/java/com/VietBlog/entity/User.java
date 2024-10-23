@@ -7,10 +7,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.VietBlog.constraints.User.CoChu_User;
-import com.VietBlog.constraints.User.FontChu_User;
-import com.VietBlog.constraints.User.MauNen_User;
-import com.VietBlog.constraints.User.VaiTro_User;
+import com.VietBlog.constraints.User.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.persistence.*;
@@ -62,7 +59,7 @@ public class User implements Serializable {
     @Column(name = "Ngay_Tao", nullable = false)
     private LocalDate ngayTao;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = VaiTro_User_Converter.class)
     @Column(name = "Vai_Tro", nullable = false)
     private VaiTro_User vaiTro;
 
@@ -81,24 +78,15 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ThanhVien> thanhVien;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = MauNen_Converter.class)
     @Column(name = "Mau_Nen")
     private MauNen_User mauNen;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = FontChu_Converter.class)
     @Column(name = "Font_Chu")
-    private CoChu_User fontChu;
+    private FontChu_User fontChu;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = CoChu_Converter.class)
     @Column(name = "Co_Chu")
-    private FontChu_User coChu;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Set<BinhLuan> binhLuan = new LinkedHashSet<>();
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Set<ThongBao> thongBao = new LinkedHashSet<>();
-
+    private CoChu_User coChu;
 }
