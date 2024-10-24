@@ -1,5 +1,6 @@
 package com.VietBlog.service;
 
+import com.VietBlog.constraints.ThanhVien.VaiTro_ThanhVien;
 import com.VietBlog.entity.Nhom;
 import com.VietBlog.entity.ThanhVien;
 import com.VietBlog.entity.ThanhVienId;
@@ -37,7 +38,7 @@ public class ThanhVienService {
 		ThanhVien thanhVien = new ThanhVien(thanhVienId,
 				nhomRepository.findById(nhomId).orElseThrow(() -> new RuntimeException("Không tìm thấy nhóm")),
 				userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng")),
-				vaiTro, LocalDate.now());
+				VaiTro_ThanhVien.THANH_VIEN, LocalDate.now());
 		return thanhVienRepository.save(thanhVien);
 	}
 
@@ -57,7 +58,7 @@ public class ThanhVienService {
 		ThanhVienId thanhVienId = new ThanhVienId(nhomId, userId);
 		ThanhVien thanhVien = thanhVienRepository.findById(thanhVienId)
 				.orElseThrow(() -> new RuntimeException("Không tìm thấy thành viên"));
-		thanhVien.setVaiTro(vaiTro);
+		thanhVien.setVaiTro(VaiTro_ThanhVien.valueOf(vaiTro));
 		return thanhVienRepository.save(thanhVien);
 	}
 

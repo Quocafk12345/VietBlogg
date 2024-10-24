@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
@@ -18,7 +19,7 @@ import java.util.List;
 
 @Controller
 @SessionAttributes("user")
-public class Giao_Dien_Controller {
+public class GiaoDienController {
 
     @Autowired
     private UserService userService;
@@ -54,6 +55,11 @@ public class Giao_Dien_Controller {
         return "home";
     }
 
+    @GetMapping("/chi-tiet-bai-viet/{id}")
+    public String detail(@PathVariable Long id, Model model) {
+        model.getAttribute("id");
+        return "ChiTietBaiViet";
+    }
 
     @GetMapping("/CaiDat")
     public String hienThiCaiDat(Model model, HttpServletRequest request) {

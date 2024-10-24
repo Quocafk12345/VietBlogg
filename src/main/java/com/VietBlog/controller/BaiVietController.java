@@ -6,12 +6,17 @@ import com.VietBlog.entity.LuuBaiViet_ID;
 import com.VietBlog.entity.User;
 import com.VietBlog.repository.*;
 import com.VietBlog.service.BaiVietService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
@@ -36,16 +41,28 @@ public class BaiVietController {
      * Phương thức lấy tất cả bài đăng
      *
      */
+    @Operation(summary = "Lấy tất cả bài viết", description = "Lấy thông tin chi tiết của tất cả bài viết.")
+    @ApiResponse(responseCode = "200", description = "Thành công", content = @Content(schema = @Schema(implementation = BaiViet.class)))
+    @ApiResponse(responseCode = "404", description = "Không tìm thấy bài viết")
     @GetMapping
     public ResponseEntity<List<BaiViet>> findAll(){
         return ResponseEntity.ok(baiVietService.getAllBaiViet());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BaiViet> findById(@PathVariable Long id){
+        return ResponseEntity.ok(baiVietService.getBaiVietById(id));
+    }
+
 
     /**
      * Phương thức đếm số lượt like của một bài viết
      * @param id: Id của bài viết
      *
      */
+    @Operation(summary = "Đếm số lượt like", description = "Đếm số lượt like của một bài viết")
+    @ApiResponse(responseCode = "200", description = "Thành công", content = @Content(schema = @Schema(implementation = BaiViet.class)))
+    @ApiResponse(responseCode = "404", description = "Không tìm thấy bài viết")
     @GetMapping("/{id}/luot-like")
     public ResponseEntity<Integer> demLuotThich(@PathVariable Long id) {
         Integer luotLike = luotLikeRepository.countLuotLike_BaiVietByBaiVietId(id);
@@ -54,12 +71,12 @@ public class BaiVietController {
 
     /**
      * Phương thức đếm số lượt bình luận của một bài viết
-     * @param idBaiViet: Id của bài viết
+     * @param id: Id của bài viết
      *
      */
     @GetMapping("/{id}/luot-binh-luan")
-    public ResponseEntity<Integer> demBinhLuan(@PathVariable Long idBaiViet) {
-        Integer luotBL = binhLuanRepository.countBinhLuanByBaiVietId(idBaiViet);
+    public ResponseEntity<Integer> demBinhLuan(@PathVariable Long id) {
+        Integer luotBL = binhLuanRepository.countBinhLuanByBaiVietId(id);
         return ResponseEntity.ok(luotBL);
     }
 

@@ -1,11 +1,8 @@
 package com.VietBlog.controller;
 
 import com.VietBlog.entity.BinhLuan;
-import com.VietBlog.repository.BaiVietRepository;
-import com.VietBlog.repository.BinhLuanRepository;
 import com.VietBlog.service.BaiVietService;
 import com.VietBlog.service.BinhLuanService;
-import com.VietBlog.service.LuotLike_BinhLuan_Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +16,11 @@ public class BinhLuanController {
 
     private final BaiVietService baiVietService;
     private final BinhLuanService binhLuanService;
-    private final LuotLike_BinhLuan_Service luotLike_BinhLuan_Service;
 
     @Autowired
-    public BinhLuanController(BaiVietService baiVietService, BinhLuanService binhLuanService, LuotLike_BinhLuan_Service luotLike_BinhLuan_Service) {
+    public BinhLuanController(BaiVietService baiVietService, BinhLuanService binhLuanService) {
         this.baiVietService = baiVietService;
         this.binhLuanService = binhLuanService;
-        this.luotLike_BinhLuan_Service = luotLike_BinhLuan_Service;
     }
 
     @GetMapping("/{idBaiViet}/binh-luan-goc")
@@ -54,10 +49,8 @@ public class BinhLuanController {
             BinhLuan binhLuanMoi = binhLuanService.themBinhLuan(binhLuan);
             return ResponseEntity.ok(binhLuanMoi);
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
             return ResponseEntity.badRequest().body(new BinhLuan()); // Trả về bad request nếu level không hợp lệ
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }

@@ -1,10 +1,12 @@
 package com.VietBlog.constraints.User;
 
 public enum MauNen_User {
-	WHITE("Trắng"),
-	BLACK("Đen"),
-	BLUE("Xanh dương"),
-	YELLOW("Vàng");
+	WHITE("TRẮNG"),
+	BLACK("ĐEN"),
+	BLUE("XANH DƯƠNG"),
+	YELLOW("VÀNG"),
+	DEFAULT("MẶC ĐỊNH");
+
 
 	private final String value;
 

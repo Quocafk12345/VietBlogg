@@ -10,14 +10,13 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 </head>
 
-<body ng-app="app" ng-controller="ctrl">
-
+<body ng-app="app" ng-controller="BaiVietController">
 
 <div class="container mt-5">
 	<div class="row">
 		<!-- Hàng bài chính -->
 		<div class="col-12">
-			<div class="card mb-4" ng-repeat="bai in baiChinh">
+			<div class="card mb-4" ng-repeat="bai in bangTin">
 				<h1 class="card-title" ng-if="!bai.nhom">(Đây là bài cá nhân)</h1>
 				<h1 class="card-title" ng-if="bai.nhom">(Đây là bài nhóm)</h1>
 				<h5 class="card-title" ng-if="bai.nhom"> <img src="#" class="card-img-top">

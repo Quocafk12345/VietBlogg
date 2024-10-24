@@ -1,5 +1,6 @@
 package com.VietBlog.service;
 
+import com.VietBlog.constraints.ThanhVien.VaiTro_ThanhVien;
 import com.VietBlog.entity.BaiViet;
 import com.VietBlog.entity.Nhom;
 import com.VietBlog.entity.ThanhVien;
@@ -32,15 +33,15 @@ public class NhomService {
 
 	// Tạo nhóm mới
 	@Transactional
-	public Nhom taoNhom(Nhom nhom, Long userId) {
+	public Nhom taoNhom(Nhom nhom, Long chuNhomId) {
 		nhom.setNgayTao(Timestamp.from(Instant.now()));
 		Nhom nhomMoi = nhomRepository.save(nhom);
 
 		// Thêm người tạo vào nhóm với vai trò "CHỦ NHÓM"
-		ThanhVienId thanhVienId = new ThanhVienId(nhomMoi.getId(), userId);
+		ThanhVienId thanhVienId = new ThanhVienId(nhomMoi.getId(), chuNhomId);
 		ThanhVien thanhVien = new ThanhVien(thanhVienId, nhomMoi,
-				userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng")),
-				"CHỦ NHÓM", LocalDate.now());
+				userRepository.findById(chuNhomId).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng")),
+				VaiTro_ThanhVien.CHU_NHOM, LocalDate.now());
 		thanhVienRepository.save(thanhVien);
 
 		return nhomMoi;
@@ -56,7 +57,7 @@ public class NhomService {
 		ThanhVien thanhVien = new ThanhVien(thanhVienId,
 				nhomRepository.findById(nhomId).orElseThrow(() -> new RuntimeException("Không tìm thấy nhóm")),
 				userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng")),
-				vaiTro, LocalDate.now());
+				VaiTro_ThanhVien.THANH_VIEN, LocalDate.now());
 		return thanhVienRepository.save(thanhVien);
 	}
 

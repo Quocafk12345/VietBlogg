@@ -166,8 +166,8 @@ ALTER TABLE Users
 GO
 
 -- Cập nhật các thuộc tính Mau_Nen, Font_Chu, Co_Chu cho bảng Users
-ALTER TABLE Users ADD Mau_Nen VARCHAR(255);
-ALTER TABLE Users ADD Font_Chu VARCHAR(255);
+ALTER TABLE Users ADD Mau_Nen NVARCHAR(255);
+ALTER TABLE Users ADD Font_Chu NVARCHAR(255);
 ALTER TABLE Users ADD Co_Chu FLOAT;
 GO
 

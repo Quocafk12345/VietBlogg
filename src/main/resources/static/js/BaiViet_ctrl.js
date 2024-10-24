@@ -1,25 +1,25 @@
 let host = "http://localhost:8080/api/bai-viet";
 const app = angular.module("app", []);
-app.controller("ctrl", function ($scope, $http, $q) {  // Inject $q
-    $scope.baiChinh = [];
-    $scope.baiPhu = [];
-    $scope.baiSoiNoi = [];
+app.controller("BaiVietController", function ($scope, $http, $q) {  // Inject $q
+    $scope.bangTin = [];
+    $scope.dangTheoDoi = [];
+    $scope.baiDuocChon = {};
 
     $scope.load_bai_viet = function () {
         var url = `${host}`;
         $http
             .get(url)
             .then((resp) => {
-                $scope.baiChinh = resp.data;
+                $scope.bangTin = resp.data;
                 var promises = [];
-                angular.forEach($scope.baiChinh, function (baiViet) {
+                angular.forEach($scope.bangTin, function (baiViet) {
                     promises.push($scope.get_luot_like(baiViet.id));
                     promises.push($scope.get_luot_binh_luan(baiViet.id)); // Thêm promise cho lượt bình luận
                 });
                 $q.all(promises).then(function (results) {
-                    for (var i = 0; i < $scope.baiChinh.length; i++) {
-                        $scope.baiChinh[i].luotLike = results[i * 2]; // Kết quả lượt like ở vị trí i * 2
-                        $scope.baiChinh[i].luotBinhLuan = results[i * 2 + 1]; // Kết quả lượt bình luận ở vị trí i * 2 + 1
+                    for (var i = 0; i < $scope.bangTin.length; i++) {
+                        $scope.bangTin[i].luotLike = results[i * 2]; // Kết quả lượt like ở vị trí i * 2
+                        $scope.bangTin[i].luotBinhLuan = results[i * 2 + 1]; // Kết quả lượt bình luận ở vị trí i * 2 + 1
                     }
                 });
             })
@@ -51,6 +51,7 @@ app.controller("ctrl", function ($scope, $http, $q) {  // Inject $q
                 console.log("Error", error);
             });
     };
+    
 
     $scope.load_bai_viet();
 });
