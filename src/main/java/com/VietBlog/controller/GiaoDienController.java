@@ -57,7 +57,7 @@ public class GiaoDienController {
 
     @GetMapping("/chi-tiet-bai-viet/{id}")
     public String detail(@PathVariable Long id, Model model) {
-        model.getAttribute("id");
+        model.addAttribute("baiVietId", id);
         return "ChiTietBaiViet";
     }
 

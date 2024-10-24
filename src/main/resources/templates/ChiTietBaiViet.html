@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +8,11 @@
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-    <!-- Custom CSS -->
+	
+	<!-- AngularJS -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+	
+	<!-- Custom CSS -->
     <style>
         .post-title {
             font-size: 2rem;
@@ -69,25 +72,26 @@
     <div class="container mt-5">
         <div class="row">
             <!-- Cột trái: Nội dung bài viết -->
-            <div class="col-lg-8">
+            <div class="col-lg-8" ng-app="app" ng-controller="BaiVietController">
+	            <script th:inline="javascript">
+		            var baiVietId = [[${baiVietId}]];
+	            </script>
                 <div class="post-details">
                     <!-- Tiêu đề bài viết -->
-                    <h1 class="post-title">Tiêu đề bài viết</h1>
+                    <h1 class="post-title">{{chiTietBaiViet.tieuDe}}</h1>
                     <!-- Thông tin bài viết: Tên người dùng, thời gian đăng -->
-                    <p class="post-meta">Người đăng: Nguyễn Văn A - 2 giờ trước</p>
+                    <p class="post-meta">Người đăng: {{chiTietBaiViet.user.tenNguoiDung}} - {{ chiTietBaiViet.thoiGianDang }}</p>
                     <!-- Ảnh trong bài viết -->
                     <div class="post-content">
                         <img src="https://via.placeholder.com/800x400" alt="Post Image">
                         <!-- Nội dung bài viết -->
-                        <p class="mt-4">Đây là nội dung chi tiết của bài viết. Bài viết này có thể bao gồm rất nhiều nội dung, từ văn bản, hình ảnh, và các yếu tố khác. Nội dung này được thể hiện đầy đủ để người dùng có thể xem chi tiết hơn so với phiên bản rút gọn trên trang bảng tin.</p>
-                        <p>Đây là đoạn văn tiếp theo trong bài viết. Bạn có thể thêm nhiều đoạn văn, hình ảnh hoặc video theo nhu cầu của mình.</p>
-                    </div>
+	                    <p class="mt-4">{{chiTietBaiViet.noiDung}}</p>                    </div>
                     <!-- Tương tác bài viết -->
                     <div class="interaction-buttons d-flex justify-content-between">
                         <!-- Bên trái: Thích, Bình luận -->
                         <div>
-                            <button class="btn btn-light me-2"><i class="bi bi-hand-thumbs-up"></i> Thích</button>
-                            <button class="btn btn-light"><i class="bi bi-chat-left-text"></i> Bình luận</button>
+                            <button class="btn btn-light me-2"><i class="bi bi-hand-thumbs-up"></i> Thích {{chiTietBaiViet.luotLike}}</button>
+                            <button class="btn btn-light"><i class="bi bi-chat-left-text"></i> Bình luận {{chiTietBaiViet.luotBinhLuan}}</button>
                         </div>
                         <!-- Bên phải: Chia sẻ, Lưu -->
                         <div>
@@ -171,5 +175,6 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/BaiViet_ctrl.js}"></script>
 </body>
 </html>

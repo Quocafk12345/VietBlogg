@@ -3,7 +3,7 @@ const app = angular.module("app", []);
 app.controller("BaiVietController", function ($scope, $http, $q) {  // Inject $q
     $scope.bangTin = [];
     $scope.dangTheoDoi = [];
-    $scope.baiDuocChon = {};
+    $scope.chiTietBaiViet = {};
 
     $scope.load_bai_viet = function () {
         var url = `${host}`;
@@ -13,13 +13,14 @@ app.controller("BaiVietController", function ($scope, $http, $q) {  // Inject $q
                 $scope.bangTin = resp.data;
                 var promises = [];
                 angular.forEach($scope.bangTin, function (baiViet) {
-                    promises.push($scope.get_luot_like(baiViet.id));
-                    promises.push($scope.get_luot_binh_luan(baiViet.id)); // Thêm promise cho lượt bình luận
+                    promises.push($scope.getLuotLike(baiViet.id));
+                    promises.push($scope.getLuotBinhLuan(baiViet.id)); // Thêm promise cho lượt bình luận
                 });
                 $q.all(promises).then(function (results) {
                     for (var i = 0; i < $scope.bangTin.length; i++) {
                         $scope.bangTin[i].luotLike = results[i * 2]; // Kết quả lượt like ở vị trí i * 2
                         $scope.bangTin[i].luotBinhLuan = results[i * 2 + 1]; // Kết quả lượt bình luận ở vị trí i * 2 + 1
+                        $scope.bangTin[i].thoiGianDang = $scope.tinhThoiGianDang($scope.bangTin[i].ngayTao);
                     }
                 });
             })
@@ -28,7 +29,7 @@ app.controller("BaiVietController", function ($scope, $http, $q) {  // Inject $q
             });
     };
 
-    $scope.get_luot_like = function (idBaiViet) {
+    $scope.getLuotLike = function (idBaiViet) {
         var url = `${host}/${idBaiViet}/luot-like`;
         return $http
             .get(url)
@@ -40,7 +41,7 @@ app.controller("BaiVietController", function ($scope, $http, $q) {  // Inject $q
             });
     };
 
-    $scope.get_luot_binh_luan = function (idBaiViet) {
+    $scope.getLuotBinhLuan = function (idBaiViet) {
         var url = `${host}/${idBaiViet}/luot-binh-luan`;
         return $http
             .get(url)
@@ -51,7 +52,73 @@ app.controller("BaiVietController", function ($scope, $http, $q) {  // Inject $q
                 console.log("Error", error);
             });
     };
-    
+
+    $scope.chuyenTrang = function($event, baiVietId) {
+        console.log(baiVietId);
+        $event.preventDefault();
+        $event.target.href = '/chi-tiet-bai-viet/' + baiVietId;
+        window.location.href = $event.target.href;
+    };
+
+    $scope.loadBaiVietDuocChon = function (baiVietId) {
+        var url = `${host}/${baiVietId}`;
+        $http
+            .get(url)
+            .then((resp) => {
+                $scope.chiTietBaiViet = resp.data;
+
+                // Lấy lượt like và lượt bình luận cho bài viết đơn lẻ
+                $scope.getLuotLike($scope.chiTietBaiViet.id)
+                    .then(function(luotLike) {
+                        $scope.chiTietBaiViet.luotLike = luotLike;
+                    });
+
+                $scope.getLuotBinhLuan($scope.chiTietBaiViet.id)
+                    .then(function(luotBinhLuan) {
+                        $scope.chiTietBaiViet.luotBinhLuan = luotBinhLuan;
+                    });
+                $scope.chiTietBaiViet.thoiGianDang = $scope.tinhThoiGianDang($scope.chiTietBaiViet.ngayTao);
+            })
+            .catch((error) => {
+                console.log("Error", error);
+            });
+    };
 
     $scope.load_bai_viet();
+
+    $scope.tinhThoiGianDang = function(ngayTao) {
+        var ngayTao = new Date(ngayTao); // Chuyển đổi chuỗi ngày tạo thành đối tượng Date
+        var hienTai = new Date(); // Lấy thời gian hiện tại
+
+        var chenhLech = hienTai - ngayTao; // Tính chênh lệch thời gian (ms)
+
+        var giay = Math.floor(chenhLech / 1000);
+        var phut = Math.floor(giay / 60);
+        var gio = Math.floor(phut / 60);
+        var ngay = Math.floor(gio / 24);
+        var tuan = Math.floor(ngay / 7);
+        var thang = Math.floor(ngay / 30);
+        var nam = Math.floor(ngay / 365);
+
+        if (nam > 0) {
+            return nam + " năm trước";
+        } else if (thang > 0) {
+            return thang + " tháng trước";
+        } else if (tuan > 0) {
+            return tuan + " tuần trước";
+        } else if (ngay > 0) {
+            return ngay + " ngày trước";
+        } else if (gio > 0) {
+            return gio + " giờ trước";
+        } else if (phut > 0) {
+            return phut + " phút trước";
+        } else {
+            return giay + " giây trước";
+        }
+    };
+
+    // Kiểm tra xem có baiVietId được truyền từ Thymeleaf không
+    if (typeof baiVietId !== 'undefined') {
+        $scope.loadBaiVietDuocChon(baiVietId);
+    }
 });
