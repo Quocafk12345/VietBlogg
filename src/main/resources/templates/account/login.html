@@ -35,12 +35,9 @@
 	</div>
 </nav>
 <div class="account-container">
-		<main class="">
-			<div class="account-form-container">
+		<main class="row p-5">
+			<div class="account-form-container col-6">
 				<form class="account-form" action="/login" method="post">
-					<div class="account-banner h-50">
-						<h1 class="title">Đăng nhập</h1>
-					</div>
 					<div class="input-group">
 						<input class="form-control"  type="text" id="identifier" name="identifier" placeholder="Nhập tên đăng nhập" required>
 					</div>
@@ -53,21 +50,23 @@
 					<div class="w-100 text-center">
 						<button type="submit" class="btn btn-continue">Tiếp tục</button>
 					</div>
-<!--					<hr>-->
-<!--					<div class="ano-btn d-flex justify-content-center">-->
-<!--						<button type="button" class="btn d-flex align-items-center">-->
-<!--							<i class="bi bi-facebook me-2"></i>Facebook-->
-<!--						</button>-->
+					<hr>
+					<div class="ano-btn d-flex justify-content-center">
+						<button type="button" class="btn d-flex align-items-center">
+							<i class="bi bi-facebook me-2"></i>Facebook
+						</button>
 
-<!--						<button type="button" class="btn d-flex align-items-center">-->
-<!--							<i class="bi bi-google me-2"></i>Google-->
-<!--						</button>-->
-<!--					</div>-->
+						<button type="button" class="btn d-flex align-items-center">
+							<i class="bi bi-google me-2"></i>Google
+						</button>
+					</div>
 				</form>
 				<p class="text-center pt-2">Bạn không nhớ mật khẩu | <a href="/forgot-password">Quên mật khẩu?</a></p>
 
 			</div>
-
+			<div class="account-banner col-6 h-50">
+				<h1 class="title">Đăng nhập</h1>
+			</div>
 		</main>
 
 </div>
