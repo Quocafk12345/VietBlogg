@@ -31,7 +31,8 @@ public class loginController {
         if (user != null && user.getMatKhau().equals(password)) {
             model.addAttribute("user", user);
             // If password is correct, redirect to the profile page with userId as a query parameter
-            return "redirect:/profilepage?userId=" + user.getId();
+//            return "redirect:/trang-ca-nhan?userId=" + user.getId();
+            return "redirect:/index";
         } else {
             // If login fails, show an error message
             model.addAttribute("error", "Email/Số điện thoại hoặc mật khẩu không chính xác");
