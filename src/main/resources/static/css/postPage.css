@@ -1,0 +1,103 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+}
+
+.create-post-form {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+}
+.add-tags {
+    margin-bottom: 10px;
+    display: inline-block;
+    background-color: #F2F3F5;
+    padding: 8px 12px;
+    border-radius: 20px;
+    color: #333;
+    cursor: pointer;
+    font-size: 14px;
+}
+.post-tabs {
+    display: flex;
+    list-style: none;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eaeaea;
+    padding: 0;
+}
+
+.post-tabs li {
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.post-tabs li:hover{
+    background-color: #26B4FF;
+}
+
+.post-tabs .active {
+    border-bottom: 2px solid #0079D3;
+    color: #0079D3;
+}
+
+
+
+.post-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.post-actions button {
+    background-color: #0079D3;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.post-actions button.save-draft {
+    background-color: #F2F3F5;
+    color: #333;
+}
+
+/* Tab content styling */
+.tabcontent {
+    display: none;
+}
+
+/* Chỉ giữ lại CSS cho trình tải lên file nếu thực sự cần */
+.file-upload {
+    border: 2px dashed #ccc;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 8px;
+    color: #999;
+}
+.account-select {
+    width: 100%;
+}
+
+.account-select select {
+    border-radius: 20px;
+    width: 50%;
+    padding: 12px;
+    font-size: 16px;
+    box-sizing: border-box;
+    outline: none;
+    margin-bottom: 10px;
+    background-color:#eaeaea;
+    border: #eaeaea;
+}
