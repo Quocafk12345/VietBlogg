@@ -7,10 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.VietBlog.entity.User;
 import com.VietBlog.service.UserService;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 @Controller
-public class loginController {
+public class DangNhapController {
 
     @Autowired
     private UserService userService;
@@ -25,7 +24,7 @@ public class loginController {
         if (identifier.contains("@")) {
             user = userService.findByEmail(identifier); // Search by email
         } else {
-            user = userService.findByDienThoai(identifier); // Search by phone number
+            user = userService.findByTenDangNhap(identifier); // Search by phone number
         }
 
         if (user != null && user.getMatKhau().equals(password)) {
