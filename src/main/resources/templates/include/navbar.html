@@ -73,7 +73,9 @@
             <!-- Right-side buttons -->
             <div class="d-flex col-2">
                 <!-- Tạo bài viết -->
-                <button class="btn btn-primary me-3 add-post"><i class="bi bi-plus-square"></i></button>
+	            <form th:action="@{/dang-bai}" method="get" class="me-3">
+		            <button type="submit" class="btn btn-primary h-100 add-post"><i class="bi bi-plus-square"></i></button>
+	            </form>
                 
                 <!-- Thông báo -->
                 <button class="btn btn-outline-secondary position-relative me-3">

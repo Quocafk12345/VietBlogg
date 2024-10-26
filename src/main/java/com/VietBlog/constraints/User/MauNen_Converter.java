@@ -15,9 +15,6 @@ public class MauNen_Converter implements AttributeConverter<MauNen_User, String>
 		return switch (dbData) {
 			case "TRẮNG" -> MauNen_User.WHITE;
 			case "ĐEN" -> MauNen_User.BLACK;
-			case "XANH DƯƠNG" -> MauNen_User.BLUE;
-			case "VÀNG" -> MauNen_User.YELLOW;
-			case "MẶC ĐỊNH" -> MauNen_User.DEFAULT;
 			default -> throw new IllegalArgumentException("Unexpected database value: " + dbData);
 		};
 	}

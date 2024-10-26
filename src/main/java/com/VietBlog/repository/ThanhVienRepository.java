@@ -10,5 +10,6 @@ import java.util.List;
 @Repository
 public interface ThanhVienRepository extends JpaRepository<ThanhVien, ThanhVienId> {
     List<ThanhVien> findByUser_Id(Long UserId);
+    // Tìm theo idNhom
     List<ThanhVien> findByNhom_Id(Long NhomId);
 }
