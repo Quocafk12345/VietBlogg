@@ -1,5 +1,8 @@
 package com.VietBlog.controller;
 
+import com.VietBlog.constraints.User.CoChu_User;
+import com.VietBlog.constraints.User.FontChu_User;
+import com.VietBlog.constraints.User.MauNen_User;
 import com.VietBlog.constraints.User.VaiTro_User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +25,11 @@ public class registerController {
             model.addAttribute("error", "Email đã tồn tại");
             return "account/register";
         }
-
+        user.setVaiTro(VaiTro_User.USER);
+        user.setCoChu(CoChu_User.NHO);
+        user.setFontChu(FontChu_User.HELVETICA_NEUE);
+        user.setMauNen(MauNen_User.WHITE);
+        user.setHinhDaiDien(null);
         // Handle the optional Ngày sinh field
         if (user.getNgaySinh() == null) {
             // You can set a default date or leave it as null
