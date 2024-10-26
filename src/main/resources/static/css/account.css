@@ -7,11 +7,7 @@ body{
     margin: 0;
     padding: 0;
     height: 100vh;
-    background-color: #f5f1ed; /* Màu nền phía dưới */
-    background-image:
-            repeating-linear-gradient(90deg, #e5decf 0px, #e5decf    1px, transparent 1px, transparent 35px),
-            repeating-linear-gradient(0deg, #e5decf 0px, #e5decf  1px, transparent 1px, transparent 35px);
-
+    background-color: #f5f1ed;
 }
 .navbar {
 }
