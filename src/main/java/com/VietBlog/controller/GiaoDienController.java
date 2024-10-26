@@ -1,5 +1,7 @@
 package com.VietBlog.controller;
 
+import com.VietBlog.constraints.BaiViet.TrangThai_BaiViet;
+import com.VietBlog.constraints.BinhLuan.Level_Binh_Luan;
 import com.VietBlog.entity.BaiViet;
 import com.VietBlog.entity.User;
 import com.VietBlog.service.BaiVietService;
@@ -13,9 +15,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.TimeZone;
 
 @Controller
 @SessionAttributes("user")
@@ -50,6 +55,12 @@ public class GiaoDienController {
         return "account/verify-token"; // Trả về trang nhập mã xác thực
     }
 
+    @GetMapping("/dang-bai")
+    public String postPage() {
+        return "postPage";
+    }
+
+
     @GetMapping("/index")
     public String index() {
         return "home";
@@ -61,8 +72,8 @@ public class GiaoDienController {
         return "ChiTietBaiViet";
     }
 
-    @GetMapping("/CaiDat")
-    public String hienThiCaiDat(Model model, HttpServletRequest request) {
+    @GetMapping("/cai-dat")
+    public String hienThiCaiDat(Model model, HttpServletRequest request, TimeZone timeZone) {
         try {
             User user = (User) model.getAttribute("user"); // Thay bằng cách lấy từ session
             if (user == null) {
@@ -83,7 +94,7 @@ public class GiaoDienController {
         }
     }
     // Profile page
-    @GetMapping("/profilepage")
+    @GetMapping("/trang-ca-nhan")
     public String showProfile(@RequestParam(value = "userId", required = false) Long userId, Model model) {
         // Check if userId is provided
         if (userId == null) {
