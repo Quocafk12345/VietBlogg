@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>VietBlog</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+	      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+
+<body ng-app="app" ng-controller="BaiVietController">
+
+<div class="container mt-5">
+	<div class="row">
+		<!-- Hàng bài chính -->
+		<div class="col-12">
+			<div class="card mb-4" ng-repeat="bai in bangTin">
+				<h1 class="card-title" ng-if="!bai.nhom">(Đây là bài cá nhân)</h1>
+				<h1 class="card-title" ng-if="bai.nhom">(Đây là bài nhóm)</h1>
+				<h5 class="card-title" ng-if="bai.nhom"> <img src="#" class="card-img-top">
+					<!-- Đây là hình đại diện nhóm -->
+					{{bai.nhom.ten}} | Bộ đếm từ thời gian đăng bài đến hiện tại, quá 1 tháng thì hiện ngày đăng
+				</h5>
+				<h5 class="card-title" ng-if="!bai.nhom"> <img src="#" class="card-img-top">
+					<!-- Đây là hình đại diện người đăng -->
+					{{bai.user.tenNguoiDung}} | Bộ đếm từ thời gian đăng bài đến hiện tại, quá 1 tháng thì hiện ngày đăng
+				</h5>
+				<div class="card-body">
+					<h5 class="card-title">{{bai.tieuDe}}</h5>
+					<p>{{bai.noiDung}}</p>
+					<img src="#" class="card-img-top d-block" alt="Hình bài viết">
+					<button class="btn-outline-light">"Icon thích" {{ bai.luotLike }}</button>
+					<button class="btn-outline-light">"Icon bình luận" {{ bai.luotBinhLuan }}</button>
+					<button class="btn-outline-light">Chia sẻ</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+<script src="js/BaiViet_ctrl.js"></script>
+</body>
+
+</html>
