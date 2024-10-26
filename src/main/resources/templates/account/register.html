@@ -13,9 +13,7 @@
 
 <body>
 <div class="login-container">
-	<div class="brand">
-		<h1>VietBlog</h1>
-		<p>Nơi chia sẻ và truyền cảm hứng qua những bài viết.</p>
+
 <nav class="navbar navbar-expand-lg fixed-top p-3">
 	<a class="navbar-brand" href="#">VietBlog</a>
 	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,15 +21,23 @@
 	</button>
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav ms-auto">
-			<li class="nav-item dropdown language-btn">
-				<a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-					<i class="bi bi-translate"></i> Ngôn ngữ
-				</a>
-				<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-					<li><a class="dropdown-item" href="#">Tiếng Việt</a></li>
-					<li><a class="dropdown-item" href="#">Tiếng Anh</a></li>
-				</ul>
-			</li>
+<!--			<li class="nav-item dropdown language-btn">-->
+<!--				<a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--					<i class="bi bi-translate"></i> Ngôn ngữ-->
+<!--				</a>-->
+<!--				<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">-->
+<!--					<li><a class="dropdown-item" href="#">Tiếng Việt</a></li>-->
+<!--					<li><a class="dropdown-item" href="#">Tiếng Anh</a></li>-->
+<!--				</ul>-->
+<!--			</li><li class="nav-item dropdown language-btn">-->
+<!--				<a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--					<i class="bi bi-translate"></i> Ngôn ngữ-->
+<!--				</a>-->
+<!--				<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">-->
+<!--					<li><a class="dropdown-item" href="#">Tiếng Việt</a></li>-->
+<!--					<li><a class="dropdown-item" href="#">Tiếng Anh</a></li>-->
+<!--				</ul>-->
+<!--			</li>-->
 
 			<li class="nav-item sign-up-btn">
 				<a class="nav-link" href="/login">Đăng nhập</a>
@@ -40,9 +46,12 @@
 	</div>
 </nav>
 <div class="account-container">
-	<main class="row p-5">
-		<div class="account-form-container col-6">
+	<main class="">
+		<div class="account-form-container ">
 			<form class="account-form" action="/register" method="post">
+				<div class="account-banner  h-50">
+					<h1 class="title">Đăng ký</h1>
+				</div>
 							<!-- Các trường thông tin người dùng -->
 							<div class="input-group">
 								<input class="form-control" type="text" name="tenDangNhap" placeholder="Tên đăng nhập" required>
@@ -81,26 +90,20 @@
 								<button type="submit" class="btn btn-continue">Tiếp tục</button>
 							</div>
 
-							<hr>
-							<div class="ano-btn d-flex justify-content-center">
-								<button type="button" class="btn d-flex align-items-center">
-									<i class="bi bi-facebook me-2"></i>Facebook
-								</button>
+<!--							<hr>-->
+<!--							<div class="ano-btn d-flex justify-content-center">-->
+<!--								<button type="button" class="btn d-flex align-items-center">-->
+<!--									<i class="bi bi-facebook me-2"></i>Facebook-->
+<!--								</button>-->
 
-								<button type="button" class="btn d-flex align-items-center">
-									<i class="bi bi-google me-2"></i>Google
-								</button>
-							</div>
+<!--								<button type="button" class="btn d-flex align-items-center">-->
+<!--									<i class="bi bi-google me-2"></i>Google-->
+<!--								</button>-->
+<!--							</div>-->
 						</form>
+					</div>
 
-		<div class="signup">
-			<p>
-				Bạn đã có tài khoản? <a href="/login">Đăng Nhập</a>
-			</p>
-		</div>
-		<div class="account-banner col-6 h-50">
-			<h1 class="title">Đăng ký</h1>
-		</div>
+
 	</main>
 
 </div>

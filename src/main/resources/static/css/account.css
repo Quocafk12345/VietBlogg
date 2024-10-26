@@ -9,8 +9,7 @@ body{
     height: 100vh;
     background-color: #f5f1ed;
 }
-.navbar {
-}
+
 
 
 .navbar .navbar-brand{
@@ -48,7 +47,7 @@ body{
 
 .account-container{
     width: 100%;
-    height: 100%;
+    height: 100vh;
     display: grid;
     justify-content: center;
     place-items: center;
@@ -64,19 +63,15 @@ body{
     place-items: center;
     font-family: 'iCiel Panton Black',sans-serif;
     font-size: 100px;
-    transform: translate(-400px,-50px);
     background-color: #a99985;
     border-radius: 10px;
     color: #fff;
 }
 
-.account-form-container{
-    transform: translate(300px,0px);
-}
+
 
 .account-form-container .account-form{
-    padding: 50px;
-    padding-top: 150px;
+    padding: 20px;
     border: 5px solid #252323;
     border-radius: 10px;
     background-color: #f5f1ed;
