@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Random;
 
 @Controller
-public class QuenMatKhauController {
+public class forgotPasswordController {
 
 	@Autowired
 	private UserService userService;

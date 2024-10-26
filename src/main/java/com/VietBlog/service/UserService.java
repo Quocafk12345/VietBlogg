@@ -32,8 +32,8 @@ public class UserService {
 		return userRepository.findByEmail(email).isPresent();
 	}
 
-	public User findByTenDangNhap(String tenDangNhap) {
-        return userRepository.findByTenDangNhap(tenDangNhap).orElse(null);
+	public User findByDienThoai(String dienThoai) {
+        return userRepository.findByDienThoai(dienThoai).orElse(null);
     }
 
 	@Transactional

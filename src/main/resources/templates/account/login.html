@@ -18,15 +18,15 @@
 	</button>
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav ms-auto">
-			<li class="nav-item dropdown language-btn">
-				<a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-					<i class="bi bi-translate"></i> Ngôn ngữ
-				</a>
-				<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-					<li><a class="dropdown-item" href="#">Tiếng Việt</a></li>
-					<li><a class="dropdown-item" href="#">Tiếng Anh</a></li>
-				</ul>
-			</li>
+<!--			<li class="nav-item dropdown language-btn">-->
+<!--				<a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--					<i class="bi bi-translate"></i> Ngôn ngữ-->
+<!--				</a>-->
+<!--				<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">-->
+<!--					<li><a class="dropdown-item" href="#">Tiếng Việt</a></li>-->
+<!--					<li><a class="dropdown-item" href="#">Tiếng Anh</a></li>-->
+<!--				</ul>-->
+<!--			</li>-->
 
 			<li class="nav-item sign-up-btn">
 				<a class="nav-link" href="/register">Đăng ký</a>
@@ -37,9 +37,9 @@
 <div class="account-container">
 		<main class="row p-5">
 			<div class="account-form-container col-6">
-				<form class="account-form" th:action="@{/login}" method="post">
+				<form class="account-form" action="/login" method="post">
 					<div class="input-group">
-						<input class="form-control"  type="text" id="identifier" name="identifier" placeholder="Nhập email hoặc tên đăng nhập" required>
+						<input class="form-control"  type="text" id="identifier" name="identifier" placeholder="Nhập tên đăng nhập" required>
 					</div>
 					<div class="input-group">
 						<input class="form-control" type="password" id="password" name="password" placeholder="Nhập mật khẩu" required>

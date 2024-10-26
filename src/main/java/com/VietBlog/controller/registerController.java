@@ -13,7 +13,7 @@ import com.VietBlog.entity.User;
 import com.VietBlog.service.UserService;
 
 @Controller
-public class DangKyController {
+public class registerController {
 
     @Autowired
     private UserService userService;
