@@ -25,10 +25,6 @@ public class registerController {
             model.addAttribute("error", "Email đã tồn tại");
             return "account/register";
         }
-        user.setVaiTro(VaiTro_User.USER);
-        user.setCoChu(CoChu_User.NHO);
-        user.setFontChu(FontChu_User.HELVETICA_NEUE);
-        user.setMauNen(MauNen_User.WHITE);
         user.setHinhDaiDien(null);
         // Handle the optional Ngày sinh field
         if (user.getNgaySinh() == null) {
