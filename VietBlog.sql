@@ -165,6 +165,11 @@ ALTER TABLE Users
     ADD CONSTRAINT UQ_Ten_Dang_Nhap UNIQUE (Ten_Dang_Nhap);
 GO
 
+-- Đặt Unique chống trùng lặp cho Email của User
+ALTER TABLE Users
+    ADD CONSTRAINT UQ_Email UNIQUE (Email);
+GO
+
 -- Cập nhật các thuộc tính Mau_Nen, Font_Chu, Co_Chu cho bảng Users
 ALTER TABLE Users ADD Mau_Nen NVARCHAR(255);
 ALTER TABLE Users ADD Font_Chu NVARCHAR(255);
