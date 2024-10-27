@@ -35,7 +35,7 @@ public class CaiDatController {
 			User user = userService.findById(userId);
 
 			// Lưu hình ảnh vào database
-			userService.luuHinhAnh(hinhAnh, user);
+			userService.luuHinhDaiDien(hinhAnh, user);
 
 			model.addAttribute("message", "Cập nhật hình ảnh thành công!");
 		} else {

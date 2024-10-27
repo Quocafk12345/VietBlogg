@@ -13,10 +13,9 @@ public class CoChu_Converter implements AttributeConverter<CoChu_User, Integer> 
 	@Override
 	public CoChu_User convertToEntityAttribute(Integer dbData) {
 		return switch (dbData) {
-			case 14 -> CoChu_User.NHO;
 			case 16 -> CoChu_User.TRUNG_BINH;
 			case 20 -> CoChu_User.LON;
-			default -> throw new IllegalArgumentException("Unexpected database value: " + dbData);
+			default -> CoChu_User.NHO;
 		};
 	}
 }
