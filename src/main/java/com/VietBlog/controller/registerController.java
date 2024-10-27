@@ -32,7 +32,7 @@ public class registerController {
             user.setNgaySinh(null);
         }
 
-        userService.saveUser(user);
+        userService.dangKy(user);
         return "redirect:/login"; // Redirect to login page after successful registration
     }
 }
