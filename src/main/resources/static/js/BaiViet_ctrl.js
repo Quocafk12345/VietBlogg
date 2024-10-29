@@ -87,7 +87,7 @@ app.controller("BaiVietController", function ($scope, $http, $q) {  // Inject $q
     $scope.load_bai_viet();
 
     $scope.tinhThoiGianDang = function(ngayTao) {
-        var ngayTao = new Date(ngayTao); // Chuyển đổi chuỗi ngày tạo thành đối tượng Date
+        ngayTao = new Date(ngayTao); // Chuyển đổi chuỗi ngày tạo thành đối tượng Date
         var hienTai = new Date(); // Lấy thời gian hiện tại
 
         var chenhLech = hienTai - ngayTao; // Tính chênh lệch thời gian (ms)

@@ -54,6 +54,7 @@ public class BaiViet implements Serializable {
     @Column(name = "Trang_Thai", nullable = false)
     private TrangThai_BaiViet trangThai;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "User_Id", nullable = false)
     private User user;
@@ -76,6 +77,7 @@ public class BaiViet implements Serializable {
     private List<LuotLike_BaiViet> luotLikeBaiViet;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "Id_Bai_Viet_Chia_Se")
     private BaiViet baiVietChiaSe;
 

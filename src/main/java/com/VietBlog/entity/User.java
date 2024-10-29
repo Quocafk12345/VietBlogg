@@ -3,9 +3,7 @@ package com.VietBlog.entity;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.VietBlog.constraints.User.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -70,9 +68,9 @@ public class User implements Serializable {
     @Column(name = "Ngay_Sinh", nullable = false)
     private LocalDate ngaySinh;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BaiViet> baiViet;
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<BaiViet> baiViet;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

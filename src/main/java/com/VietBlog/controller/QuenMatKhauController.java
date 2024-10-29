@@ -65,7 +65,7 @@ public class QuenMatKhauController {
         User user = userService.findByEmail(this.email); // Sử dụng email đã lưu
         if (user != null) {
             user.setMatKhau(password); // Cập nhật mật khẩu mới
-            userService.saveUser(user); // Lưu vào cơ sở dữ liệu
+            userService.updateUser(user); // Lưu vào cơ sở dữ liệu
             model.addAttribute("message", "Mật khẩu đã được cập nhật thành công!");
             return "account/login"; // Chuyển về trang đăng nhập
         } else {

@@ -73,9 +73,7 @@
             <!-- Right-side buttons -->
             <div class="d-flex col-2">
                 <!-- Tạo bài viết -->
-	            <form th:action="@{/dang-bai}" method="get" class="me-3">
-		            <button type="submit" class="btn btn-primary h-100 add-post"><i class="bi bi-plus-square"></i></button>
-	            </form>
+                <button class="btn btn-primary me-3 add-post"><i class="bi bi-plus-square"></i></button>
                 
                 <!-- Thông báo -->
                 <button class="btn btn-outline-secondary position-relative me-3">
@@ -89,9 +87,10 @@
                 <div class="dropdown">
                     <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="https://via.placeholder.com/40" alt="Avatar" class="rounded-circle me-2" width="30" height="30">
+	                    <span th:text="${session.currentUser != null} ? ${session.currentUser.tenNguoiDung} : 'Tên người dùng'"></span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                        <li><a class="dropdown-item" th:href="@{/trang-ca-nhan/}">Trang cá nhân</a></li>
+                        <li><a class="dropdown-item" href="#">Trang cá nhân</a></li>
                         <li><a class="dropdown-item" href="#">Cài đặt</a></li>
                         <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
                     </ul>
