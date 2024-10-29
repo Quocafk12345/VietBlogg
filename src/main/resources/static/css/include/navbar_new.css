@@ -1,0 +1,68 @@
+.navbar-light {
+    background-color: #F5F1ED; /* Nền trắng sáng */
+    border-bottom: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+}
+
+/* Màu sắc cho các thành phần trong navbar */
+.nav-page-link, .navbar-brand, .dropdown-item {
+    color: #252323; /* Màu đen thay thế */
+    position: relative;
+    transition: color 0.3s;
+}
+
+.nav-page-link{
+    font-weight: 700;
+}
+
+/* Hiệu ứng hover cho đường dẫn */
+.nav-page-link:hover {
+    color: #70798c; /* Màu nhấn khi hover */
+
+}
+
+.nav-page-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0;
+    height: 2px;
+    background-color: #70798c   ; /* Gạch dưới nhấn */
+    transition: width 0.3s ease;
+}
+.nav-page-link:hover::after {
+    width: 100%;
+}
+
+/* Thanh tìm kiếm */
+.search-form {
+    border: 1px solid #70798C;
+    width: 600px;
+    border-radius: 7px;
+    background-color: #fff;
+    padding: 2px;
+}
+.form-control {
+    background-color: none; /* Màu nền sáng hơn */
+    border: none; /* Viền màu xám nhạt */
+    color: #252323; /* Màu chữ tối */
+}
+
+.form-control:focus {
+    border-color: #A99985; /* Viền màu nhấn khi focus */
+    box-shadow: none;
+}
+
+/* Nút tìm kiếm */
+.btn-search {
+    color: #252323; /* Màu chữ tối */
+    border-color: #70798C; /* Viền màu xám nhạt */
+
+}
+
+.btn-search:hover {
+    background-color: #70798C;
+    border-color: #70798C;
+    color: #F5F1ED;
+}

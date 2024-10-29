@@ -1,0 +1,43 @@
+/* CSS tùy chỉnh cho trang nhóm */
+.sidebar {
+    background: #f8f9fa;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    height: 100vh; /* Chiều cao thanh sidebar */
+}
+.sidebar button {
+    width: 100%;
+    margin-bottom: 10px;
+}
+.create-group {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #ffffff;
+}
+.group-list {
+    margin-top: 20px;
+}
+.group-item {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background: #f1f1f1;
+}
+
+.group-card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #fff;
+    text-align: center;
+}
+.group-card img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+}
