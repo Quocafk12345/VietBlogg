@@ -1,7 +1,5 @@
 package com.VietBlog.controller;
 
-import com.VietBlog.constraints.BaiViet.TrangThai_BaiViet;
-import com.VietBlog.constraints.BinhLuan.Level_Binh_Luan;
 import com.VietBlog.entity.BaiViet;
 import com.VietBlog.entity.User;
 import com.VietBlog.service.BaiVietService;
@@ -10,31 +8,36 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.TimeZone;
 
 @Controller
-@SessionAttributes("user")
+@SessionAttributes("currentUser")
 public class GiaoDienController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    private final BaiVietService baiVietService;
 
     @Autowired
-    private BaiVietService baiVietService;
+    public GiaoDienController(UserService userService, BaiVietService baiVietService) {
+        this.userService = userService;
+        this.baiVietService = baiVietService;
+    }
 
     @GetMapping("/login")
     public String login() {
         return "account/login";
+    }
+
+    @PostMapping("/login-success") // Endpoint mới để lưu User vào session
+    public String loginSuccess(@RequestBody User user, Model model) {
+        model.addAttribute("currentUser", user);
+        return "redirect:/index"; // Redirect đến trang index
     }
 
     @GetMapping("/register")
@@ -99,7 +102,7 @@ public class GiaoDienController {
         // Check if userId is provided
         if (userId == null) {
             model.addAttribute("error", "Vui lòng đăng nhập để truy cập trang cá nhân.");
-            return "account/login"; // Redirect to login page if userId is not provided
+            return "redirect:/login"; // Redirect to login page if userId is not provided
         }
 
         // Fetch user by ID
@@ -124,7 +127,7 @@ public class GiaoDienController {
         } else {
             // Handle case where user is not found
             model.addAttribute("error", "User không tồn tại.");
-            return "account/login"; // Redirect to login if the user is not found
+            return "redirect:/login"; // Redirect to login if the user is not found
         }
 
         return "account/profilepage"; // Return to profile page

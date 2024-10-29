@@ -27,7 +27,7 @@ public class CaiDatController {
 	private UserService userService;
 
 
-	@PostMapping("/CaiDat/capNhatHinhAnh")
+	@PostMapping("/cai-dat/cap-nhat-hinh-anh")
 	public String capNhatHinhAnh(@RequestParam("hinhAnh") MultipartFile hinhAnh, @RequestParam("userId") Long userId,
 								 Model model) throws IOException {
 		if (!hinhAnh.isEmpty()) {
@@ -41,14 +41,14 @@ public class CaiDatController {
 		} else {
 			model.addAttribute("error", "Vui lòng chọn hình ảnh để tải lên.");
 		}
-		return "redirect:/CaiDat";
+		return "redirect:/cai-dat";
 	}
 
 	@PostMapping("/CaiDat/capNhat")
 	public String capNhatThongTin(@ModelAttribute User user) {
 		try {
 			userService.updateUser(user);
-			return "redirect:/CaiDat";
+			return "redirect:/cai-dat";
 		} catch (Exception e) {
 			// Xử lý exception, ví dụ: log lỗi và hiển thị thông báo lỗi
 			return "error";
@@ -84,7 +84,7 @@ public class CaiDatController {
 			existingUser.setMatKhau(matKhauMoi);
 			userService.updateUser(existingUser);
 
-			return "redirect:/CaiDat";
+			return "redirect:/cai-dat";
 
 		} catch (Exception e) {
 			model.addAttribute("errorMessage", "Có lỗi xảy ra khi thay đổi mật khẩu.");
@@ -108,7 +108,7 @@ public class CaiDatController {
 		} catch (Exception e) {
 			model.addAttribute("error", "Có lỗi xảy ra khi cập nhật thông tin cá nhân.");
 		}
-		return "redirect:/CaiDat";
+		return "redirect:/cai-dat";
 	}
 
 	@PostMapping("/CaiDat/luuGiaoDien")
@@ -128,6 +128,6 @@ public class CaiDatController {
 		user.setCoChu(coChu_User);
 		userService.updateUser(user);
 
-		return "redirect:/CaiDat";
+		return "redirect:/cai-dat";
 	}
 }
