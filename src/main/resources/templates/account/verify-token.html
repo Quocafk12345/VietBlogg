@@ -8,7 +8,7 @@
     <h1>Xác Thực Mã Đặt Lại Mật Khẩu</h1>
     <form action="#" th:action="@{/verify-token}" method="post">
         <label for="token">Nhập Mã Xác Thực:</label>
-        <input type="text" name="token" required />
+        <input type="text" name="token" id="token" required />
         <button type="submit">Xác Thực</button>
     </form>
     <div th:if="${error}">
