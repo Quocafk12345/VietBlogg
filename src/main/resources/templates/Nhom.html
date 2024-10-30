@@ -11,14 +11,80 @@
     <!-- css -->
     <link rel="stylesheet" th:href="@{/css/include/navbar.css}">
     <link rel="stylesheet" th:href="@{/css/Page/Nhom.css}">
-
+    <link rel="stylesheet" href="../css/Page/Nhom.css">
 </head>
 <body>
     <div class="Nhom-container">
         <div th:replace="include/navbar :: navbar"></div>
         <div class="container-fluid row">
+            <header>
+                <button id="doi-anh">Đổi ảnh đại diện</button>
+            </header>
 
+            <div class="header-content">
+                <h1>Cosplayer VietNam</h1>
+                <div class="group-info">
+                    <span>Nhóm Riêng tư - 305,7K thành viên</span>
+                    <button>+ Đăng bài</button>
+                    <button>Chia sẻ</button>
+                    <!-- Dropdown button for "Đã tham gia" -->
+                    <div class="btn-group">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="joinedGroupDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            Đã tham gia
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="joinedGroupDropdown">
+                            <li><a class="dropdown-item" href="#">Rời nhóm</a></li>
+                            <li><a class="dropdown-item" href="#">Giải tán nhóm</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <nav>
+                <ul>
+                    <li>Thảo luận</li>
+                    <li>Đáng chú ý</li>
+                    <li>Thành viên</li>
+                    <li>File phương tiện</li>
+                    <li>Bài viết kiểm duyệt</li>
+                </ul>
+            </nav>
+
+            <main>
+                <div class="left-column">
+                    <div class="featured-section">
+                        <h2>Bài viết</h2>
+                        <div class="featured-post">
+                            <p>Nguyễn Tùng Nhi</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="right-column">
+                    <div class="group-description">
+                        <h2>Giới thiệu</h2>
+                        <p>tất cả mọi người nếu có nhu cầu về mua bán cosplay đều có thể tham gia :3</p>
+                        <p>Cần giúp đỡ inbox admin</p>
+                    </div>
+                    <div class="group-rules">
+                        <h2>Quy định nhóm</h2>
+                        <p>Chỉ thành viên mới nhìn thấy mọi người trong nhóm và những gì họ đăng.</p>
+                        <p>Ai cũng có thể tìm thấy nhóm này.</p>
+                        <a href="#">Tìm hiểu thêm</a>
+                    </div>
+                    <div class="group-chat">
+                        <h2>Đoạn chat</h2>
+                        <div class="chat-room">
+                            <p>2024 - CVFO - 3</p>
+                            <button>Tham gia</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
         </div>
     </div>
 </body>
+
+<!-- bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
 </html>
