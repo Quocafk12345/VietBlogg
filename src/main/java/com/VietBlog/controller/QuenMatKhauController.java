@@ -38,7 +38,7 @@ public class QuenMatKhauController {
 			return "account/verify-token"; // Chuyển đến trang nhập mã xác thực
 		} else {
 			model.addAttribute("error", "Email không tồn tại!");
-			return "forgot-password"; // Quay lại trang nhập email
+			return "account/forgot-password"; // Quay lại trang nhập email
 		}
 	}
 
@@ -54,13 +54,13 @@ public class QuenMatKhauController {
 	}
 
 	@PostMapping("/reset-password")
-    public String processResetPassword(@RequestParam String password, 
-                                        @RequestParam String confirmPassword, 
-                                        Model model) {
-        if (!password.equals(confirmPassword)) {
-            model.addAttribute("error", "Mật khẩu xác nhận không khớp!");
-            return "account/reset-password"; // Quay lại trang nhập mật khẩu mới
-        }
+	public String processResetPassword(@RequestParam String password,
+	                                   @RequestParam String confirmPassword,
+	                                   Model model) {
+		if (!password.equals(confirmPassword)) {
+			model.addAttribute("error", "Mật khẩu xác nhận không khớp!");
+			return "account/reset-password"; // Quay lại trang nhập mật khẩu mới
+		}
 
         User user = userService.findByEmail(this.email); // Sử dụng email đã lưu
         if (user != null) {

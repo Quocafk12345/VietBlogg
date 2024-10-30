@@ -54,7 +54,6 @@ public class BaiViet implements Serializable {
     @Column(name = "Trang_Thai", nullable = false)
     private TrangThai_BaiViet trangThai;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "User_Id", nullable = false)
     private User user;
