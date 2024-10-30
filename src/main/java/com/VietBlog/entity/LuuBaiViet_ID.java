@@ -15,9 +15,6 @@ import java.util.Objects;
 @AllArgsConstructor
 public class LuuBaiViet_ID implements Serializable {
 
-    /**
-     *
-     */
     @Serial
     private static final long serialVersionUID = 1L;
 

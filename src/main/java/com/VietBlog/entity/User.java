@@ -20,9 +20,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "Users")
 public class User implements Serializable {
 
-    /**
-     *
-     */
     @Serial
     private static final long serialVersionUID = 1L;
 

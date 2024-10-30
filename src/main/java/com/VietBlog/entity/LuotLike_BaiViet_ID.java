@@ -15,10 +15,6 @@ import java.util.Objects;
 @AllArgsConstructor
 public class LuotLike_BaiViet_ID implements Serializable {
 
-
-    /**
-     *
-     */
     @Serial
     private static final long serialVersionUID = 1L;
 

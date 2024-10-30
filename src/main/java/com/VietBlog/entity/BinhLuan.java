@@ -65,6 +65,4 @@ public class BinhLuan implements Serializable {
     @ManyToOne
     @JoinColumn(name = "User_Id", nullable = false)
     private User user;
-
-
 }
