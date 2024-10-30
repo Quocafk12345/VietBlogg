@@ -38,7 +38,7 @@ public class QuenMatKhauController {
 			return "account/verify-token"; // Chuyển đến trang nhập mã xác thực
 		} else {
 			model.addAttribute("error", "Email không tồn tại!");
-			return "forgot-password"; // Quay lại trang nhập email
+			return "account/forgot-password"; // Quay lại trang nhập email
 		}
 	}
 
