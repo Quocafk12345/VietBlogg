@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <link rel="stylesheet" th:href="@{/css/postPage.css}">
     <title>CKEditor Integration</title>
@@ -11,7 +11,6 @@
 
     <!-- CKEditor 5 CDN -->
     <script th:src="@{https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js}"></script>
-
 </head>
 
 <body>
@@ -22,7 +21,7 @@
     <div class="account-select mb-3">
         <select th:name="userName">
             <option value="">Chọn người dùng</option>
-            <option th:each="name:${userNames}" th:value="${name}" th:text="${name}"></option>
+            <option th:each="name:*{userNames}" th:value="${name}" th:text="${name}"></option>
         </select>
     </div>
     <!-- Tabs -->
@@ -40,7 +39,7 @@
 
     <!-- Cố định trường tiêu đề -->
     <div class="post-content mb-3">
-        <input th:name="Tieu_De" type="text" placeholder="Title*" class="form-control" maxlength="300" th:required="required" />
+        <input th:field="*{Tieu_De}" type="text" placeholder="Title*" class="form-control" maxlength="300" th:required="required" />
         <div class="add-tags mt-2">Add tags</div>
     </div>
 
