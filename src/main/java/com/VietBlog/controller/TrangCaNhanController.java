@@ -5,10 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class NhomController {
-
-    @GetMapping("/Nhom")
-    public String Nhom(){
-        return "page/Nhom_new";
-    }
+public class TrangCaNhanController {
+    @GetMapping("/Trang_ca_nhan")
+    public static String trangCaNhan() { return "account/trangCaNhan"; }
 }

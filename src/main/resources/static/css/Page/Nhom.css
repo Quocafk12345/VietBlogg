@@ -1,82 +1,43 @@
-/* CSS cơ bản cho các thành phần */
-body {
-    font-family: sans-serif;
-    max-width: 1200px; /* Giới hạn chiều rộng tối đa cho toàn bộ nội dung */
-    margin: 0 auto; /* Canh giữa nội dung */
-    box-sizing: border-box; /* Bao gồm padding và border vào chiều rộng */
+/* CSS tùy chỉnh cho trang nhóm */
+.sidebar {
+    background: #f8f9fa;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    height: 100vh; /* Chiều cao thanh sidebar */
 }
-
-header {
-    background-color: #f0f2f5;
+.sidebar button {
+    width: 100%;
+    margin-bottom: 10px;
+}
+.create-group {
+    margin-top: 20px;
     padding: 10px;
-    background-image: url("anh-dai-dien.jpg");
-    background-size: contain; /* Hoặc 100px 100px */
-    background-position: center;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #ffffff;
 }
-
-#doi-anh {
-    /* CSS cho nút đổi ảnh */
+.group-list {
+    margin-top: 20px;
+}
+.group-item {
     padding: 10px;
-    background-color: #4CAF50; /* Màu xanh lá cây */
-    color: white;
-    border: none;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background: #f1f1f1;
 }
 
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    background-color: #e4e6eb;
-}
-
-nav li {
+.group-card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
     padding: 10px;
+    margin: 10px 0;
+    background-color: #fff;
+    text-align: center;
 }
-
-main {
-    display: flex;
-}
-
-.left-column {
-    width: 60%;
-    padding: 10px;
-}
-
-.right-column {
-    width: 40%;
-    padding: 10px;
-    border-left: 1px solid #ddd;
-}
-
-/* ... thêm các kiểu CSS khác ... */
-/* CSS cho tất cả các nút button */
-button {
-    background-color: #008CBA; /* Màu xanh dương */
-    color: white;
-    padding: 10px 10px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px; /* Bo góc */
-    font-family: sans-serif;
-}
-
-/* Hiệu ứng hover */
-button:hover {
-    background-color: #005b82; /* Màu xanh đậm hơn khi hover */
-}
-
-/* CSS cho nút "Tham gia" trong phần chat */
-.group-chat .chat-room button {
-    background-color: #4CAF50; /* Màu xanh lá cây */
-}
-
-.group-chat .chat-room button:hover {
-    background-color: #367c39; /* Màu xanh lá cây đậm hơn khi hover */
+.group-card img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
 }

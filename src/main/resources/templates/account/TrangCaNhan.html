@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VietBlog</title>
+
+    <!-- bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- AngularJS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+    <!-- css -->
+    <link rel="stylesheet" th:href="@{/css/include/navbar_new.css}">
+    <link rel="stylesheet" th:href="@{/css/include/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/account/TrangCaNhan.css}">
+
+
+</head>
+<body>
+<div th:replace="~{include/navbar_new :: navbar}"></div>
+<div class="container mt-4">
+    <!-- Phần thông tin người dùng -->
+    <div class="profile-header d-flex align-items-center">
+        <img src="https://via.placeholder.com/100" alt="Avatar" class="avatar">
+        <div class="profile-info">
+            <h2>Nguyễn Văn A</h2>
+            <p><strong>Người theo dõi:</strong> 150</p>
+            <p><strong>Bài đã đăng:</strong> 45</p>
+            <p><strong>Tiểu sử:</strong> Yêu thích chia sẻ kiến thức về lập trình và công nghệ.</p>
+            <div class="btn-group">
+                <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Quản lý tài khoản</button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Chỉnh sửa thông tin</a></li>
+                    <li><a class="dropdown-item" href="#">Đổi mật khẩu</a></li>
+                    <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
+                </ul>
+            </div>
+            <button class="btn btn-primary">Cài đặt</button>
+        </div>
+    </div>
+
+    <!-- Phần bài đăng -->
+    <ul class="nav nav-tabs mt-4" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="posts-tab" data-bs-toggle="tab" href="#posts" role="tab" aria-controls="posts" aria-selected="true">Bài đăng</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="shared-tab" data-bs-toggle="tab" href="#shared" role="tab" aria-controls="shared" aria-selected="false">Bài chia sẻ</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="saved-tab" data-bs-toggle="tab" href="#saved" role="tab" aria-controls="saved" aria-selected="false">Đã lưu</a>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="myTabContent">
+        <!-- Tab Bài đăng -->
+        <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="post-item">
+                        <img src="https://via.placeholder.com/500x300" alt="Thumbnail" class="thumbnail">
+                        <h6>Bài đăng 1</h6>
+                        <p>Nội dung tóm tắt bài đăng 1... Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <a href="#" class="btn btn-link">Xem thêm</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Tab Bài chia sẻ -->
+        <div class="tab-pane fade" id="shared" role="tabpanel" aria-labelledby="shared-tab">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="post-item">
+                        <img src="https://via.placeholder.com/500x300" alt="Thumbnail" class="thumbnail">
+                        <h6>Bài chia sẻ 1</h6>
+                        <p>Nội dung tóm tắt bài chia sẻ 1... Aenean commodo ligula eget dolor. Aenean massa.</p>
+                        <a href="#" class="btn btn-link">Xem thêm</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Tab Đã lưu -->
+        <div class="tab-pane fade" id="saved" role="tabpanel" aria-labelledby="saved-tab">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="post-item">
+                        <img src="https://via.placeholder.com/500x300" alt="Thumbnail" class="thumbnail">
+                        <h6>Bài đã lưu 1</h6>
+                        <p>Nội dung tóm tắt bài đã lưu 1... Curabitur sodales ligula in libero. Sed dignissim lacinia nunc.</p>
+                        <a href="#" class="btn btn-link">Xem thêm</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
