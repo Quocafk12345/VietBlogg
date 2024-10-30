@@ -180,6 +180,18 @@ UPDATE Users
 Set Ngay_Sinh = '2002-10-10'
 GO
 
+UPDATE Users
+Set Co_Chu = 16
+GO
+
+UPDATE Users
+Set Font_Chu = 'Helvetica Neue'
+GO
+
+UPDATE Users
+Set Mau_Nen = N'TRẮNG'
+GO
+
 ALTER TABLE Thanh_Vien ADD Ngay_Tham_Gia DATE;
 GO
 
