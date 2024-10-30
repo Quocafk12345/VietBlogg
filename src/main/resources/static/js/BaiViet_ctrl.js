@@ -1,12 +1,12 @@
-let host = "http://localhost:8080/api/bai-viet";
-const app = angular.module("app", []);
+let host_BaiViet = "http://localhost:8080/api/bai-viet";
+const app = angular.module("BaiVietApp", []);
 app.controller("BaiVietController", function ($scope, $http, $q) {  // Inject $q
     $scope.bangTin = [];
     $scope.dangTheoDoi = [];
     $scope.chiTietBaiViet = {};
 
     $scope.load_bai_viet = function () {
-        var url = `${host}`;
+        var url = `${host_BaiViet}`;
         $http
             .get(url)
             .then((resp) => {
@@ -30,7 +30,7 @@ app.controller("BaiVietController", function ($scope, $http, $q) {  // Inject $q
     };
 
     $scope.getLuotLike = function (idBaiViet) {
-        var url = `${host}/${idBaiViet}/luot-like`;
+        var url = `${host_BaiViet}/${idBaiViet}/luot-like`;
         return $http
             .get(url)
             .then((resp) => {
@@ -42,7 +42,7 @@ app.controller("BaiVietController", function ($scope, $http, $q) {  // Inject $q
     };
 
     $scope.getLuotBinhLuan = function (idBaiViet) {
-        var url = `${host}/${idBaiViet}/luot-binh-luan`;
+        var url = `${host_BaiViet}/${idBaiViet}/luot-binh-luan`;
         return $http
             .get(url)
             .then((resp) => {
@@ -61,7 +61,7 @@ app.controller("BaiVietController", function ($scope, $http, $q) {  // Inject $q
     };
 
     $scope.loadBaiVietDuocChon = function (baiVietId) {
-        var url = `${host}/${baiVietId}`;
+        var url = `${host_BaiViet}/${baiVietId}`;
         $http
             .get(url)
             .then((resp) => {

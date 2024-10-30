@@ -48,7 +48,7 @@
 
     </style>
 </head>
-<body>
+<body ng-app="loginApp" ng-controller="loginController">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm border sticky-top" th:fragment="navbar">
         <div class="container-fluid row">
@@ -90,9 +90,14 @@
 	                    <span th:text="${session.currentUser != null} ? ${session.currentUser.tenNguoiDung} : 'Tên người dùng'"></span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                        <li><a class="dropdown-item" href="#">Trang cá nhân</a></li>
+                        <li>
+	                        <form th:action="@{/trang-ca-nhan}" method="get">
+	                            <input type="hidden" name="userId" th:value="${session.currentUser.id}">
+	                            <button type="submit" class="dropdown-item">Trang cá nhân</button>
+                            </form>
+                        </li>
                         <li><a class="dropdown-item" href="#">Cài đặt</a></li>
-                        <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
+                        <li><button class="dropdown-item" ng-click="logout()">Đăng xuất</button></li>
                     </ul>
                 </div>
             </div>
