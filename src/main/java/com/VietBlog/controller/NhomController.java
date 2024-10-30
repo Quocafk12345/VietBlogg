@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class NhomController {
 
-    @GetMapping("/Nhom")
+    @GetMapping("/ChiTietNhom")
     public String Nhom(){
-        return "page/Nhom_new";
+        return "ChiTietNhom";
     }
 }

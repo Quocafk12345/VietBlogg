@@ -1,0 +1,82 @@
+/* CSS cơ bản cho các thành phần */
+body {
+    font-family: sans-serif;
+    max-width: 1200px; /* Giới hạn chiều rộng tối đa cho toàn bộ nội dung */
+    margin: 0 auto; /* Canh giữa nội dung */
+    box-sizing: border-box; /* Bao gồm padding và border vào chiều rộng */
+}
+
+header {
+    background-color: #f0f2f5;
+    padding: 10px;
+    background-image: url("anh-dai-dien.jpg");
+    background-size: contain; /* Hoặc 100px 100px */
+    background-position: center;
+}
+
+#doi-anh {
+    /* CSS cho nút đổi ảnh */
+    padding: 10px;
+    background-color: #4CAF50; /* Màu xanh lá cây */
+    color: white;
+    border: none;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    background-color: #e4e6eb;
+}
+
+nav li {
+    padding: 10px;
+}
+
+main {
+    display: flex;
+}
+
+.left-column {
+    width: 60%;
+    padding: 10px;
+}
+
+.right-column {
+    width: 40%;
+    padding: 10px;
+    border-left: 1px solid #ddd;
+}
+
+/* ... thêm các kiểu CSS khác ... */
+/* CSS cho tất cả các nút button */
+button {
+    background-color: #008CBA; /* Màu xanh dương */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px; /* Bo góc */
+    font-family: sans-serif;
+}
+
+/* Hiệu ứng hover */
+button:hover {
+    background-color: #005b82; /* Màu xanh đậm hơn khi hover */
+}
+
+/* CSS cho nút "Tham gia" trong phần chat */
+.group-chat .chat-room button {
+    background-color: #4CAF50; /* Màu xanh lá cây */
+}
+
+.group-chat .chat-room button:hover {
+    background-color: #367c39; /* Màu xanh lá cây đậm hơn khi hover */
+}
