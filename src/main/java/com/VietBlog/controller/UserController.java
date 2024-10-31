@@ -8,9 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Map;
+
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/user")
+@SessionAttributes("currentUser")
 public class UserController {
 
 	private final UserService userService;
@@ -33,7 +36,7 @@ public class UserController {
 	@PostMapping("/dang-xuat")
 	public ResponseEntity<?> logout(SessionStatus sessionStatus) {
 		sessionStatus.setComplete();
-		return ResponseEntity.ok("Đăng xuất thành công");
+		return ResponseEntity.ok().body(Map.of("message", "Đăng xuất thành công"));
 	}
 
 	@PutMapping("/update")

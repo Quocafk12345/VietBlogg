@@ -1,6 +1,5 @@
 let host_BaiViet = "http://localhost:8080/api/bai-viet";
-const app = angular.module("BaiVietApp", []);
-app.controller("BaiVietController", function ($scope, $http, $q) {  // Inject $q
+mainApp.controller("BaiVietController", function ($scope, $http, $q) {  // Inject $q
     $scope.bangTin = [];
     $scope.dangTheoDoi = [];
     $scope.chiTietBaiViet = {};

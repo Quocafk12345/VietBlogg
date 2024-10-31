@@ -41,10 +41,9 @@ public class GiaoDienController {
         return "redirect:/index"; // Redirect đến trang index
     }
 
-    @GetMapping("/logout")
-    public String logout(SessionStatus sessionStatus) {
-        sessionStatus.setComplete(); // Hủy session
-        return "redirect:/login"; // Redirect đến trang đăng nhập
+    @GetMapping("/chi-tiet-nhom")
+    public String Nhom(){
+        return "ChiTietNhom";
     }
 
     @GetMapping("/register")
