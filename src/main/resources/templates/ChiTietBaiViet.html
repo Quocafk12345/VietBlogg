@@ -103,61 +103,33 @@
             </div>
 
             <!-- Cột phải: Bình luận -->
-            <div class="col-lg-4">
-                <h4>Bình luận</h4>
-                <div class="comments-section">
-                    <!-- Thông tin tác giả bình luận -->
-                    <div class="user-info">
-                        <img src="https://via.placeholder.com/40" alt="User Avatar">
-                        <div>
-                            <h6 class="mb-0">Tác giả bình luận: Trần Thị B</h6>
-                            <small class="text-muted">1 giờ trước</small>
-                        </div>
-                    </div>
-                    <!-- Một bình luận -->
-                    <div class="comment mb-4">
-                        <div class="d-flex">
-                            <img src="https://via.placeholder.com/50" class="rounded-circle me-3" alt="User Avatar">
-                            <div>
-                                <h6 class="mb-0">Trần Thị B</h6>
-                                <small class="text-muted">1 giờ trước</small>
-                                <p class="mt-2">Bài viết này rất hữu ích. Cảm ơn bạn đã chia sẻ!</p>
-                                <div class="comment-action">
-                                    <div>
-                                        <button class="btn btn-link btn-sm">Thích</button>
-                                        <button class="btn btn-link btn-sm">Trả lời</button>
-                                        <button class="btn btn-link btn-sm">Báo cáo</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Một bình luận khác -->
-                    <div class="comment mb-4">
-                        <div class="d-flex">
-                            <img src="https://via.placeholder.com/50" class="rounded-circle me-3" alt="User Avatar">
-                            <div>
-                                <h6 class="mb-0">Phạm Văn C</h6>
-                                <small class="text-muted">30 phút trước</small>
-                                <p class="mt-2">Mình rất thích cách bạn viết bài, rất chi tiết và rõ ràng.</p>
-                                <div class="comment-action">
-                                    <div>
-                                        <button class="btn btn-link btn-sm">Thích</button>
-                                        <button class="btn btn-link btn-sm">Trả lời</button>
-                                        <button class="btn btn-link btn-sm">Báo cáo</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Phần thêm bình luận của bạn -->
-                <div class="comment-input">
-                    <h5>Thêm bình luận của bạn:</h5>
-                    <textarea class="form-control" rows="3" placeholder="Nhập bình luận của bạn..."></textarea>
-                    <button class="btn btn-primary mt-2">Gửi bình luận</button>
-                </div>
-            </div>
+	        <div class="col-lg-4" ng-controller="BinhLuanController">
+		        <h4>Bình luận</h4>
+		        <div class="comments-section">
+			        <div class="comment mb-4" ng-repeat="binhLuan in danhSachBinhLuan">
+				        <div class="d-flex">
+					        <img src="https://via.placeholder.com/50" class="rounded-circle me-3" alt="User Avatar">
+					        <div>
+						        <h6 class="mb-0">{{binhLuan.user.tenNguoiDung}}</h6>
+						        <small class="text-muted">{{binhLuan.thoiGianDang}}</small>
+						        <p class="mt-2">{{binhLuan.noiDung}}</p>
+						        <div class="comment-action">
+							        <div>
+								        <button class="btn btn-link btn-sm">Thích</button>
+								        <button class="btn btn-link btn-sm">Trả lời</button>
+								        <button class="btn btn-link btn-sm">Báo cáo</button>
+							        </div>
+						        </div>
+					        </div>
+				        </div>
+			        </div>
+		        </div>
+		        <div class="comment-input">
+			        <h5>Thêm bình luận của bạn:</h5>
+			        <textarea class="form-control" rows="3" placeholder="Nhập bình luận của bạn..."></textarea>
+			        <button class="btn btn-primary mt-2">Gửi bình luận</button>
+		        </div>
+	        </div>
         </div>
 
         <!-- Bài viết liên quan -->
@@ -181,6 +153,7 @@
 </script>
 <script th:src="@{/js/MainApp.js}"></script>
 <script th:src="@{/js/BaiViet_ctrl.js}"></script>
+<script th:src="@{/js/BinhLuan_ctrl.js}"></script>
 <script th:src="@{/js/DangNhap_ctrl.js}"></script>
 </body>
 </html>

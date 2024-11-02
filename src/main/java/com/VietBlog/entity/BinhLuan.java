@@ -49,7 +49,6 @@ public class BinhLuan implements Serializable {
      * </ul>
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
     @JoinColumn(name = "Id_BL_Cha")
     private BinhLuan binhLuanCha;
 
