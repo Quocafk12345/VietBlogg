@@ -5,6 +5,7 @@ app.controller("nhomController", function ($scope, $http) {
     $scope.nhoms = [];
 
     $scope.loadNhom = function () {
+
         // Giả sử bạn có thể lấy userId từ session hoặc từ model Thymeleaf
         let userId = /* Lấy userId từ session hoặc model */
 

@@ -34,5 +34,4 @@ public interface NhomRepository extends JpaRepository<Nhom, Long> {
 	// Tìm nhóm mà người dùng đã tham gia
 	@Query("SELECT tv.nhom FROM ThanhVien tv WHERE tv.user.id = :userId")
 	List<Nhom> findNhomTheoNguoiDung(@Param("userId") Long userId);
-
 }
