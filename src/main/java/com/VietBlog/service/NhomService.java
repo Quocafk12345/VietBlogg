@@ -99,5 +99,4 @@ public class NhomService {
 	public List<Nhom> layDanhSachNhomCuaThanhVien(Long userId) {
 		return nhomRepository.findNhomByUserId(userId);
 	}
-
 }

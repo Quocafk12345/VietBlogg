@@ -24,5 +24,4 @@ public class NhomController {
         List<Nhom> nhoms = nhomService.layDanhSachNhomCuaThanhVien(userId);
         return ResponseEntity.ok(nhoms);
     }
-
 }
