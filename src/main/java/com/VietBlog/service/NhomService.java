@@ -86,4 +86,17 @@ public class NhomService {
 		return nhomRepository.countThanhVienByNhomId(nhomId);
 	}
 
+	// Lấy danh sách nhóm theo người dùng
+	public List<Nhom> layDanhSachNhomTheoNguoiDung(Long userId) {
+		return nhomRepository.findNhomTheoNguoiDung(userId);
+	}
+
+	public List<Nhom> layDanhSachNhomDaThamGia(Long userId) {
+		return nhomRepository.findNhomByUserId(userId);
+	}
+
+	// Lấy danh sách nhóm của một người dùng
+	public List<Nhom> layDanhSachNhomCuaThanhVien(Long userId) {
+		return nhomRepository.findNhomByUserId(userId);
+	}
 }
