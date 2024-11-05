@@ -67,31 +67,22 @@ public class BinhLuanService {
 	// Xóa bình luận
 	@Transactional
 	public void xoaBinhLuan(Long binhLuanId) {
-		// Xóa lượt like của bình luận gốc
-		xoaLuotLikeCuaBinhLuanVaCon(binhLuanId);
+		// Tìm tất cả ID của bình luận con (bao gồm cả cấp 1 và cấp 2)
+		List<Long> binhLuanConIds = new ArrayList<>();
+		binhLuanConIds.add(binhLuanId); // Thêm ID của bình luận gốc
 
-		// Tìm tất cả bình luận con cấp 1 của bình luận cần xóa
 		List<BinhLuan> binhLuanCap1 = binhLuanRepository.findByBinhLuanCha_Id(binhLuanId);
-
 		for (BinhLuan blCap1 : binhLuanCap1) {
-			xoaLuotLikeCuaBinhLuanVaCon(blCap1.getId());
-			binhLuanRepository.deleteAll(binhLuanRepository.findByBinhLuanCha_Id(blCap1.getId()));
+			binhLuanConIds.add(blCap1.getId()); // Thêm ID của bình luận cấp 1
+			binhLuanConIds.addAll(binhLuanRepository.findByBinhLuanCha_Id(blCap1.getId())
+					.stream().map(BinhLuan::getId).toList()); // Thêm ID của bình luận cấp 2
 		}
-		binhLuanRepository.deleteAll(binhLuanCap1);
-		binhLuanRepository.deleteById(binhLuanId);
-	}
 
-	// Phương thức hỗ trợ xóa lượt like của bình luận và các bình luận con
-	private void xoaLuotLikeCuaBinhLuanVaCon(Long binhLuanId) {
-		// Xóa lượt like của bình luận hiện tại
-		List<LuotLike_BinhLuan> luotLikes = luotLike_BinhLuan_Repository.findByBinhLuan_Id(binhLuanId);
-		luotLike_BinhLuan_Repository.deleteAll(luotLikes);
+		// Xóa lượt like của tất cả bình luận con
+		luotLike_BinhLuan_Repository.deleteAllByBinhLuan_IdInBatch(binhLuanConIds);
 
-		// Xóa lượt like của các bình luận con (đệ quy)
-		List<BinhLuan> binhLuanCon = binhLuanRepository.findByBinhLuanCha_Id(binhLuanId);
-		for (BinhLuan blCon : binhLuanCon) {
-			xoaLuotLikeCuaBinhLuanVaCon(blCon.getId());
-		}
+		// Xóa tất cả bình luận con
+		binhLuanRepository.deleteAllByIdInBatch(binhLuanConIds);
 	}
 
 	// Cập nhật bình luận

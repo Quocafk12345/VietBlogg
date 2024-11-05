@@ -48,8 +48,7 @@ public class BinhLuan implements Serializable {
      *   <li>KHÁC: ID của bình luận được phản hồi</li>
      * </ul>
      */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Id_BL_Cha")
     private BinhLuan binhLuanCha;
 

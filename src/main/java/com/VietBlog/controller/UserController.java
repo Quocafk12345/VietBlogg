@@ -1,16 +1,24 @@
 package com.VietBlog.controller;
 
+import com.VietBlog.entity.BaiViet;
 import com.VietBlog.entity.User;
 import com.VietBlog.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Map;
+
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/user")
+@SessionAttributes("currentUser")
 public class UserController {
 
 	private final UserService userService;
@@ -20,6 +28,9 @@ public class UserController {
 		this.userService = userService;
 	}
 
+	@Operation(summary = "Đăng nhập tài khoản", description = "Nhận thông tin chi tiết của người dùng và lưu vào session.")
+	@ApiResponse(responseCode = "200", description = "Thành công", content = @Content(schema = @Schema(implementation = BaiViet.class)))
+	@ApiResponse(responseCode = "404", description = "Không tìm thấy tài khoản", content = @Content(schema = @Schema(implementation = BaiViet.class)))
 	@PostMapping("/dang-nhap")
 	public User login(@RequestParam("identifiers") String identifier,
 	                               @RequestParam("password") String password) {
@@ -33,7 +44,7 @@ public class UserController {
 	@PostMapping("/dang-xuat")
 	public ResponseEntity<?> logout(SessionStatus sessionStatus) {
 		sessionStatus.setComplete();
-		return ResponseEntity.ok("Đăng xuất thành công");
+		return ResponseEntity.ok().body(Map.of("message", "Đăng xuất thành công"));
 	}
 
 	@PutMapping("/update")

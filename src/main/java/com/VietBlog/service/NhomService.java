@@ -81,6 +81,10 @@ public class NhomService {
 		return nhomRepository.findBaiVietByNhomId(nhomId);
 	}
 
+	public List<Nhom> layToanBoNhom(){
+		return nhomRepository.findAll();
+	}
+
 	// Đếm số lượng thành viên của một nhóm
 	public int demSoLuongThanhVien(Long nhomId) {
 		return nhomRepository.countThanhVienByNhomId(nhomId);
