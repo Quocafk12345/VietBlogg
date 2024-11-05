@@ -21,19 +21,34 @@ mainApp.controller('BinhLuanController', function($scope, $http, timeService) {
     };
 
     $scope.hienThiBinhLuanCon = function(binhLuan) {
-        if (binhLuan.replies.length === 0) { // Chỉ lấy bình luận con nếu chưa lấy
+        if (binhLuan.replies.length === 0) {
             $http.get(`${host_BinhLuan}/${binhLuan.id}/binh-luan-con`)
                 .then(resp => {
                     binhLuan.replies = resp.data;
                     angular.forEach(binhLuan.replies, function(reply) {
                         reply.thoiGianDang = $scope.tinhThoiGianDang(reply.ngayTao);
+                        reply.showReplies = false; // Hiển thị tất cả bình luận con cấp 2
+                        reply.replies = []; // Khởi tạo mảng replies cho bình luận cấp 2
                     });
                 })
                 .catch(error => {
                     console.error("Lỗi khi lấy bình luận con:", error);
                 });
         }
-        binhLuan.showReplies = !binhLuan.showReplies; // Đảo trạng thái hiển thị
+        binhLuan.showReplies = !binhLuan.showReplies; // Đảo trạng thái hiển thị cho bình luận cấp 1
+    };
+
+    $scope.layBinhLuanConCap2 = function(binhLuan) {
+        $http.get(`${host_BinhLuan}/${binhLuan.id}/binh-luan-con`)
+            .then(resp => {
+                binhLuan.replies = resp.data;
+                angular.forEach(binhLuan.replies, function(reply) {
+                    reply.thoiGianDang = $scope.tinhThoiGianDang(reply.ngayTao);
+                });
+            })
+            .catch(error => {
+                console.error("Lỗi khi lấy bình luận con cấp 2:", error);
+            });
     };
 
     $scope.themBinhLuan = function(binhLuanCha) {
