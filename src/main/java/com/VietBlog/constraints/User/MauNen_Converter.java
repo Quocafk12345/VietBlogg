@@ -14,8 +14,8 @@ public class MauNen_Converter implements AttributeConverter<MauNen_User, String>
 	public MauNen_User convertToEntityAttribute(String dbData) {
 		return switch (dbData) {
 			case "ĐEN" -> MauNen_User.BLACK;
-			default -> MauNen_User.WHITE;
-
+			case "TRẮNG" -> MauNen_User.WHITE;
+			default -> throw new IllegalArgumentException("Unexpected database value: " + dbData);
 		};
 	}
 }

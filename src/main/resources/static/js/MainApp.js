@@ -1,4 +1,4 @@
-// mainApp.js
+// MainApp.js
 var mainApp = angular.module('mainApp', []);
 
 mainApp.service('timeService', function () {

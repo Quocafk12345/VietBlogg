@@ -107,17 +107,56 @@
 		        <h4>Bình luận</h4>
 		        <div class="comments-section">
 			        <div class="comment mb-4" ng-repeat="binhLuan in danhSachBinhLuan">
-				        <div class="d-flex">
+				        <div>
 					        <img src="https://via.placeholder.com/50" class="rounded-circle me-3" alt="User Avatar">
+					        <h6 class="mb-0">{{binhLuan.user.tenNguoiDung}}</h6>
+					        <small class="text-muted">{{binhLuan.thoiGianDang}}</small>
+					        <p class="mt-2">{{binhLuan.noiDung}}</p>
+					        <div class="comment-action">
+						        <div>
+							        <button class="btn btn-link btn-sm">Thích</button>
+							        <button class="btn btn-link btn-sm" ng-click="hienThiInputTraLoi(binhLuan)">Trả lời</button>
+							        <button class="btn btn-link btn-sm">Báo cáo</button>
+						        </div>
+					        </div>
 					        <div>
-						        <h6 class="mb-0">{{binhLuan.user.tenNguoiDung}}</h6>
-						        <small class="text-muted">{{binhLuan.thoiGianDang}}</small>
-						        <p class="mt-2">{{binhLuan.noiDung}}</p>
-						        <div class="comment-action">
+						        <button class="btn btn-link btn-sm" ng-click="hienThiBinhLuanCon(binhLuan)">
+							        <span ng-if="!binhLuan.showReplies">Xem các phản hồi</span>
+							        <span ng-if="binhLuan.showReplies">Ẩn các phản hồi</span>
+						        </button>
+					        </div>
+					        <div class="comment-input mt-2" ng-show="binhLuan.showReplyForm">
+						        <textarea class="form-control" ng-attr-id="replyInput-{{binhLuan.id}}" placeholder="Nhập nội dung trả lời..."
+						                  rows="2"></textarea>
+						        <button class="btn btn-primary mt-2 btn-sm" ng-click="themBinhLuan(binhLuan)">Gửi
+						        </button>
+					        </div>
+					        <div class="ms-4" ng-repeat="reply in binhLuan.replies" ng-show="binhLuan.showReplies">
+						        <div class="d-flex">
+							        <img alt="User Avatar" class="rounded-circle me-3"
+							             src="https://via.placeholder.com/50">
 							        <div>
-								        <button class="btn btn-link btn-sm">Thích</button>
-								        <button class="btn btn-link btn-sm">Trả lời</button>
-								        <button class="btn btn-link btn-sm">Báo cáo</button>
+								        <h6 class="mb-0">{{reply.user.tenNguoiDung}}</h6>
+								        <small class="text-muted">{{reply.thoiGianDang}}</small>
+								        <p class="mt-2">{{reply.noiDung}}</p>
+							        </div>
+							        <div class="comment-action">
+								        <div>
+									        <button class="btn btn-link btn-sm">Thích</button>
+									        <button class="btn btn-link btn-sm" ng-click="hienThiInputTraLoi(reply)">Trả lời</button>
+									        <button class="btn btn-link btn-sm">Báo cáo</button>
+								        </div>
+							        </div>
+							        <div>
+								        <button class="btn btn-link btn-sm" ng-click="hienThiBinhLuanCon(reply)">
+									        <span ng-if="!reply.showReplies">Xem các phản hồi</span>
+									        <span ng-if="reply.showReplies">Ẩn các phản hồi</span>
+								        </button>
+							        </div>
+							        <div class="comment-input mt-2" ng-show="reply.showReplyForm">
+								        <textarea class="form-control" ng-attr-id="replyInput-{{reply.id}}" placeholder="Nhập nội dung trả lời..." rows="2"></textarea>
+								        <button class="btn btn-primary mt-2 btn-sm" ng-click="themBinhLuan(reply)">Gửi
+								        </button>
 							        </div>
 						        </div>
 					        </div>
@@ -126,8 +165,9 @@
 		        </div>
 		        <div class="comment-input">
 			        <h5>Thêm bình luận của bạn:</h5>
-			        <textarea class="form-control" rows="3" placeholder="Nhập bình luận của bạn..."></textarea>
-			        <button class="btn btn-primary mt-2">Gửi bình luận</button>
+			        <textarea class="form-control" id="binhLuanInput" placeholder="Nhập bình luận của bạn..."
+			                  rows="3"></textarea>
+			        <button class="btn btn-primary mt-2" ng-click="themBinhLuan()">Gửi bình luận</button>
 		        </div>
 	        </div>
         </div>
@@ -150,6 +190,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 <script th:inline="javascript">
 	var baiVietId = [[${baiVietId}]];
+	var currentUserId = [[${session.currentUser.id}]];
 </script>
 <script th:src="@{/js/MainApp.js}"></script>
 <script th:src="@{/js/BaiViet_ctrl.js}"></script>

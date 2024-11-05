@@ -14,7 +14,8 @@ public class VaiTro_User_Converter implements AttributeConverter<VaiTro_User, St
 	public VaiTro_User convertToEntityAttribute(String dbData) {
 		return switch (dbData) {
 			case "ADMIN" -> VaiTro_User.ADMIN;
-			default -> VaiTro_User.USER;
+			case "USER" -> VaiTro_User.USER;
+			default -> throw new IllegalArgumentException("Unexpected database value: " + dbData);
 		};
 	}
 }

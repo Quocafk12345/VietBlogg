@@ -16,7 +16,8 @@ public class FontChu_Converter implements AttributeConverter<FontChu_User, Strin
 			case "Times New Roman" -> FontChu_User.TIMES_NEW_ROMAN;
 			case "Tahoma" -> FontChu_User.TAHOMA;
 			case "Verdana" -> FontChu_User.VERDANA;
-			default -> FontChu_User.HELVETICA_NEUE;
+			case "Helvetica Neue" -> FontChu_User.HELVETICA_NEUE;
+			default -> throw new IllegalArgumentException("Unexpected database value: " + dbData);
 		};
 	}
 }
