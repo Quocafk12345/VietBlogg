@@ -40,8 +40,7 @@ public class BinhLuanService {
 					.orElseThrow(() -> new RuntimeException("Bình luận cha không tồn tại"));
 			if (binhLuanCha.getLevel().compareTo(Level_Binh_Luan.CAP_2) >= 0) {
 				binhLuan.setLevel(Level_Binh_Luan.CAP_2);
-			}
-			binhLuan.setLevel(Level_Binh_Luan.values()[binhLuanCha.getLevel().ordinal() + 1]);
+			} else binhLuan.setLevel(Level_Binh_Luan.values()[binhLuanCha.getLevel().ordinal() + 1]);
 		} else {
 			binhLuan.setLevel(Level_Binh_Luan.BINH_LUAN_GOC); // Bình luận gốc
 		}
@@ -68,21 +67,21 @@ public class BinhLuanService {
 	@Transactional
 	public void xoaBinhLuan(Long binhLuanId) {
 		// Tìm tất cả ID của bình luận con (bao gồm cả cấp 1 và cấp 2)
-		List<Long> binhLuanConIds = new ArrayList<>();
-		binhLuanConIds.add(binhLuanId); // Thêm ID của bình luận gốc
+		List<Long> binhLuanConId = new ArrayList<>();
+		binhLuanConId.add(binhLuanId); // Thêm ID của bình luận gốc
 
 		List<BinhLuan> binhLuanCap1 = binhLuanRepository.findByBinhLuanCha_Id(binhLuanId);
 		for (BinhLuan blCap1 : binhLuanCap1) {
-			binhLuanConIds.add(blCap1.getId()); // Thêm ID của bình luận cấp 1
-			binhLuanConIds.addAll(binhLuanRepository.findByBinhLuanCha_Id(blCap1.getId())
+			binhLuanConId.add(blCap1.getId()); // Thêm ID của bình luận cấp 1
+			binhLuanConId.addAll(binhLuanRepository.findByBinhLuanCha_Id(blCap1.getId())
 					.stream().map(BinhLuan::getId).toList()); // Thêm ID của bình luận cấp 2
 		}
 
 		// Xóa lượt like của tất cả bình luận con
-		luotLike_BinhLuan_Repository.deleteAllByBinhLuan_IdInBatch(binhLuanConIds);
+		luotLike_BinhLuan_Repository.deleteAllByBinhLuan_IdInBatch(binhLuanConId);
 
 		// Xóa tất cả bình luận con
-		binhLuanRepository.deleteAllByIdInBatch(binhLuanConIds);
+		binhLuanRepository.deleteAllByIdInBatch(binhLuanConId);
 	}
 
 	// Cập nhật bình luận

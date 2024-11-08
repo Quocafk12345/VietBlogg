@@ -1,20 +1,18 @@
-let host = "http://localhost:8080/api";
-const app = angular.module("app", []);
+let host_Nhom = "http://localhost:8080/api/nhom";
 
-app.controller("nhomController", function ($scope, $http) {
-    $scope.nhoms = [];
+mainApp.controller("nhomController", function ($scope, $http) {
+    $scope.DSnhom = [];
 
     $scope.loadNhom = function () {
 
-        // Giả sử bạn có thể lấy userId từ session hoặc từ model Thymeleaf
-        let userId = /* Lấy userId từ session hoặc model */
-
-        $http.get(`${host}/nhom/user/${userId}`)
+        $http.get(`${host_Nhom}/user/${currentUserId}`)
             .then(resp => {
-                $scope.nhoms = resp.data;
+                $scope.DSnhom = resp.data;
             })
             .catch(error => {
                 console.log("Error", error);
             });
     }
+
+    $scope.loadNhom();
 });

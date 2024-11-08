@@ -12,4 +12,5 @@ public interface ThanhVienRepository extends JpaRepository<ThanhVien, ThanhVienI
     List<ThanhVien> findByUser_Id(Long UserId);
     // Tìm theo idNhom
     List<ThanhVien> findByNhom_Id(Long NhomId);
+    void deleteAllByNhom_Id(Long NhanId);
 }

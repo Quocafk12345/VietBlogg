@@ -30,8 +30,4 @@ public interface NhomRepository extends JpaRepository<Nhom, Long> {
 	// Lấy danh sách bài viết của một nhóm
 	@Query("SELECT bv FROM BaiViet bv WHERE bv.nhom.id = :nhomId")
 	List<BaiViet> findBaiVietByNhomId(@Param("nhomId") Long nhomId);
-
-	// Tìm nhóm mà người dùng đã tham gia
-	@Query("SELECT tv.nhom FROM ThanhVien tv WHERE tv.user.id = :userId")
-	List<Nhom> findNhomTheoNguoiDung(@Param("userId") Long userId);
 }
