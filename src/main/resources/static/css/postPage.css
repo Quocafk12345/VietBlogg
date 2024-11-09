@@ -5,6 +5,10 @@ body, html {
     align-items: center;
 }
 
+.file-preview img, .file-preview video{
+    max-width: 160px;
+    margin: 5px;
+}
 .create-post-form {
     width: 100%;
     max-width: 700px;

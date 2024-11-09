@@ -1,5 +1,6 @@
 package com.VietBlog.controller;
 
+import com.VietBlog.constraints.BaiViet.TrangThai_BaiViet;
 import com.VietBlog.entity.BaiViet;
 import com.VietBlog.entity.LuuBaiViet;
 import com.VietBlog.entity.LuuBaiViet_ID;
@@ -10,11 +11,26 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.file.Paths;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -22,11 +38,14 @@ import java.util.List;
 @RequestMapping("/api/bai-viet")
 public class BaiVietController {
 
+    @Value("${uploadDir}")
+    private String uploadFolder;
+
     private final BaiVietService baiVietService;
     private final BinhLuanRepository binhLuanRepository;
     private final LuotLike_BaiViet_Repository luotLikeRepository;
     private final LuuBaiVietRepository luuBaiVietRepository;
-
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     @Autowired
     public BaiVietController(BaiVietService baiVietService, BinhLuanRepository binhLuanRepository,
                              LuotLike_BaiViet_Repository luotLikeRepository, LuuBaiVietRepository luuBaiVietRepository) {
@@ -90,19 +109,62 @@ public class BaiVietController {
             return ResponseEntity.notFound().build();
         } else return ResponseEntity.ok(list);
     }
-
-    /**
-     * Phương thức đăng bài
-     * @param baiViet: Các thông tin của một bài viết
-     */
+    
     @PostMapping("/dang-bai")
     @Transactional
-    public ResponseEntity<BaiViet> dangBaiViet(@RequestBody BaiViet baiViet) {
+    public @ResponseBody ResponseEntity<?> dangBaiViet(@RequestParam("Tieu_De")String tieuDe, @RequestParam("NoiDung")String noiDung, @RequestParam("Trang_Thai")String trangThaiStr, @RequestParam("thumbnail")MultipartFile file, Model model, HttpServletRequest request, HttpSession session) {
         try {
-            BaiViet baiVietMoi = baiVietService.themBaiViet(baiViet); // Sử dụng BaiVietService
-            return ResponseEntity.ok(baiVietMoi);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build(); // Hoặc trả về thông báo lỗi cụ thể hơn
+            User user = (User) session.getAttribute("id");
+            if(user == null){
+                return new ResponseEntity<>("Bạn cần đăng nhập để tạo bài viết", HttpStatus.UNAUTHORIZED);
+            }
+            TrangThai_BaiViet trangThai = TrangThai_BaiViet.valueOf(trangThaiStr);
+
+            if(tieuDe.isEmpty()||noiDung.isEmpty()){
+                return new ResponseEntity<>("Tiêu đề và nội dung không được để trống.", HttpStatus.BAD_REQUEST);
+            }
+            String imageData = null;
+            if(file != null && !file.isEmpty()) {
+                String uploadDirectory = request.getServletContext().getRealPath(uploadFolder);
+                log.info("uploadDirectory::" + uploadDirectory);
+                String fileName = file.getOriginalFilename();
+                String filePath = Paths.get(uploadDirectory, fileName).toString();
+
+                //Tao thư mục nếu chưa có
+                File dir = new File(uploadDirectory);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+                try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(filePath))) {
+                    stream.write(file.getBytes());
+                } catch (Exception e) {
+                    return new ResponseEntity<>("Lỗi khi tải lên hình ảnh.", HttpStatus.BAD_REQUEST);
+                }
+                imageData = "/uploads" + fileName;
+            }
+                //Lưu đường dẫn bài viết
+                BaiViet baiViet = new BaiViet();
+                baiViet.setTieuDe(tieuDe);
+                baiViet.setNoiDung(noiDung);
+                baiViet.setTrangThai(trangThai);
+                baiViet.setNgayTao(new Timestamp(System.currentTimeMillis()));
+                baiViet.setUser(user);
+                if (imageData != null) {
+                    baiViet.setThumbnail(imageData);//Gán dường dẫn hình ảnh
+                }
+
+                boolean isSaved = baiVietService.themBaiViet(baiViet);
+
+                if (isSaved) {
+                    return new ResponseEntity<>("Ba Viết đã được tạo thành công!", HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>("Có lỗi xảy ra khi tạo bài viết.", HttpStatus.BAD_REQUEST);
+                }
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>("Trạng thái không hợp lệ.", HttpStatus.BAD_REQUEST);// Hoặc trả về thông báo lỗi cụ thể hơn
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>("Lỗi ệ thống", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
