@@ -36,4 +36,15 @@ mainApp.controller('loginController', function ($scope, $http, $window) {
             console.error("Lỗi khi đăng xuất:", error);
         });
     };
+
+    $scope.showPassword = false;
+
+    $scope.togglePassword = function() {
+        $scope.showPassword = !$scope.showPassword;
+        if ($scope.showPassword) {
+            document.getElementById("password").setAttribute("type", "text");
+        } else {
+            document.getElementById("password").setAttribute("type", "password");
+        }
+    };
 });
