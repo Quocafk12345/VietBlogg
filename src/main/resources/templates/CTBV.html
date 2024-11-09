@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết bài viết - VietBlog</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+	<!-- AngularJS -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+	<link rel="stylesheet" th:href="@{/css/include/navbar.css}">
+
+
+	<!-- Custom CSS -->
+
+</head>
+<body>
+<div class="container-fluid p-0">
+	<div th:replace="~{include/navbar_new :: navbar}"></div>
+	<main class="row">
+		<div th:replace="~{include/slidebar :: slidebar}" class="col-2"></div>
+        <div class="col-10">
+            <main class="container-fluid row my-5">
+                <!-- Main Article Section -->
+                <article class="col-lg-9 col-md-12 mb-4">
+                    <!-- Post Title -->
+                    <h1 class="mb-4 text-dark">Tiêu đề bài viết</h1>
+
+                    <!-- Post Image -->
+                    <div class="mb-4">
+                        <img src="https://via.placeholder.com/500x300" alt="Hình ảnh bài viết" class="img-fluid rounded shadow-sm">
+                    </div>
+
+                    <!-- Post Content -->
+                    <div class="post-content bg-light p-4 rounded shadow-sm text-dark">
+                        <p>Đoạn nội dung chi tiết của bài viết... Đây là một đoạn văn dài mô tả nội dung chính của bài viết mà người dùng đã nhấn vào xem.</p>
+                        <p>Thêm nội dung khác để mô tả thêm chi tiết về bài viết. Bạn có thể thêm nhiều đoạn văn hoặc thông tin khác tại đây.</p>
+                    </div>
+
+                    <!-- Comments Section -->
+                    <section class="container mt-4">
+                        <!-- Bình luận chính 1 -->
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start">
+                                    <img src="https://via.placeholder.com/40" alt="User Avatar" class="rounded-circle me-2">
+                                    <div>
+                                        <h6 class="mb-0">Người dùng A</h6>
+                                        <small class="text-muted">15 phút trước</small>
+                                        <p class="mt-2">Đây là bình luận chính đầu tiên. Nội dung bình luận này được viết bởi người dùng A.</p>
+                                        <a href="#" class="text-primary">Thích</a> •
+                                        <a href="#" class="text-primary">Trả lời</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bình luận trả lời của Bình luận chính 1 -->
+                        <div class="ms-5">
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-start">
+                                        <img src="https://via.placeholder.com/35" alt="User Avatar" class="rounded-circle me-2">
+                                        <div>
+                                            <h6 class="mb-0">Người dùng B</h6>
+                                            <small class="text-muted">10 phút trước</small>
+                                            <p class="mt-2">Đây là bình luận trả lời đầu tiên của người dùng B cho bình luận chính 1.</p>
+                                            <a href="#" class="text-primary">Thích</a> •
+                                            <a href="#" class="text-primary">Trả lời</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-start">
+                                        <img src="https://via.placeholder.com/35" alt="User Avatar" class="rounded-circle me-2">
+                                        <div>
+                                            <h6 class="mb-0">Người dùng C</h6>
+                                            <small class="text-muted">8 phút trước</small>
+                                            <p class="mt-2">Đây là bình luận trả lời thứ hai từ người dùng C.</p>
+                                            <a href="#" class="text-primary">Thích</a> •
+                                            <a href="#" class="text-primary">Trả lời</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nút xem thêm bình luận trả lời của Bình luận chính 1 -->
+                        <div class="ms-5 mb-3">
+                            <button class="btn btn-link p-0 text-primary">Xem thêm bình luận trả lời</button>
+                        </div>
+
+                        <!-- Bình luận chính 2 -->
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start">
+                                    <img src="https://via.placeholder.com/40" alt="User Avatar" class="rounded-circle me-2">
+                                    <div>
+                                        <h6 class="mb-0">Người dùng D</h6>
+                                        <small class="text-muted">1 giờ trước</small>
+                                        <p class="mt-2">Bình luận chính thứ hai với nội dung ngắn gọn của người dùng D.</p>
+                                        <a href="#" class="text-primary">Thích</a> •
+                                        <a href="#" class="text-primary">Trả lời</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bình luận trả lời của Bình luận chính 2 -->
+                        <div class="ms-5">
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-start">
+                                        <img src="https://via.placeholder.com/35" alt="User Avatar" class="rounded-circle me-2">
+                                        <div>
+                                            <h6 class="mb-0">Người dùng E</h6>
+                                            <small class="text-muted">50 phút trước</small>
+                                            <p class="mt-2">Trả lời đầu tiên từ người dùng E cho bình luận của người dùng D.</p>
+                                            <a href="#" class="text-primary">Thích</a> •
+                                            <a href="#" class="text-primary">Trả lời</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-start">
+                                        <img src="https://via.placeholder.com/35" alt="User Avatar" class="rounded-circle me-2">
+                                        <div>
+                                            <h6 class="mb-0">Người dùng F</h6>
+                                            <small class="text-muted">45 phút trước</small>
+                                            <p class="mt-2">Một bình luận trả lời khác từ người dùng F cho bình luận chính 2.</p>
+                                            <a href="#" class="text-primary">Thích</a> •
+                                            <a href="#" class="text-primary">Trả lời</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nút xem thêm bình luận trả lời của Bình luận chính 2 -->
+                        <div class="ms-5 mb-3">
+                            <button class="btn btn-link p-0 text-primary">Xem thêm bình luận trả lời</button>
+                        </div>
+                    </section>
+
+                </article>
+
+                <!-- Sidebar Section -->
+                <aside class="col-lg-3 col-md-12">
+                    <!-- Author Information -->
+                    <div class="author-info bg-white p-4 mb-4 rounded shadow-sm text-center">
+                        <div class="d-flex align-items-center flex-column">
+                            <img src="path/to/author.jpg" alt="Hình ảnh tác giả" class="rounded-circle mb-3 shadow" width="80" height="80">
+                            <h5 class="text-dark">Tên tác giả</h5>
+                            <button class="btn btn-outline-dark btn-sm mt-2">Theo dõi</button>
+                        </div>
+                    </div>
+
+                    <!-- Interaction Section -->
+                    <div class="interaction-section bg-white p-4 mb-4 rounded shadow-sm">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <button class="btn btn-light">
+                                <i class="bi bi-hand-thumbs-up"></i> Thích
+                            </button>
+                            <span class="text-dark">100 lượt thích</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <button class="btn btn-light">
+                                <i class="bi bi-share"></i> Chia sẻ
+                            </button>
+                            <span class="text-dark">50 lượt chia sẻ</span>
+                        </div>
+                    </div>
+
+                    <!-- Related Posts Section -->
+                    <div class="related-posts bg-white p-4 rounded shadow-sm">
+                        <h5 class="text-dark">Bài viết liên quan</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-3">
+                                <a href="#" class="text-dark text-decoration-none">Tiêu đề bài viết liên quan 1</a>
+                            </li>
+                            <li class="mb-3">
+                                <a href="#" class="text-dark text-decoration-none">Tiêu đề bài viết liên quan 2</a>
+                            </li>
+                            <li class="mb-3">
+                                <a href="#" class="text-dark text-decoration-none">Tiêu đề bài viết liên quan 3</a>
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
+            </main>
+
+            <style>
+                .btn-light {
+                    color: #333;
+                }
+                .shadow-sm {
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                }
+                .rounded {
+                    border-radius: 0.5rem;
+                }
+                .rounded-circle {
+                    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+                }
+            </style>
+
+
+        </div>
+    </main>
+</div>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!--    <script th:src="@{/js/BaiViet_ctrl.js}"></script>-->
+</body>
+</html>

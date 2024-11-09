@@ -32,4 +32,15 @@ appDangNhap.controller('loginController', function ($scope, $http, $window) {
                 console.log("Error", error); // Xử lý lỗi nếu có
         });
     };
+
+    $scope.showPassword = false;
+
+    $scope.togglePassword = function() {
+        $scope.showPassword = !$scope.showPassword;
+        if ($scope.showPassword) {
+            document.getElementById("password").setAttribute("type", "text");
+        } else {
+            document.getElementById("password").setAttribute("type", "password");
+        }
+    };
 });
