@@ -4,6 +4,7 @@ import com.VietBlog.entity.BinhLuan;
 import com.VietBlog.entity.LuotLike_BinhLuan;
 import com.VietBlog.entity.LuotLike_BinhLuan_ID;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.lang.NonNull;
@@ -28,4 +29,7 @@ public interface LuotLike_BinhLuan_Repository extends JpaRepository<LuotLike_Bin
 
 	// Xóa một lượt like bình luận
 	void deleteById(@NonNull LuotLike_BinhLuan_ID id);
-}
+
+	@Modifying
+	@Query("DELETE FROM LuotLike_BinhLuan llbl WHERE llbl.binhLuan.id IN :binhLuanIds")
+	void deleteAllByBinhLuan_IdInBatch(@Param("binhLuanIds") List<Long> binhLuanIds);}

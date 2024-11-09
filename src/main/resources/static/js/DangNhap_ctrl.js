@@ -1,6 +1,5 @@
 let host_DangNhap = "http://localhost:8080";
-var appDangNhap = angular.module('loginApp', []);
-appDangNhap.controller('loginController', function ($scope, $http, $window) {
+mainApp.controller('loginController', function ($scope, $http, $window) {
 
     $scope.login = function() {
 
@@ -15,8 +14,9 @@ appDangNhap.controller('loginController', function ($scope, $http, $window) {
         }).then(function successCallback(response) {
             var user = response.data; // Lấy User từ response
 
-            $http.post(`${host_DangNhap}/login-success`, user).then(function () {
-                $window.location.href = `${host_DangNhap}/index`; // Chuyển hướng đến /index
+            $http.post(`${host_DangNhap}/login-success`, user)
+                .then(function () {
+                    $window.location.href = `${host_DangNhap}/index`; // Chuyển hướng đến /index
             });
         }).catch((error) => {
             console.log("Error", error);
@@ -24,12 +24,16 @@ appDangNhap.controller('loginController', function ($scope, $http, $window) {
     };
 
     $scope.logout = function () {
-        $http.post(`${host_DangNhap}/api/user/dang-xuat`)
-            .then(function successCallback(response) {
-                console.log(response); // In ra thông báo đăng xuất thành công
-                $window.location.href = `${host_DangNhap}/logout`; // Redirect đến /logout
-            }).catch((error) => {
-                console.log("Error", error); // Xử lý lỗi nếu có
+        $http({
+            method: 'POST',
+            url: `${host_DangNhap}/api/user/dang-xuat`,
+            responseType: 'text' // Chỉ định responseType là 'text' nếu máy chủ trả về chuỗi
+        }).then(function(response) {
+            $window.location.href = `${host_DangNhap}/login`; // Redirect đến /logout
+            console.log(response.data); // xử lý phản hồi ở đây
+            // Thêm xử lý điều hướng nếu cần
+        }, function(error) {
+            console.error("Lỗi khi đăng xuất:", error);
         });
     };
 

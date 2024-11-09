@@ -1,8 +1,8 @@
 package com.VietBlog.controller;
 
 import com.VietBlog.entity.User;
-import com.VietBlog.service.UserService;
 import com.VietBlog.service.EmailService;
+import com.VietBlog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +22,7 @@ public class QuenMatKhauController {
 
 	private String resetToken; // Biến lưu trữ mã xác thực
 	private String email;
-	
+
 	@PostMapping("/forgot-password")
 	public String processForgotPassword(Model model, @RequestParam String email) {
 		User user = userService.findByEmail(email);
@@ -62,17 +62,18 @@ public class QuenMatKhauController {
 			return "account/reset-password"; // Quay lại trang nhập mật khẩu mới
 		}
 
-        User user = userService.findByEmail(this.email); // Sử dụng email đã lưu
-        if (user != null) {
-            user.setMatKhau(password); // Cập nhật mật khẩu mới
-            userService.updateUser(user); // Lưu vào cơ sở dữ liệu
-            model.addAttribute("message", "Mật khẩu đã được cập nhật thành công!");
-            return "account/login"; // Chuyển về trang đăng nhập
-        } else {
-            model.addAttribute("error", "Người dùng không tồn tại!");
-            return "account/reset-password"; // Quay lại trang nhập mật khẩu mới
-        }
-	 }
+		User user = userService.findByEmail(this.email); // Sử dụng email đã lưu
+		if (user != null) {
+			user.setMatKhau(password); // Cập nhật mật khẩu mới
+			userService.updateUser(user); // Lưu vào cơ sở dữ liệu
+			model.addAttribute("message", "Mật khẩu đã được cập nhật thành công!");
+			return "account/login"; // Chuyển về trang đăng nhập
+		} else {
+			model.addAttribute("error", "Người dùng không tồn tại!");
+			return "account/reset-password"; // Quay lại trang nhập mật khẩu mới
+		}
+	}
+
 	private String generateResetToken() {
 		// Tạo mã xác thực ngẫu nhiên (có thể sử dụng UUID hoặc bất kỳ phương pháp nào
 		// khác)

@@ -49,8 +49,10 @@ public class BinhLuanController {
             BinhLuan binhLuanMoi = binhLuanService.themBinhLuan(binhLuan);
             return ResponseEntity.ok(binhLuanMoi);
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body(new BinhLuan()); // Trả về bad request nếu level không hợp lệ
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }

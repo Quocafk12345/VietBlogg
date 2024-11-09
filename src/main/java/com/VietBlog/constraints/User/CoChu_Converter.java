@@ -15,7 +15,8 @@ public class CoChu_Converter implements AttributeConverter<CoChu_User, Integer> 
 		return switch (dbData) {
 			case 16 -> CoChu_User.TRUNG_BINH;
 			case 20 -> CoChu_User.LON;
-			default -> CoChu_User.NHO;
+			case 14 -> CoChu_User.NHO;
+			default -> throw new IllegalArgumentException("Unexpected database value: " + dbData);
 		};
 	}
 }
