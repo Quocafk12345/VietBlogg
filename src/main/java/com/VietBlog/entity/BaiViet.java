@@ -46,8 +46,6 @@ public class BaiViet implements Serializable {
     @Column(name = "Noi_Dung", nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String noiDung;
 
-    @Column(name="Thumbnail", length=10,nullable = true)
-    private String thumbnail;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "Ngay_Tao", nullable = false)
     private Timestamp ngayTao;
