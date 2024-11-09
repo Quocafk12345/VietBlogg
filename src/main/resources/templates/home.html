@@ -20,7 +20,7 @@
     <div th:replace="~{include/navbar :: navbar}"></div>
     <main class="row">
         <div th:replace="~{include/sidebar :: sidebar}" class="col-3"></div>
-        <div class="col-10">
+        <div class="col-9">
 <!--            <div class="story-carousel d-flex overflow-auto p-3">-->
 <!--                &lt;!&ndash; Story 1 &ndash;&gt;-->
 <!--                <div class="story-item me-3">-->
@@ -161,7 +161,7 @@
    <script th:inline="javascript">
 	   var currentUserId = [[${session.currentUser.id}]];
    </script>
-   <script th:src="@{/js/mainApp.js}"></script>
+   <script th:src="@{/js/MainApp.js}"></script>
    <script th:src="@{/js/BaiViet_ctrl.js}"></script>
    <script th:src="@{/js/DangNhap_ctrl.js}"></script>
    <script th:src="@{/js/Nhom_ctrl.js}"></script>

@@ -99,8 +99,8 @@ public class BaiVietController {
     @Transactional
     public ResponseEntity<BaiViet> dangBaiViet(@RequestBody BaiViet baiViet) {
         try {
-            BaiViet baiVietMoi = baiVietService.themBaiViet(baiViet); // Sử dụng BaiVietService
-            return ResponseEntity.ok(baiVietMoi);
+             // Sử dụng BaiVietService
+            return ResponseEntity.ok(baiVietService.themBaiViet(baiViet));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build(); // Hoặc trả về thông báo lỗi cụ thể hơn
         }

@@ -14,8 +14,8 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
                 $scope.bangTin = resp.data;
                 var promises = [];
                 angular.forEach($scope.bangTin, function (baiViet) {
-                    promises.push($scope.getLuotLike(baiViet.id));
-                    promises.push($scope.getLuotBinhLuan(baiViet.id)); // Thêm promise cho lượt bình luận
+                    promises.push($scope.demLuotLike(baiViet.id));
+                    promises.push($scope.demLuotBinhLuan(baiViet.id)); // Thêm promise cho lượt bình luận
                 });
                 $q.all(promises).then(function (results) {
                     for (var i = 0; i < $scope.bangTin.length; i++) {
@@ -30,7 +30,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
-    $scope.getLuotLike = function (idBaiViet) {
+    $scope.demLuotLike = function (idBaiViet) {
         var url = `${host_BaiViet}/${idBaiViet}/luot-like`;
         return $http
             .get(url)
@@ -42,7 +42,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
-    $scope.getLuotBinhLuan = function (idBaiViet) {
+    $scope.demLuotBinhLuan = function (idBaiViet) {
         var url = `${host_BaiViet}/${idBaiViet}/luot-binh-luan`;
         return $http
             .get(url)
@@ -69,12 +69,12 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
                 $scope.chiTietBaiViet = resp.data;
 
                 // Lấy lượt like và lượt bình luận cho bài viết đơn lẻ
-                $scope.getLuotLike($scope.chiTietBaiViet.id)
+                $scope.demLuotLike($scope.chiTietBaiViet.id)
                     .then(function(luotLike) {
                         $scope.chiTietBaiViet.luotLike = luotLike;
                     });
 
-                $scope.getLuotBinhLuan($scope.chiTietBaiViet.id)
+                $scope.demLuotBinhLuan($scope.chiTietBaiViet.id)
                     .then(function(luotBinhLuan) {
                         $scope.chiTietBaiViet.luotBinhLuan = luotBinhLuan;
                     });

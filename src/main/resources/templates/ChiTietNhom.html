@@ -1,90 +1,79 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" ng-app="mainApp" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Chi Tiết Nhóm</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>VietBlog</title>
+	
+	<!-- bootstrap 5 -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	
+	<!-- css -->
+	<link rel="stylesheet" th:href="@{/css/include/navbar_new.css}">
+	<link rel="stylesheet" th:href="@{/css/include/navbar.css}">
+	<link rel="stylesheet" th:href="@{/css/Page/home.css}">
 
-    <!-- bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-    <!-- css -->
-    <link rel="stylesheet" th:href="@{/css/include/navbar.css}">
-    <link rel="stylesheet" th:href="@{/css/Page/Nhom.css}">
-    <link rel="stylesheet" href="../css/Page/ChiTietNhom.css">
 </head>
-<body>
-    <div class="Nhom-container">
-        <div th:replace="include/navbar :: navbar"></div>
-        <div class="container-fluid row">
-            <header>
-                <button id="doi-anh">Đổi ảnh đại diện</button>
-            </header>
-
-            <div class="header-content">
-                <h1>Cosplayer VietNam</h1>
-                <div class="group-info">
-                    <span>Nhóm Riêng tư - 305,7K thành viên</span>
-                    <button>+ Đăng bài</button>
-                    <button>Chia sẻ</button>
-                    <!-- Dropdown button for "Đã tham gia" -->
-                    <div class="btn-group">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="joinedGroupDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            Đã tham gia
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="joinedGroupDropdown">
-                            <li><a class="dropdown-item" href="#">Rời nhóm</a></li>
-                            <li><a class="dropdown-item" href="#">Giải tán nhóm</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <nav>
-                <ul>
-                    <li>Thảo luận</li>
-                    <li>Đáng chú ý</li>
-                    <li>Thành viên</li>
-                    <li>File phương tiện</li>
-                    <li>Bài viết kiểm duyệt</li>
-                </ul>
-            </nav>
-
-            <main>
-                <div class="left-column">
-                    <div class="featured-section">
-                        <h2>Bài viết</h2>
-                        <div class="featured-post">
-                            <p>Nguyễn Tùng Nhi</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="right-column">
-                    <div class="group-description">
-                        <h2>Giới thiệu</h2>
-                        <p>tất cả mọi người nếu có nhu cầu về mua bán cosplay đều có thể tham gia :3</p>
-                        <p>Cần giúp đỡ inbox admin</p>
-                    </div>
-                    <div class="group-rules">
-                        <h2>Quy định nhóm</h2>
-                        <p>Chỉ thành viên mới nhìn thấy mọi người trong nhóm và những gì họ đăng.</p>
-                        <p>Ai cũng có thể tìm thấy nhóm này.</p>
-                        <a href="#">Tìm hiểu thêm</a>
-                    </div>
-                    <div class="group-chat">
-                        <h2>Đoạn chat</h2>
-                        <div class="chat-room">
-                            <p>2024 - CVFO - 3</p>
-                            <button>Tham gia</button>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
-    </div>
+<body ng-controller="nhomController">
+<div class="container-fluid p-0">
+	<div th:replace="~{include/navbar :: navbar}"></div>
+	<main class="row">
+		<div th:replace="~{include/sidebar :: sidebar}" class="col-3"></div>
+		<div class="col-9">
+			<div class="row">
+				<div class="col-md-8">
+					
+					<div class="d-flex align-items-center mb-3">
+						<img ng-src="{{nhom.hinhDaiDien}}" alt="Hình đại diện nhóm" class="rounded-circle" width="50"
+						     height="50">
+						<h1 class="ms-3">{{nhomDuocChon.ten}}</h1>
+					</div>
+					
+					<ul class="nav nav-tabs">
+						<li class="nav-item">
+							<a class="nav-link active" aria-current="page" href="#">Bài viết</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="#">Thành viên</a>
+						</li>
+					</ul>
+					
+					<div class="tab-content">
+						<div class="tab-pane active" id="baiviet">
+						</div>
+						<div class="tab-pane" id="thanhvien">
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-md-4">
+					<div class="card">
+						<div class="card-header">
+							Thông tin nhóm
+						</div>
+						<div class="card-body">
+							<p>Ngày tạo: <span>{{nhomDuocChon.ngayTao | date:'dd/MM/yyyy'}}</span></p>
+							<p>Số lượng thành viên: <span>{{nhomDuocChon.soLuongThanhVien}}</span></p>
+							<p>{{nhomDuocChon.gioiThieu}}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+	        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+	        crossorigin="anonymous">
+	</script>
+	<script th:inline="javascript">
+		var currentUserId = [[${session.currentUser.id}]];
+	</script>
+	<script th:src="@{/js/MainApp.js}"></script>
+	<script th:src="@{/js/BaiViet_ctrl.js}"></script>
+	<script th:src="@{/js/DangNhap_ctrl.js}"></script>
+	<script th:src="@{/js/Nhom_ctrl.js}"></script>
+</div>
 </body>
-
-<!-- bootstrap 5 JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 </html>
