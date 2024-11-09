@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.support.SessionStatus;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -21,7 +20,6 @@ import java.util.TimeZone;
 public class GiaoDienController {
 
     private final UserService userService;
-
     private final BaiVietService baiVietService;
 
     @Autowired
@@ -41,10 +39,9 @@ public class GiaoDienController {
         return "redirect:/index"; // Redirect đến trang index
     }
 
-    @GetMapping("/logout")
-    public String logout(SessionStatus sessionStatus) {
-        sessionStatus.setComplete(); // Hủy session
-        return "redirect:/login"; // Redirect đến trang đăng nhập
+    @GetMapping("/chi-tiet-nhom")
+    public String Nhom(){
+        return "ChiTietNhom";
     }
 
     @GetMapping("/register")
@@ -84,19 +81,17 @@ public class GiaoDienController {
     }
 
     @GetMapping("/cai-dat")
-    public String hienThiCaiDat(Model model, HttpServletRequest request, TimeZone timeZone) {
-        try {
-            User user = (User) model.getAttribute("user"); // Thay bằng cách lấy từ session
-            if (user == null) {
-                model.addAttribute("errorMessage", "Không tìm thấy thông tin người dùng.");
-                return "error";
-            }
+    public String hienThiCaiDat(Model model, @ModelAttribute("currentUser") User currentUser) {
+        if (currentUser == null) {
+            return "redirect:/login"; // Chuyển hướng đến trang đăng nhập nếu chưa đăng nhập
+        }
 
+        try {
             // Thêm thông tin giao diện vào model
-            model.addAttribute("user", user);
-            model.addAttribute("mauNen", user.getMauNen());
-            model.addAttribute("fontChu", user.getFontChu());
-            model.addAttribute("coChu", user.getCoChu());
+            model.addAttribute("user", currentUser);
+            model.addAttribute("mauNen", currentUser.getMauNen());
+            model.addAttribute("fontChu", currentUser.getFontChu());
+            model.addAttribute("coChu", currentUser.getCoChu());
 
             return "CaiDat";
         } catch (Exception e) {

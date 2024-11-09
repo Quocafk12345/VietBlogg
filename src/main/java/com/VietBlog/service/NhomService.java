@@ -16,6 +16,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NhomService {
@@ -49,7 +50,7 @@ public class NhomService {
 
 	// Tham gia nhóm
 	@Transactional
-	public ThanhVien thamGiaNhom(Long nhomId, Long userId, String vaiTro) {
+	public ThanhVien thamGiaNhom(Long nhomId, Long userId) {
 		ThanhVienId thanhVienId = new ThanhVienId(nhomId, userId);
 		if (thanhVienRepository.existsById(thanhVienId)) {
 			throw new RuntimeException("Người dùng đã tham gia nhóm này rồi");
@@ -71,6 +72,29 @@ public class NhomService {
 		thanhVienRepository.deleteById(thanhVienId);
 	}
 
+	public Optional<Nhom> layNhomTheoId(Long nhomId){
+		return nhomRepository.findById(nhomId);
+	}
+
+	// Tham gia nhóm
+	@Transactional
+	public void xoaNhom(Long nhomId) {
+		thanhVienRepository.deleteAllByNhom_Id(nhomId);
+		nhomRepository.deleteById(nhomId);
+	}
+
+	public Nhom capNhatNhom(Long nhomId, Nhom capNhat) {
+		Optional<Nhom> nhom = nhomRepository.findById(nhomId);
+		if (nhom.isPresent()) {
+			Nhom hienTai = nhom.get();
+			hienTai.setTen(capNhat.getTen());
+			hienTai.setGioiThieu(capNhat.getGioiThieu());
+			return nhomRepository.save(hienTai);
+		} else {
+			throw new RuntimeException("Bài viết không tồn tại");
+		}
+	}
+
 	// Lấy danh sách nhóm theo người tạo
 	public List<Nhom> layDanhSachNhomTheoNguoiTao(Long userId) {
 		return nhomRepository.findNhomByNguoiTao(userId);
@@ -81,9 +105,22 @@ public class NhomService {
 		return nhomRepository.findBaiVietByNhomId(nhomId);
 	}
 
+	public List<Nhom> layToanBoNhom(){
+		return nhomRepository.findAll();
+	}
+
 	// Đếm số lượng thành viên của một nhóm
 	public int demSoLuongThanhVien(Long nhomId) {
 		return nhomRepository.countThanhVienByNhomId(nhomId);
+	}
+
+	public List<Nhom> layDanhSachNhomDaThamGia(Long userId) {
+		return nhomRepository.findNhomByUserId(userId);
+	}
+
+	// Lấy danh sách nhóm của một người dùng
+	public List<Nhom> layDanhSachNhomCuaThanhVien(Long userId) {
+		return nhomRepository.findNhomByUserId(userId);
 	}
 
 }
