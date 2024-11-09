@@ -66,7 +66,8 @@ public class GiaoDienController {
     }
 
     @GetMapping("/dang-bai")
-    public String postPage() {
+    public String postPage(Model model) {
+        model.addAttribute("bv",new BaiViet());
         return "postPage";
     }
 

@@ -1,6 +1,5 @@
 package com.VietBlog.service;
 
-import com.VietBlog.constraints.BaiViet.TrangThai_BaiViet;
 import com.VietBlog.entity.BaiViet;
 import com.VietBlog.repository.BaiVietRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +29,14 @@ public class BaiVietService {
 	}
 
 	// Thêm bài viết mới
-	public BaiViet themBaiViet(BaiViet baiViet) {
-		return baiVietRepository.save(baiViet);
+	public Boolean themBaiViet(BaiViet baiViet) {
+		boolean flag = false;
+		if(baiViet!=null){
+			baiVietRepository.save(baiViet);
+			flag = true;
+			return flag;
+		}
+		return flag;
 	}
 
 	// Cập nhật bài viết
@@ -76,7 +81,4 @@ public class BaiVietService {
 	public Integer countBaiVietByUserId(Long userId) {
 		return baiVietRepository.countBaiVietByUserId(userId);
 	}
-
-
-
 }
