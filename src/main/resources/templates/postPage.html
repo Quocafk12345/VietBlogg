@@ -1,27 +1,28 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <link rel="stylesheet" th:href="@{/css/postPage.css}">
     <title>CKEditor Integration</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-    <!-- Bootstrap CSS -->
-    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css}" rel="stylesheet" />
-
     <!-- CKEditor 5 CDN -->
     <script th:src="@{https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js}"></script>
+
 </head>
 
 <body>
 <h1 class="text-center mt-5">Tạo bài viết</h1>
-<form th:action="@{postPage}" method="post" enctype="multipart/form-data" class="create-post-form" onsubmit="return validateForm()">
+<form th:action="@{dang-bai}" th:object="${bv}" method="post" enctype="multipart/form-data" class="create-post-form" onsubmit="return validateForm()">
 
     <!-- Custom dropdown menu -->
     <div class="account-select mb-3">
         <select th:name="userName">
-            <option value="">Chọn người dùng</option>
-            <option th:each="name:*{userNames}" th:value="${name}" th:text="${name}"></option>
+            <option value="">Chọn nơi đăng bài</option>
+            <option th:each="name:${userNames}" th:value="${name}" th:text="${name}">User</option>
+            <br>
+            <h5>Nhóm</h5>
+            <option>Group</option>
         </select>
     </div>
     <!-- Tabs -->
@@ -39,32 +40,25 @@
 
     <!-- Cố định trường tiêu đề -->
     <div class="post-content mb-3">
-        <input th:field="*{Tieu_De}" type="text" placeholder="Title*" class="form-control" maxlength="300" th:required="required" />
+        <input th:field="*{tieuDe}" type="text" placeholder="Title*" class="form-control" maxlength="300" th:required="required" />
         <div class="add-tags mt-2">Add tags</div>
     </div>
 
     <!-- Text tab content -->
     <div id="Post" class="tabcontent" style="display: block;">
         <div class="post-content mb-3">
-            <textarea th:name="Noi_Dung" id="editor" class="form-control" placeholder="Body" th:required="required"></textarea>
+            <textarea th:field="*{noiDung}" id="editor" class="form-control" placeholder="Body" th:required="required"></textarea>
         </div>
     </div>
 
     <!-- Image & Video tab content -->
     <div id="ImageVideo" class="tabcontent" style="display: none;">
-        <input type="file" id="fileInput" th:name="thumbnail" multiple style="display: none;" th:required="required" />
+        <input type="file" id="fileInput" th:field="*{thumbnail}" multiple style="display: none;" th:required="required" />
         <div class="file-preview" id="filePreview"></div>
         <div class="post-content mb-3">
             <div class="file-upload" id="fileDropZone">
                 Drag and Drop or upload media
             </div>
-        </div>
-    </div>
-
-    <!-- Link tab content -->
-    <div id="Link" class="tabcontent" style="display: none;">
-        <div class="post-content mb-3">
-            <input th:name="linkUrl" type="text" class="form-control" placeholder="URL" required />
         </div>
     </div>
 
@@ -74,10 +68,6 @@
         <button type="submit" class="btn btn-primary">Post</button>
     </div>
 </form>
-
-<!-- Bootstrap JS -->
-<script th:src="@{https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js}"></script>
-<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js}"></script>
 
 <!-- CKEditor Initialization -->
 <script>
