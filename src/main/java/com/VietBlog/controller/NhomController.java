@@ -7,8 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -16,6 +21,8 @@ import java.util.Optional;
 @RequestMapping("/api/nhom")
 public class NhomController {
     private final NhomService nhomService;
+    @Autowired
+    private Cloudinary cloudinary; // Khai báo bean Cloudinary
 
     @Autowired
     public NhomController(NhomService nhomService) {
@@ -29,8 +36,35 @@ public class NhomController {
     }
 
     // API tạo nhóm mới
+//    @PostMapping("/tao-nhom")
+//    public ResponseEntity<Nhom> taoNhom(@RequestBody Nhom nhom, @RequestParam Long userId) {
+//        Nhom nhomMoi = nhomService.taoNhom(nhom, userId);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(nhomMoi);
+//    }
+
     @PostMapping("/tao-nhom")
-    public ResponseEntity<Nhom> taoNhom(@RequestBody Nhom nhom, @RequestParam Long userId) {
+    public ResponseEntity<Nhom> taoNhom(
+            @RequestParam("userId") Long userId,
+            @RequestParam("ten") String ten,
+            @RequestParam("gioiThieu") String gioiThieu,
+            @RequestParam("hinhAnh") MultipartFile hinhAnh
+    ) {
+        Nhom nhom = new Nhom();
+        nhom.setTen(ten);
+        nhom.setGioiThieu(gioiThieu);
+
+        // Xử lý hình ảnh (ví dụ: sử dụng Cloudinary)
+        if (!hinhAnh.isEmpty()) {
+            try {
+                // Lưu hình ảnh lên Cloudinary
+                Map uploadResult = cloudinary.uploader().upload(hinhAnh.getBytes(), ObjectUtils.emptyMap());
+                String imageUrl = (String) uploadResult.get("secure_url");
+                nhom.setHinhDaiDien(imageUrl);
+            } catch (IOException e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            }
+        }
+
         Nhom nhomMoi = nhomService.taoNhom(nhom, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(nhomMoi);
     }
@@ -105,5 +139,6 @@ public class NhomController {
         int soLuong = nhomService.demSoLuongThanhVien(nhomId);
         return ResponseEntity.ok(soLuong);
     }
+
 
 }

@@ -159,14 +159,14 @@
                 </a>
                 <ul class="collapse" id="groupMenu">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="/api/nhom/tao-nhom" ng-click="chuyenTrangTaoNhom($event)">
                             <i class="bi bi-plus-circle"></i> Tạo nhóm
                         </a>
                     </li>
 
                     <div>
                         <li class="nav-item" ng-repeat="nhom in DSnhom">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" th:href="@{/nhom/chi-tiet/}" ng-click="chuyenTrang($event, nhom.id)">
                                 <img ng-src="{{ nhom.hinhDaiDien }}" alt="Avatar Group 1" class="rounded-circle"> {{ nhom.ten }}
                             </a>
                         </li>
@@ -178,5 +178,6 @@
     </div>
 </nav>
 
+<script th:src="@{/js/Nhom_ctrl.js}"></script></body>
 </body>
 </html>

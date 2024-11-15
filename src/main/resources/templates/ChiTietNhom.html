@@ -68,7 +68,9 @@
 	</script>
 	<script th:inline="javascript">
 		var currentUserId = [[${session.currentUser.id}]];
+		var idNhom = [[${idNhom}]];
 	</script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 	<script th:src="@{/js/MainApp.js}"></script>
 	<script th:src="@{/js/BaiViet_ctrl.js}"></script>
 	<script th:src="@{/js/DangNhap_ctrl.js}"></script>
