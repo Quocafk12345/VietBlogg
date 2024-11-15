@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/api/nhom")
 public class NhomController_new {
 
-    @GetMapping("/tao-nhom") // Giữ nguyên đường dẫn ở đây
+    @GetMapping("/tao-nhom")
     public String hienThiTrangTaoNhom() {
         return "TaoNhom";
     }

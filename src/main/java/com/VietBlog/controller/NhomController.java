@@ -35,7 +35,7 @@ public class NhomController {
         return ResponseEntity.ok(DSnhom);
     }
 
-    // API tạo nhóm mới
+    // API tạo nhóm mới của người dùng
 //    @PostMapping("/tao-nhom")
 //    public ResponseEntity<Nhom> taoNhom(@RequestBody Nhom nhom, @RequestParam Long userId) {
 //        Nhom nhomMoi = nhomService.taoNhom(nhom, userId);

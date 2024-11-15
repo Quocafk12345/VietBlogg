@@ -132,7 +132,6 @@
             hinhAnhInput.addEventListener('change', (event) => {
               const file = event.target.files[0];
               const reader = new FileReader();
-
               reader.onload = (e) => {
                 previewAnh.src = e.target.result;
               }

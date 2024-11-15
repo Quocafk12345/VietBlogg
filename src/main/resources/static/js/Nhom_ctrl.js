@@ -59,7 +59,6 @@ mainApp.controller("nhomController", function ($scope, $http, $window) {
             ten: document.getElementById("tenNhom").value, // Lấy giá trị từ input
             gioiThieu: document.getElementById("moTa").value  // Lấy giá trị từ textarea
         };
-
         // Sử dụng currentUser từ Thymeleaf
         if (currentUser) {
             nhom.nguoiTao = { id: currentUser.id }; // Thêm userId vào object nguoiTao
