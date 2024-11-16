@@ -1,5 +1,6 @@
 package com.VietBlog.controller;
 
+import com.VietBlog.constraints.BaiViet.TrangThai_BaiViet;
 import com.VietBlog.entity.BaiViet;
 import com.VietBlog.entity.LuuBaiViet;
 import com.VietBlog.entity.LuuBaiViet_ID;
@@ -100,7 +101,9 @@ public class BaiVietController {
     public ResponseEntity<BaiViet> dangBaiViet(@RequestBody BaiViet baiViet) {
         try {
              // Sử dụng BaiVietService
-            return ResponseEntity.ok(baiVietService.themBaiViet(baiViet));
+            baiViet.setTrangThai(TrangThai_BaiViet.DA_DANG);
+            baiVietService.themBaiViet(baiViet);
+            return ResponseEntity.ok(baiViet);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build(); // Hoặc trả về thông báo lỗi cụ thể hơn
         }

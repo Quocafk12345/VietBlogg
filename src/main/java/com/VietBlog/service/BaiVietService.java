@@ -4,7 +4,10 @@ import com.VietBlog.entity.BaiViet;
 import com.VietBlog.repository.BaiVietRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +17,7 @@ public class BaiVietService {
 	private final BaiVietRepository baiVietRepository;
 
 	@Autowired
-	private BaiVietService(BaiVietRepository baiVietRepository){
+	public BaiVietService(BaiVietRepository baiVietRepository){
 		this.baiVietRepository = baiVietRepository;
 	}
 
@@ -29,12 +32,14 @@ public class BaiVietService {
 	}
 
 	// Thêm bài viết mới
-	public BaiViet themBaiViet(BaiViet baiViet) {
+	@Transactional
+	public void themBaiViet(BaiViet baiViet) {
+		baiViet.setNgayTao(Timestamp.from(Instant.now()));
 		baiVietRepository.save(baiViet);
-		return baiViet;
 	}
 
 	// Cập nhật bài viết
+	@Transactional
 	public BaiViet capNhatBaiViet(Long id, BaiViet baiViet) {
 		Optional<BaiViet> optionalBaiViet = baiVietRepository.findById(id);
 		if (optionalBaiViet.isPresent()) {
@@ -48,6 +53,7 @@ public class BaiVietService {
 	}
 
 	// Xóa bài viết
+	@Transactional
 	public void xoaBaiViet(Long id) {
 		baiVietRepository.deleteById(id);
 	}

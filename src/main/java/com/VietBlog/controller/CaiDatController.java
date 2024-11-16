@@ -119,13 +119,9 @@ public class CaiDatController {
 
 		// Chuyển đổi giá trị String từ request sang enum
 		MauNen_User mauNen_User = MauNen_User.valueOf(mauNen.toUpperCase().replace(" ", "_"));
-		FontChu_User fontChu_User = FontChu_User.valueOf(fontChu.toUpperCase().replace(" ", "_"));
-		CoChu_User coChu_User = CoChu_User.valueOf(coChu.toUpperCase().replace(" ", "_"));
 
 
 		user.setMauNen(mauNen_User);
-		user.setFontChu(fontChu_User);
-		user.setCoChu(coChu_User);
 		userService.updateUser(user);
 
 		return "redirect:/cai-dat";

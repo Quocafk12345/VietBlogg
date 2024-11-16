@@ -39,11 +39,10 @@ public class GiaoDienController {
         return "redirect:/index"; // Redirect đến trang index
     }
 
-    @GetMapping("/chi-tiet-nhom")
-    public String Nhom(){
+    @GetMapping("/nhom/thong-tin")
+    public String thongTin() {
         return "ChiTietNhom";
     }
-
     @GetMapping("/register")
     public String sign_up() {
         return "account/register";
@@ -65,16 +64,15 @@ public class GiaoDienController {
     @GetMapping("/dang-bai")
     public String postPage(Model model) {
         model.addAttribute("bv",new BaiViet());
-        return "postPage";
+        return "page/DangBai";
     }
-
 
     @GetMapping("/index")
     public String index() {
         return "home";
     }
 
-    @GetMapping("/chi-tiet-bai-viet/{id}")
+    @GetMapping("/bai-viet/{id}")
     public String detail(@PathVariable Long id, Model model) {
         model.addAttribute("baiVietId", id);
         return "ChiTietBaiViet";
@@ -90,8 +88,6 @@ public class GiaoDienController {
             // Thêm thông tin giao diện vào model
             model.addAttribute("user", currentUser);
             model.addAttribute("mauNen", currentUser.getMauNen());
-            model.addAttribute("fontChu", currentUser.getFontChu());
-            model.addAttribute("coChu", currentUser.getCoChu());
 
             return "CaiDat";
         } catch (Exception e) {

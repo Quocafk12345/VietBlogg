@@ -123,7 +123,6 @@
 				<div class="comments-section">
 					<div class="comment mb-4" ng-repeat="binhLuan in danhSachBinhLuan">
 						<div class="d-flex">
-							<img src="https://via.placeholder.com/50" class="rounded-circle me-3" alt="User Avatar">
 							<div>
 								<h6 class="mb-0">{{binhLuan.user.tenNguoiDung}}</h6>
 								<small class="text-muted">{{binhLuan.thoiGianDang}}</small>
@@ -148,7 +147,6 @@
 								<div ng-show="binhLuan.showReplies">
 									<div ng-repeat="reply in binhLuan.replies" class="ms-4">
 										<div class="d-flex">
-											<img src="https://via.placeholder.com/50" class="rounded-circle me-3" alt="User Avatar">
 											<div>
 												<h6 class="mb-0">{{reply.user.tenNguoiDung}}</h6>
 												<small class="text-muted">{{reply.thoiGianDang}}</small>
@@ -172,7 +170,6 @@
 												</div>
 												<div ng-show="reply.showReplies" ng-repeat="reply2 in reply.replies" class="ms-4">
 													<div class="d-flex">
-														<img src="https://via.placeholder.com/50" class="rounded-circle me-3" alt="User Avatar">
 														<div>
 															<h6 class="mb-0">{{reply2.user.tenNguoiDung}}</h6>
 															<small class="text-muted">{{reply2.thoiGianDang}}</small>
@@ -224,8 +221,8 @@
 <!-- AngularJS -->
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 <script th:inline="javascript">
-	var baiVietId = [[${baiVietId}]];
-	var currentUserId = [[${session.currentUser.id}]];
+	const baiVietId = [[${baiVietId}]];
+	const currentUser = [[${session.currentUser}]];
 </script>
 <script th:src="@{/js/MainApp.js}"></script>
 <script th:src="@{/js/DangNhap_ctrl.js}"></script>

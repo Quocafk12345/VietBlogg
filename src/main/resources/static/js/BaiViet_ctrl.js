@@ -4,6 +4,21 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     $scope.dangTheoDoi = [];
     $scope.chiTietBaiViet = {};
 
+    $scope.loaiBaiDang = "caNhan";
+
+    $scope.chonNoiDangBai = function (mucDuocChon) {
+        $scope.mucDuocChon = mucDuocChon;
+        if (mucDuocChon.ten === currentUser.tenNguoiDung) { // Kiểm tra nếu chọn "Trang cá nhân"
+            $scope.loaiBaiDang = "caNhan";
+        } else {
+            $scope.loaiBaiDang = "nhom";
+        }
+    };
+
+    $scope.thongTinUser = [
+        { ten: currentUser.tenNguoiDung, hinhDaiDien: 'https://via.placeholder.com/20x20' }
+    ];
+
     $scope.tinhThoiGianDang = timeService.tinhThoiGianDang; // Gán hàm từ service
 
     $scope.load_bai_viet = function () {
@@ -57,7 +72,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     $scope.chuyenTrang = function($event, baiVietId) {
         console.log(baiVietId);
         $event.preventDefault();
-        $event.target.href = '/chi-tiet-bai-viet/' + baiVietId;
+        $event.target.href = '/bai-viet/' + baiVietId;
         window.location.href = $event.target.href;
     };
 
@@ -85,10 +100,48 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
+    $scope.dangBai = function (nhom) {
+        var url = `${host_BaiViet}/dang-bai`;
+        // Tạo object bài viết mới
+
+
+        var baiViet = {
+            tieuDe: document.getElementById('tieuDe').value, // Lấy tiêu đề từ input
+            noiDung: document.getElementById('noiDung').value, // Lấy nội dung từ textarea
+            user: {id: currentUser.id} // Lấy thông tin user từ biến currentUser
+        };
+
+        // Nếu có nhóm được chọn, thêm thông tin nhóm vào bài viết
+        if ($scope.loaiBaiDang === "nhom") {
+            baiViet.nhom = nhom;
+        }
+
+        // Gọi API để thêm bài viết mới
+        $http.post(url, baiViet)
+            .then(function (response) {
+                // Xử lý khi thêm bài viết thành công
+                console.log('Thêm bài viết thành công:', response.data);
+
+                // Cập nhật danh sách bài viết
+                $scope.bangTin.unshift(response.data);
+
+                // Reset form
+                document.getElementById('tieuDe').value = '';
+                document.getElementById('noiDung').value = '';
+                $scope.nhomDuocChon = {ten: 'Chọn nhóm'};
+
+            })
+            .catch(function (error) {
+                // Xử lý khi thêm bài viết thất bại
+                console.error('Lỗi khi thêm bài viết:', error);
+            });
+    };
+
     $scope.load_bai_viet();
 
     // Kiểm tra xem có baiVietId được truyền từ Thymeleaf không
     if (typeof baiVietId !== 'undefined') {
         $scope.loadBaiVietDuocChon(baiVietId);
     }
+
 });

@@ -60,8 +60,6 @@ public class UserService {
 	public void dangKy(User user) {
 		user.setNgayTao(LocalDate.now());
 		user.setVaiTro(VaiTro_User.USER);
-		user.setCoChu(CoChu_User.NHO);
-		user.setFontChu(FontChu_User.HELVETICA_NEUE);
 		user.setMauNen(MauNen_User.WHITE);
 
 
@@ -108,9 +106,6 @@ public class UserService {
 		existingUser.setEmail(user.getEmail() != null ? user.getEmail() : existingUser.getEmail());
 		existingUser.setMatKhau(user.getMatKhau() != null ? user.getMatKhau() : existingUser.getMatKhau());
 		existingUser.setMauNen(user.getMauNen() != null ? user.getMauNen() : existingUser.getMauNen());
-		existingUser.setFontChu(user.getFontChu() != null ? user.getFontChu() : existingUser.getFontChu());
-		existingUser.setCoChu(user.getCoChu() != null ? user.getCoChu() : existingUser.getCoChu());
-
 		userRepository.save(existingUser);
 	}
 

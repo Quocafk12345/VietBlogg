@@ -65,9 +65,9 @@ public class User implements Serializable {
     @Column(name = "Ngay_Sinh", nullable = false)
     private LocalDate ngaySinh;
 
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<BaiViet> baiViet;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BaiViet> baiViet;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
