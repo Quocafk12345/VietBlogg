@@ -61,7 +61,8 @@ public class UserService {
 		user.setNgayTao(LocalDate.now());
 		user.setVaiTro(VaiTro_User.USER);
 		user.setMauNen(MauNen_User.WHITE);
-
+		user.setCoChu(CoChu_User.NHO);
+		user.setFontChu(FontChu_User.HELVETICA_NEUE);
 
 		if (isEmailExists(user.getEmail())) {
 			return;

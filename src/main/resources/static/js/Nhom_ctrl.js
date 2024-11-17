@@ -5,13 +5,6 @@ mainApp.controller("nhomController", function ($scope, $http) {
 
     $scope.thongTinNhom = {};
 
-    $scope.mucDuocChon = {ten: 'Chọn nhóm'};
-
-    $scope.chonNoiDangBai = function (item) {
-        $scope.mucDuocChon = item;
-        console.log($scope.mucDuocChon);
-    };
-
     $scope.loadNhom = function () {
 
         $http.get(`${host_Nhom}/user/${currentUser.id}`)
@@ -27,7 +20,6 @@ mainApp.controller("nhomController", function ($scope, $http) {
         $http.get('/api/nhom/' + idNhom)
             .then(function (response) {
                 $scope.thongTinNhom = response.data;
-                $scope.thongTinNhom.soLuongThanhVien =
             });
     };
 
@@ -43,8 +35,11 @@ mainApp.controller("nhomController", function ($scope, $http) {
     $scope.hienThiNhomDuocChon = function (idNhom) {
         $http.get(`${host_Nhom}/${idNhom}`)
             .then(function(response) {
-                $scope.nhomDuocChon = response.data;
-                // Chuyển hướng đến trang chi tiết nhóm
+                $scope.thongTinNhom = response.data;
+                $scope.layThongTinNhom_SoThanhVien(idNhom)
+                    .then(function(soThanhVien) {
+                        $scope.thongTinNhom.soLuongThanhVien = soThanhVien;
+                    });
             })
             .catch(error => {
                 console.log("Error", error);
@@ -52,10 +47,12 @@ mainApp.controller("nhomController", function ($scope, $http) {
     }
 
     $scope.layThongTinNhom_SoThanhVien = function (idNhom) {
-        $http.get('/api/nhom/' + idNhom + '/thanh-vien/so-luong')
-            .then(function (response) {
-                $scope.nhomDuocChon.soLuongThanhVien = response.data;
-            });
+        return $http.get('/api/nhom/' + idNhom + '/thanh-vien/so-luong')
+            .then((resp) => {
+                return resp.data;
+            }).catch((error) => {
+            console.log("Error", error);
+        });
     };
 
     if (typeof idNhom !== 'undefined') {

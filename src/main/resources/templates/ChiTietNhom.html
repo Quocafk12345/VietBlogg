@@ -25,9 +25,9 @@
 				<div class="col-md-8">
 					
 					<div class="d-flex align-items-center mb-3">
-						<img ng-src="{{nhom.hinhDaiDien}}" alt="Hình đại diện nhóm" class="rounded-circle" width="50"
+						<img src="{{thongTinNhom.hinhDaiDien}}" alt="Hình đại diện nhóm" class="rounded-circle" width="50"
 						     height="50">
-						<h1 class="ms-3">{{nhomDuocChon.ten}}</h1>
+						<h1 class="ms-3">{{thongTinNhom.ten}}</h1>
 					</div>
 					
 					<ul class="nav nav-tabs">
@@ -35,7 +35,7 @@
 							<a class="nav-link active" aria-current="page" href="#">Bài viết</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="#">Thành viên</a>
+							<a class="nav-link" href="#">{{thongTinNhom.soLuongThanhVien}} Thành viên</a>
 						</li>
 					</ul>
 					
@@ -53,9 +53,9 @@
 							Thông tin nhóm
 						</div>
 						<div class="card-body">
-							<p>Ngày tạo: <span>{{nhomDuocChon.ngayTao | date:'dd/MM/yyyy'}}</span></p>
-							<p>Số lượng thành viên: <span>{{nhomDuocChon.soLuongThanhVien}}</span></p>
-							<p>{{nhomDuocChon.gioiThieu}}</p>
+							<p>Ngày tạo: <span>{{thongTinNhom.ngayTao | date:'dd/MM/yyyy'}}</span></p>
+							<p>Số lượng thành viên: <span>{{thongTinNhom.soLuongThanhVien}}</span></p>
+							<p>{{thongTinNhom.gioiThieu}}</p>
 						</div>
 					</div>
 				</div>
@@ -66,6 +66,7 @@
 	        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
 	        crossorigin="anonymous">
 	</script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 	<script th:inline="javascript">
 		var currentUser = [[${session.currentUser}]];
 		var idNhom = [[${idNhom}]];

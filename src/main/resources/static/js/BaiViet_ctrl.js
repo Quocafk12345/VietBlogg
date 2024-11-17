@@ -4,7 +4,14 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     $scope.dangTheoDoi = [];
     $scope.chiTietBaiViet = {};
 
-    $scope.loaiBaiDang = "caNhan";
+    $scope.loaiBaiDang = "";
+
+    $scope.mucDuocChon = {ten: 'Chọn nhóm'};
+
+    $scope.thongTinUser = [
+        {ten: currentUser.tenNguoiDung, hinhDaiDien: 'https://via.placeholder.com/20x20'}
+    ];
+
 
     $scope.chonNoiDangBai = function (mucDuocChon) {
         $scope.mucDuocChon = mucDuocChon;
@@ -14,10 +21,6 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             $scope.loaiBaiDang = "nhom";
         }
     };
-
-    $scope.thongTinUser = [
-        { ten: currentUser.tenNguoiDung, hinhDaiDien: 'https://via.placeholder.com/20x20' }
-    ];
 
     $scope.tinhThoiGianDang = timeService.tinhThoiGianDang; // Gán hàm từ service
 
@@ -69,7 +72,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
-    $scope.chuyenTrang = function($event, baiVietId) {
+    $scope.chuyenTrang = function ($event, baiVietId) {
         console.log(baiVietId);
         $event.preventDefault();
         $event.target.href = '/bai-viet/' + baiVietId;
@@ -85,12 +88,12 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
 
                 // Lấy lượt like và lượt bình luận cho bài viết đơn lẻ
                 $scope.demLuotLike($scope.chiTietBaiViet.id)
-                    .then(function(luotLike) {
+                    .then(function (luotLike) {
                         $scope.chiTietBaiViet.luotLike = luotLike;
                     });
 
                 $scope.demLuotBinhLuan($scope.chiTietBaiViet.id)
-                    .then(function(luotBinhLuan) {
+                    .then(function (luotBinhLuan) {
                         $scope.chiTietBaiViet.luotBinhLuan = luotBinhLuan;
                     });
                 $scope.chiTietBaiViet.thoiGianDang = $scope.tinhThoiGianDang($scope.chiTietBaiViet.ngayTao);
@@ -100,20 +103,20 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
-    $scope.dangBai = function (nhom) {
+    $scope.dangBai = function () {
         var url = `${host_BaiViet}/dang-bai`;
         // Tạo object bài viết mới
-
 
         var baiViet = {
             tieuDe: document.getElementById('tieuDe').value, // Lấy tiêu đề từ input
             noiDung: document.getElementById('noiDung').value, // Lấy nội dung từ textarea
-            user: {id: currentUser.id} // Lấy thông tin user từ biến currentUser
+            user: {id: currentUser.id}, // Lấy thông tin user từ biến currentUser
+            nhom: {id: null}
         };
 
         // Nếu có nhóm được chọn, thêm thông tin nhóm vào bài viết
         if ($scope.loaiBaiDang === "nhom") {
-            baiViet.nhom = nhom;
+            baiViet.nhom.id = $scope.mucDuocChon.id;
         }
 
         // Gọi API để thêm bài viết mới

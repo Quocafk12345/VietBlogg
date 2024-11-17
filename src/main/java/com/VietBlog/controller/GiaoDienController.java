@@ -39,10 +39,17 @@ public class GiaoDienController {
         return "redirect:/index"; // Redirect đến trang index
     }
 
-    @GetMapping("/nhom/thong-tin")
-    public String thongTin() {
+    @GetMapping("/nhom/chi-tiet/{idNhom}")
+    public String chiTietNhom(@PathVariable Long idNhom, Model model) {
+        model.addAttribute("idNhom", idNhom);
         return "ChiTietNhom";
     }
+
+    @GetMapping("/nhom")
+    public String trangNhom() {
+        return "page/Nhom_new";
+    }
+
     @GetMapping("/register")
     public String sign_up() {
         return "account/register";
