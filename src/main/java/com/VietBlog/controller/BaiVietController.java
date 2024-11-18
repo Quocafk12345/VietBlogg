@@ -6,16 +6,19 @@ import com.VietBlog.entity.LuuBaiViet_ID;
 import com.VietBlog.entity.User;
 import com.VietBlog.repository.*;
 import com.VietBlog.service.BaiVietService;
+import com.VietBlog.service.LuotLike_BaiViet_Service;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin("*")
@@ -26,14 +29,16 @@ public class BaiVietController {
     private final BinhLuanRepository binhLuanRepository;
     private final LuotLike_BaiViet_Repository luotLikeRepository;
     private final LuuBaiVietRepository luuBaiVietRepository;
+    private final LuotLike_BaiViet_Service luotLike_BaiViet_Service;
 
     @Autowired
     public BaiVietController(BaiVietService baiVietService, BinhLuanRepository binhLuanRepository,
-                             LuotLike_BaiViet_Repository luotLikeRepository, LuuBaiVietRepository luuBaiVietRepository) {
+                             LuotLike_BaiViet_Repository luotLikeRepository, LuuBaiVietRepository luuBaiVietRepository, LuotLike_BaiViet_Service luotLike_BaiViet_Service) {
         this.baiVietService = baiVietService;
         this.binhLuanRepository = binhLuanRepository;
         this.luotLikeRepository = luotLikeRepository;
         this.luuBaiVietRepository = luuBaiVietRepository;
+        this.luotLike_BaiViet_Service = luotLike_BaiViet_Service;
     }
 
     /**
@@ -99,7 +104,7 @@ public class BaiVietController {
     @Transactional
     public ResponseEntity<BaiViet> dangBaiViet(@RequestBody BaiViet baiViet) {
         try {
-             // Sử dụng BaiVietService
+            // Sử dụng BaiVietService
             return ResponseEntity.ok(baiVietService.themBaiViet(baiViet));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build(); // Hoặc trả về thông báo lỗi cụ thể hơn
@@ -154,6 +159,15 @@ public class BaiVietController {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
+        }
+    }
+    @PostMapping("/{id}/like")
+    public ResponseEntity<?> toggleLike(@PathVariable("id") Long idBaiViet, @RequestParam("userId")Long userId) {
+        try {
+            boolean isLiked = luotLike_BaiViet_Service.toggleLike(idBaiViet, userId);
+            return ResponseEntity.ok(isLiked);
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 }

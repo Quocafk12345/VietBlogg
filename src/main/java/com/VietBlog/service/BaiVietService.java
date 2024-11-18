@@ -1,7 +1,11 @@
 package com.VietBlog.service;
 
 import com.VietBlog.entity.BaiViet;
+import com.VietBlog.entity.LuotLike_BaiViet;
+import com.VietBlog.entity.LuotLike_BaiViet_ID;
+import com.VietBlog.entity.User;
 import com.VietBlog.repository.BaiVietRepository;
+import com.VietBlog.repository.LuotLike_BaiViet_Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +18,9 @@ public class BaiVietService {
 	private final BaiVietRepository baiVietRepository;
 
 	@Autowired
-	private BaiVietService(BaiVietRepository baiVietRepository){
+	private BaiVietService(BaiVietRepository baiVietRepository, LuotLike_BaiViet_Repository luotLikeBaiVietRepository){
 		this.baiVietRepository = baiVietRepository;
-	}
+    }
 
 	// Lấy tất cả bài viết
 	public List<BaiViet> getAllBaiViet() {
