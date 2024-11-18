@@ -5,9 +5,8 @@ import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
 
-import com.VietBlog.constraints.User.CoChu_User;
 import com.VietBlog.constraints.User.FontChu_User;
-import com.VietBlog.constraints.User.MauNen_User;
+import com.VietBlog.constraints.User.Theme_User;
 import com.VietBlog.constraints.User.VaiTro_User;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
@@ -60,8 +59,7 @@ public class UserService {
 	public void dangKy(User user) {
 		user.setNgayTao(LocalDate.now());
 		user.setVaiTro(VaiTro_User.USER);
-		user.setMauNen(MauNen_User.WHITE);
-		user.setCoChu(CoChu_User.NHO);
+		user.setTheme(Theme_User.LIGHT);
 		user.setFontChu(FontChu_User.HELVETICA_NEUE);
 
 		if (isEmailExists(user.getEmail())) {
@@ -106,7 +104,7 @@ public class UserService {
 		existingUser.setTenDangNhap(user.getTenDangNhap() != null ? user.getTenDangNhap() : existingUser.getTenDangNhap());
 		existingUser.setEmail(user.getEmail() != null ? user.getEmail() : existingUser.getEmail());
 		existingUser.setMatKhau(user.getMatKhau() != null ? user.getMatKhau() : existingUser.getMatKhau());
-		existingUser.setMauNen(user.getMauNen() != null ? user.getMauNen() : existingUser.getMauNen());
+		existingUser.setTheme(user.getTheme() != null ? user.getTheme() : existingUser.getTheme());
 		userRepository.save(existingUser);
 	}
 

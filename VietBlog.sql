@@ -171,9 +171,8 @@ ALTER TABLE Users
 GO
 
 -- Cập nhật các thuộc tính Mau_Nen, Font_Chu, Co_Chu cho bảng Users
-ALTER TABLE Users ADD Mau_Nen NVARCHAR(255);
-ALTER TABLE Users ADD Font_Chu NVARCHAR(255);
-ALTER TABLE Users ADD Co_Chu FLOAT;
+ALTER TABLE Users ADD Theme NVARCHAR(255);
+ALTER TABLE Users ADD Font NVARCHAR(255);
 GO
 
 UPDATE Users
@@ -181,15 +180,11 @@ Set Ngay_Sinh = '2002-10-10'
 GO
 
 UPDATE Users
-Set Co_Chu = 16
+Set Font = 'Helvetica Neue'
 GO
 
 UPDATE Users
-Set Font_Chu = 'Helvetica Neue'
-GO
-
-UPDATE Users
-Set Mau_Nen = N'TRẮNG'
+Set Theme = N'SÁNG'
 GO
 
 ALTER TABLE Thanh_Vien ADD Ngay_Tham_Gia DATE;

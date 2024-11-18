@@ -1,12 +1,12 @@
 package com.VietBlog.constraints.User;
 
-public enum MauNen_User {
-	WHITE("TRẮNG"),
-	BLACK("ĐEN");
+public enum Theme_User {
+	LIGHT("SÁNG"),
+	DARK("TỐI");
 
 	private final String value;
 
-	MauNen_User(String value) {
+	Theme_User(String value) {
 		this.value = value;
 	}
 
