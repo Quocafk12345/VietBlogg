@@ -19,7 +19,7 @@ public class BaiVietService {
 	@Autowired
 	public BaiVietService(BaiVietRepository baiVietRepository){
 		this.baiVietRepository = baiVietRepository;
-	}
+    }
 
 	// Lấy tất cả bài viết
 	public List<BaiViet> getAllBaiViet() {

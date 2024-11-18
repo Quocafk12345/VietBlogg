@@ -3,6 +3,7 @@ package com.VietBlog.service;
 import com.VietBlog.entity.BaiViet;
 import com.VietBlog.entity.LuotLike_BaiViet;
 import com.VietBlog.entity.LuotLike_BaiViet_ID;
+import com.VietBlog.entity.User;
 import com.VietBlog.repository.BaiVietRepository;
 import com.VietBlog.repository.LuotLike_BaiViet_Repository;
 import com.VietBlog.repository.UserRepository;
@@ -18,35 +19,40 @@ public class LuotLike_BaiViet_Service {
 	private final LuotLike_BaiViet_Repository luotLikeRepository;
 	private final UserRepository userRepository;
 	private final BaiVietRepository baiVietRepository;
+	private final LuotLike_BaiViet_Repository luotLike_BaiViet_Repository;
 
 	@Autowired
-	public LuotLike_BaiViet_Service(LuotLike_BaiViet_Repository luotLikeRepository, UserRepository userRepository, BaiVietRepository baiVietRepository) {
+	public LuotLike_BaiViet_Service(LuotLike_BaiViet_Repository luotLikeRepository, UserRepository userRepository, BaiVietRepository baiVietRepository, LuotLike_BaiViet_Repository luotLike_BaiViet_Repository) {
 		this.luotLikeRepository = luotLikeRepository;
 		this.userRepository = userRepository;
 		this.baiVietRepository = baiVietRepository;
+		this.luotLike_BaiViet_Repository = luotLike_BaiViet_Repository;
 	}
 
-	// Thêm lượt like
-	@Transactional
-	public LuotLike_BaiViet themLuotLike(Long userId, Long baiVietId) {
-		LuotLike_BaiViet_ID id = new LuotLike_BaiViet_ID(userId, baiVietId);
-		if (luotLikeRepository.existsById(id)) {
-			throw new RuntimeException("Người dùng đã like bài viết này rồi");
-		}
-		LuotLike_BaiViet luotLike = new LuotLike_BaiViet(id,
-				userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng")),
-				baiVietRepository.findById(baiVietId).orElseThrow(() -> new RuntimeException("Không tìm thấy bài viết")));
-		return luotLikeRepository.save(luotLike);
-	}
+	public boolean toggleLike(Long id, Long userId) {
+		// Kiểm tra người dùng và bài viết có tồn tại không
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new RuntimeException("User không tồn tại."));
+		BaiViet baiViet = baiVietRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Bài viết không tồn tại."));
 
-	// Xóa lượt like
-	@Transactional
-	public void xoaLuotLike(Long userId, Long baiVietId) {
-		LuotLike_BaiViet_ID id = new LuotLike_BaiViet_ID(userId, baiVietId);
-		if (!luotLikeRepository.existsById(id)) {
-			throw new RuntimeException("Người dùng chưa like bài viết này");
+		// Tạo ID cho bảng trung gian
+		LuotLike_BaiViet_ID luotLikeId = new LuotLike_BaiViet_ID(userId, id);
+
+		if (luotLike_BaiViet_Repository.existsById(luotLikeId)) {
+			// Nếu đã like, xóa bản ghi
+			luotLike_BaiViet_Repository.deleteById(luotLikeId);
+			return false; // Trả về trạng thái "không like"
+		} else {
+			// Nếu chưa like, thêm bản ghi
+			LuotLike_BaiViet luotLikeBaiViet = new LuotLike_BaiViet();
+			luotLikeBaiViet.setId(luotLikeId);
+			luotLikeBaiViet.setUser(user);
+			luotLikeBaiViet.setBaiViet(baiViet);
+
+			luotLike_BaiViet_Repository.save(luotLikeBaiViet);
+			return true; // Trả về trạng thái "đã like"
 		}
-		luotLikeRepository.deleteById(id);
 	}
 
 	// Đếm số lượt like theo bài viết
