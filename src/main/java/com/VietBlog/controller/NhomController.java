@@ -1,8 +1,10 @@
 package com.VietBlog.controller;
 
-import com.VietBlog.entity.BaiViet;
-import com.VietBlog.entity.Nhom;
+import com.VietBlog.entity.*;
+import com.VietBlog.repository.BaiVietRepository;
+import com.VietBlog.repository.ThanhVienRepository;
 import com.VietBlog.service.NhomService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +14,11 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin("*")
@@ -29,6 +33,12 @@ public class NhomController {
         this.nhomService = nhomService;
     }
 
+    @Autowired
+    private ThanhVienRepository thanhVienRepository;
+
+    @Autowired
+    private BaiVietRepository baiVietRepository;
+
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Nhom>> layDanhSachNhomCuaUser(@PathVariable Long userId) {
         List<Nhom> DSnhom = nhomService.layDanhSachNhomCuaThanhVien(userId);
@@ -36,6 +46,7 @@ public class NhomController {
     }
 
     // API tạo nhóm mới của người dùng
+
 //    @PostMapping("/tao-nhom")
 //    public ResponseEntity<Nhom> taoNhom(@RequestBody Nhom nhom, @RequestParam Long userId) {
 //        Nhom nhomMoi = nhomService.taoNhom(nhom, userId);
@@ -70,17 +81,78 @@ public class NhomController {
     }
 
     // API lấy danh sách tất cả các nhóm
+//    @GetMapping("/danh-sach")
+//    public ResponseEntity<List<Nhom>> layDanhSachNhom() {
+//        List<Nhom> DSnhom = nhomService.layToanBoNhom();
+//        return ResponseEntity.ok(DSnhom);
+//    }
+    //lấy danh sách nhóm trả về thêm thông tin về vai trò của người dùng hiện tại trong mỗi nhóm lên CongDong.html
+    //Thay vì chỉ trả về danh sách Nhom, bạn sẽ trả về một danh sách các object, mỗi object chứa thông tin về
+    // nhóm (Nhom) và vai trò của người dùng trong nhóm đó (vaiTro)
     @GetMapping("/danh-sach")
-    public ResponseEntity<List<Nhom>> layDanhSachNhom() {
-        List<Nhom> DSnhom = nhomService.layToanBoNhom();
-        return ResponseEntity.ok(DSnhom);
+    public ResponseEntity<List<Map<String, Object>>> layDanhSachNhom(HttpServletRequest request) {
+        List<Nhom> nhomList = nhomService.layToanBoNhom();
+        User currentUser = (User) request.getSession().getAttribute("currentUser");
+
+        List<Map<String, Object>> responseList = nhomList.stream()
+                .map(nhom -> {
+                    Map<String, Object> response = new HashMap<>();
+                    response.put("nhom", nhom);
+
+                    if (currentUser != null) {
+                        Optional<ThanhVien> thanhVienOptional = thanhVienRepository.findById(new ThanhVienId(nhom.getId(), currentUser.getId()));
+                        String vaiTro = thanhVienOptional.map(thanhVien -> thanhVien.getVaiTro().toString()).orElse("KHÔNG_THAM_GIA");
+                        response.put("vaiTro", vaiTro);
+                    } else {
+                        response.put("vaiTro", "KHÔNG_THAM_GIA");
+                    }
+
+                    return response;
+                })
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(responseList);
     }
 
     // API lấy thông tin một nhóm theo ID
+//    @GetMapping("/{nhomId}")
+//    public ResponseEntity<Nhom> layNhomTheoId(@PathVariable Long nhomId) {
+//        Optional<Nhom> nhom = nhomService.layNhomTheoId(nhomId);
+//	    return nhom.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+//    }
     @GetMapping("/{nhomId}")
-    public ResponseEntity<Nhom> layNhomTheoId(@PathVariable Long nhomId) {
-        Optional<Nhom> nhom = nhomService.layNhomTheoId(nhomId);
-	    return nhom.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<Map<String, Object>> layNhomTheoId(@PathVariable Long nhomId, HttpServletRequest request) {
+        Optional<Nhom> nhomOptional = nhomService.layNhomTheoId(nhomId);
+        if (nhomOptional.isPresent()) {
+            Nhom nhom = nhomOptional.get();
+
+            // Lấy thông tin người dùng từ session
+            // Lấy vai trò của người dùng trong nhóm
+            User currentUser = (User) request.getSession().getAttribute("currentUser");
+            String vaiTro = "Thành viên"; // Mặc định là "Thành viên"
+
+            // Kiểm tra xem người dùng hiện tại có phải là thành viên của nhóm không
+            boolean daThamGia = currentUser != null && nhom.getThanhVien().stream()
+                    .anyMatch(thanhVien -> thanhVien.getUser().getId().equals(currentUser.getId()));
+
+            // Thêm thuộc tính daThamGia vào entity Nhom
+            nhom.setDaThamGia(daThamGia); // Thêm phương thức setDaThamGia() vào entity Nhom
+
+            if (currentUser != null) {
+                Optional<ThanhVien> thanhVienOptional = thanhVienRepository.findById(new ThanhVienId(nhomId, currentUser.getId())); // Sử dụng instance thanhVienRepository
+                if (thanhVienOptional.isPresent()) {
+                    vaiTro = thanhVienOptional.get().getVaiTro().toString();
+                }
+            }
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("nhom", nhom);
+            response.put("vaiTro", vaiTro);
+
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     // API cập nhật thông tin giới thiêu một nhóm
@@ -112,6 +184,17 @@ public class NhomController {
         return ResponseEntity.ok().build();
     }
 
+    // API rời khỏi nhóm và nhượng quyền trong ChiTietNhom.html
+    @PostMapping("/{nhomId}/roi-nhom/{userId}/nhuong-quyen/{nguoiNhanId}")
+    public ResponseEntity<Void> roiKhoiNhomVaNhuongQuyen(
+            @PathVariable Long nhomId,
+            @PathVariable Long userId,
+            @PathVariable Long nguoiNhanId) {
+
+        nhomService.roiKhoiNhomVaNhuongQuyen(nhomId, userId, nguoiNhanId);
+        return ResponseEntity.ok().build();
+    }
+
     // API lấy danh sách nhóm theo người tạo
     @GetMapping("/nguoitao/{userId}")
     public ResponseEntity<List<Nhom>> layDanhSachNhomTheoNguoiTao(@PathVariable Long userId) {
@@ -126,11 +209,33 @@ public class NhomController {
         return ResponseEntity.ok(DSnhom);
     }
 
+    //API lấy danh sách các thành viên trong nhóm
+    @GetMapping("/{nhomId}/thanh-vien")
+    public ResponseEntity<List<ThanhVienDTO>> layDanhSachThanhVien(@PathVariable Long nhomId) {
+        List<ThanhVien> danhSachThanhVien = thanhVienRepository.findByNhom_Id(nhomId);
+
+        List<ThanhVienDTO> danhSachThanhVienDTO = danhSachThanhVien.stream()
+                .map(thanhVien -> new ThanhVienDTO(
+                        thanhVien.getUser().getTenNguoiDung(),
+                        thanhVien.getVaiTro().toString(),
+                        thanhVien.getUser().getHinhDaiDien(),
+                        thanhVien.getUser().getId() // Set userId
+                ))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(danhSachThanhVienDTO);
+    }
+
     // API lấy danh sách bài viết của một nhóm
-    @GetMapping("/{nhomId}/baiviet")
+//    @GetMapping("/{nhomId}/baiviet")
+//    public ResponseEntity<List<BaiViet>> layDanhSachBaiVietCuaNhom(@PathVariable Long nhomId) {
+//        List<BaiViet> DSBaiViet = nhomService.layDanhSachBaiVietCuaNhom(nhomId);
+//        return ResponseEntity.ok(DSBaiViet);
+//    }
+    @GetMapping("/{nhomId}/bai-viet")
     public ResponseEntity<List<BaiViet>> layDanhSachBaiVietCuaNhom(@PathVariable Long nhomId) {
-        List<BaiViet> DSBaiViet = nhomService.layDanhSachBaiVietCuaNhom(nhomId);
-        return ResponseEntity.ok(DSBaiViet);
+        List<BaiViet> baiVietList = baiVietRepository.findByNhom_Id(nhomId); // Sử dụng BaiVietRepository để lấy danh sách bài viết theo nhóm
+        return ResponseEntity.ok(baiVietList);
     }
 
     // API đếm số lượng thành viên của một nhóm
@@ -139,6 +244,5 @@ public class NhomController {
         int soLuong = nhomService.demSoLuongThanhVien(nhomId);
         return ResponseEntity.ok(soLuong);
     }
-
 
 }

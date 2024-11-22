@@ -12,4 +12,9 @@ public class NhomController_new {
     public String hienThiTrangTaoNhom() {
         return "TaoNhom";
     }
+
+    @GetMapping(value = {"/CongDong", "/nhom/CongDong", "/CongDong"}) // Thêm value attribute
+    public String congDongPage() {
+        return "CongDong";
+    }
 }

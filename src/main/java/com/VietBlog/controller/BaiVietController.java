@@ -54,6 +54,14 @@ public class BaiVietController {
         return ResponseEntity.ok(baiVietService.getBaiVietById(id));
     }
 
+    @GetMapping("/nhom/{nhomId}/user/{userId}")
+    public ResponseEntity<List<BaiViet>> layDanhSachBaiVietCuaUserTrongNhom(
+            @PathVariable Long nhomId,
+            @PathVariable Long userId) {
+
+        List<BaiViet> baiVietList = baiVietService.getBaiVietByNhomIdAndUserId(nhomId, userId);
+        return ResponseEntity.ok(baiVietList);
+    }
 
     /**
      * Phương thức đếm số lượt like của một bài viết

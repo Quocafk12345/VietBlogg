@@ -5,9 +5,7 @@ import com.VietBlog.entity.BaiViet;
 import com.VietBlog.entity.Nhom;
 import com.VietBlog.entity.ThanhVien;
 import com.VietBlog.entity.ThanhVienId;
-import com.VietBlog.repository.NhomRepository;
-import com.VietBlog.repository.ThanhVienRepository;
-import com.VietBlog.repository.UserRepository;
+import com.VietBlog.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,16 +30,37 @@ public class NhomService {
 		this.userRepository = userRepository;
 	}
 
+	@Autowired
+	private BaiVietRepository baiVietRepository; // Khai báo BaiVietRepository
+
+	@Autowired
+	private DS_LuatNhom_Repository dsLuatNhomRepository;
 	// Tạo nhóm mới
+//	@Transactional
+//	public Nhom taoNhom(Nhom nhom, Long chuNhomId) {
+//		nhom.setNgayTao(Timestamp.from(Instant.now()));
+//		Nhom nhomMoi = nhomRepository.save(nhom);
+//
+//		// Thêm người tạo vào nhóm với vai trò "CHỦ NHÓM"
+//		ThanhVienId thanhVienId = new ThanhVienId(nhomMoi.getId(), chuNhomId);
+//		ThanhVien thanhVien = new ThanhVien(thanhVienId, nhomMoi,
+//				userRepository.findById(chuNhomId).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng")),
+//				VaiTro_ThanhVien.CHU_NHOM, LocalDate.now());
+//		thanhVienRepository.save(thanhVien);
+//
+//		return nhomMoi;
+//	}
+
 	@Transactional
 	public Nhom taoNhom(Nhom nhom, Long chuNhomId) {
 		nhom.setNgayTao(Timestamp.from(Instant.now()));
+		// Xử lý lưu hình ảnh (nếu có)
 		Nhom nhomMoi = nhomRepository.save(nhom);
 
 		// Thêm người tạo vào nhóm với vai trò "CHỦ NHÓM"
 		ThanhVienId thanhVienId = new ThanhVienId(nhomMoi.getId(), chuNhomId);
 		ThanhVien thanhVien = new ThanhVien(thanhVienId, nhomMoi,
-				userRepository.findById(chuNhomId).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng")),
+				userRepository.findById(chuNhomId).orElseThrow(),
 				VaiTro_ThanhVien.CHU_NHOM, LocalDate.now());
 		thanhVienRepository.save(thanhVien);
 
@@ -76,10 +95,19 @@ public class NhomService {
 		return nhomRepository.findById(nhomId);
 	}
 
-	// Tham gia nhóm
+	// Xóa nhóm
 	@Transactional
 	public void xoaNhom(Long nhomId) {
+		// 1. Xóa tất cả bài viết thuộc nhóm
+		baiVietRepository.deleteAllByNhom_Id(nhomId);
+
+		// 2. Xóa tất cả luật nhóm
+		dsLuatNhomRepository.deleteAllByNhom_Id(nhomId); // Thêm dòng này
+
+		// 3. Xóa tất cả thành viên trong nhóm
 		thanhVienRepository.deleteAllByNhom_Id(nhomId);
+
+		// 4. Xóa nhóm
 		nhomRepository.deleteById(nhomId);
 	}
 
@@ -93,6 +121,25 @@ public class NhomService {
 		} else {
 			throw new RuntimeException("Bài viết không tồn tại");
 		}
+	}
+
+	public void roiKhoiNhomVaNhuongQuyen(Long nhomId, Long userId, Long nguoiNhanId) {
+		// 1. Kiểm tra vai trò của người dùng hiện tại
+		ThanhVien thanhVienHienTai = thanhVienRepository.findById(new ThanhVienId(nhomId, userId))
+				.orElseThrow(() -> new RuntimeException("Không tìm thấy thành viên"));
+
+		if (thanhVienHienTai.getVaiTro() == VaiTro_ThanhVien.CHU_NHOM ||
+				thanhVienHienTai.getVaiTro() == VaiTro_ThanhVien.QUAN_TRI_VIEN) {
+
+			// 2. Cập nhật vai trò của người được nhượng quyền
+			ThanhVien thanhVienNhanQuyen = thanhVienRepository.findById(new ThanhVienId(nhomId, nguoiNhanId))
+					.orElseThrow(() -> new RuntimeException("Không tìm thấy thành viên được nhượng quyền"));
+			thanhVienNhanQuyen.setVaiTro(thanhVienHienTai.getVaiTro()); // Nhượng quyền
+			thanhVienRepository.save(thanhVienNhanQuyen);
+		}
+
+		// 3. Rời khỏi nhóm
+		roiKhoiNhom(nhomId, userId);
 	}
 
 	// Lấy danh sách nhóm theo người tạo

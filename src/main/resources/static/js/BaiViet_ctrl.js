@@ -1,9 +1,10 @@
 let host_BaiViet = "http://localhost:8080/api/bai-viet";
-mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService) {  // Inject $q
+mainApp.controller("BaiVietController", function ($scope, $rootScope, $http, $q, timeService) {  // Inject $q
     $scope.bangTin = [];
     $scope.dangTheoDoi = [];
     $scope.chiTietBaiViet = {};
 
+    $scope.loaiBaiDang = "caNhan";
     $scope.loaiBaiDang = "";
 
     $scope.mucDuocChon = {ten: 'Chọn nhóm'};
@@ -11,7 +12,6 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     $scope.thongTinUser = [
         {ten: currentUser.tenNguoiDung, hinhDaiDien: 'https://via.placeholder.com/20x20'}
     ];
-
 
     $scope.chonNoiDangBai = function (mucDuocChon) {
         $scope.mucDuocChon = mucDuocChon;
@@ -146,5 +146,35 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     if (typeof baiVietId !== 'undefined') {
         $scope.loadBaiVietDuocChon(baiVietId);
     }
+
+    //Bài Vit nhóm trong CHITIETNHOm
+    $scope.loadBaiVietNhom = function() {
+        // Lấy danh sách bài viết của nhóm từ API
+        $http.get(`${host_Nhom}/${$rootScope.idNhom}/baiviet`)
+            .then(resp => {
+                $scope.baiVietNhom = resp.data;
+
+                // Xử lý lượt like, lượt bình luận, thời gian đăng cho mỗi bài viết
+                var promises = [];
+                angular.forEach($scope.baiVietNhom, function (baiViet) {
+                    promises.push($scope.demLuotLike(baiViet.id));
+                    promises.push($scope.demLuotBinhLuan(baiViet.id));
+                });
+                $q.all(promises).then(function (results) {
+                    for (var i = 0; i < $scope.baiVietNhom.length; i++) {
+                        $scope.baiVietNhom[i].luotLike = results[i * 2];
+                        $scope.baiVietNhom[i].luotBinhLuan = results[i * 2 + 1];
+                        $scope.baiVietNhom[i].thoiGianDang = $scope.tinhThoiGianDang($scope.baiVietNhom[i].ngayTao);
+                    }
+                });
+            })
+            .catch(error => {
+                console.error("Lỗi khi lấy bài viết của nhóm:", error);
+            });
+    };
+
+    $scope.$on('loadBaiVietNhom', function() {
+        $scope.loadBaiVietNhom();
+    });
 
 });

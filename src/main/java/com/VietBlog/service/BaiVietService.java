@@ -82,4 +82,8 @@ public class BaiVietService {
 	public Integer countBaiVietByUserId(Long userId) {
 		return baiVietRepository.countBaiVietByUserId(userId);
 	}
+
+	public List<BaiViet> getBaiVietByNhomIdAndUserId(Long nhomId, Long userId) {
+		return baiVietRepository.findByNhomIdAndUserId(nhomId, userId);
+	}
 }
