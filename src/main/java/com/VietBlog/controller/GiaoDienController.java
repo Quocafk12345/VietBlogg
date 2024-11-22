@@ -94,7 +94,7 @@ public class GiaoDienController {
         try {
             // Thêm thông tin giao diện vào model
             model.addAttribute("user", currentUser);
-            model.addAttribute("mauNen", currentUser.getMauNen());
+            model.addAttribute("mauNen", currentUser.getTheme());
 
             return "CaiDat";
         } catch (Exception e) {

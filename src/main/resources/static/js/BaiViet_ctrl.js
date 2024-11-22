@@ -22,6 +22,8 @@ mainApp.controller("BaiVietController", function ($scope, $rootScope, $http, $q,
         }
     };
 
+    // $scope.daLike = false;
+    // $scope.userId = currentUserId;
     $scope.tinhThoiGianDang = timeService.tinhThoiGianDang; // Gán hàm từ service
 
     $scope.load_bai_viet = function () {
@@ -40,6 +42,7 @@ mainApp.controller("BaiVietController", function ($scope, $rootScope, $http, $q,
                         $scope.bangTin[i].luotLike = results[i * 2]; // Kết quả lượt like ở vị trí i * 2
                         $scope.bangTin[i].luotBinhLuan = results[i * 2 + 1]; // Kết quả lượt bình luận ở vị trí i * 2 + 1
                         $scope.bangTin[i].thoiGianDang = $scope.tinhThoiGianDang($scope.bangTin[i].ngayTao);
+                        // $scope.bangTin[i].daLike = results[i*3+1];
                     }
                 });
             })
@@ -47,6 +50,29 @@ mainApp.controller("BaiVietController", function ($scope, $rootScope, $http, $q,
                 console.log("Error", error);
             });
     };
+
+
+    // $scope.toggleLike = function (baiViet) {
+    //     if (!baiViet || !baiViet.id) {
+    //         console.error("Bài viết không hợp lệ:", baiViet);
+    //         return;
+    //     }
+    //     $scope.toggleSuccess = function () {
+    //         $scope.daLike = !$scope.daLike;
+    //     };
+    //     var url = `${host_BaiViet}/${baiViet.id}/like?userId=${currentUserId}`;
+    //     $http.post(url)
+    //         .then((resp) => {
+    //             console.log("Like thành công:", resp.data);
+    //             baiViet.daLike = !baiViet.daLike; // Đổi trạng thái like
+    //             baiViet.luotLike += baiViet.daLike ? -1 : 1; // Cập nhật lượt like
+    //         })
+    //         .catch((error) => {
+    //             console.error("Lỗi khi toggle like:", error);
+    //         });
+    // };
+    //
+
 
     $scope.demLuotLike = function (idBaiViet) {
         var url = `${host_BaiViet}/${idBaiViet}/luot-like`;

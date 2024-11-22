@@ -1,80 +1,84 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="mainApp" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Chi tiết bài viết - VietBlog</title>
-	
-	<!-- Bootstrap 5 -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-	
-	<link rel="stylesheet" th:href="@{/css/include/navbar.css}">
-	
-	<!-- Custom CSS -->
-	<style>
-		.post-title {
-			font-size: 2rem;
-			font-weight: bold;
-			margin-bottom: 20px;
-		}
-		
-		.post-meta {
-			font-size: 0.9rem;
-			color: gray;
-			margin-bottom: 30px;
-		}
-		
-		.post-content img {
-			max-width: 100%;
-			height: auto;
-			border-radius: 10px;
-		}
-		
-		.post-content p {
-			font-size: 1.1rem;
-			margin-bottom: 20px;
-		}
-		
-		.interaction-buttons {
-			margin-top: 20px;
-		}
-		
-		.comments-section {
-			max-height: 400px;
-			overflow-y: auto; /* Cuộn nếu quá nhiều bình luận */
-			border: 1px solid #ddd;
-			border-radius: 10px;
-			padding: 15px;
-		}
-		
-		.related-posts {
-			margin-top: 30px;
-		}
-		
-		.comment-action {
-			display: flex;
-			justify-content: space-between;
-			font-size: 0.9rem;
-		}
-		
-		.comment-input {
-			margin-top: 20px;
-		}
-		
-		.user-info {
-			display: flex;
-			align-items: center;
-			margin-bottom: 15px;
-		}
-		
-		.user-info img {
-			border-radius: 50%;
-			width: 40px; /* Chiều rộng ảnh đại diện */
-			height: 40px; /* Chiều cao ảnh đại diện */
-			margin-right: 10px; /* Khoảng cách giữa ảnh đại diện và tên người dùng */
-		}
-	</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết bài viết - VietBlog</title>
+
+    <!-- Bootstrap 5 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/include/navbar.css}">
+
+    <!-- Custom CSS -->
+    <style>
+        .like-button .fa-thumbs-up {
+            color: inherit; /* Giữ màu icon đồng bộ với chữ */
+        }
+        .post-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .post-meta {
+            font-size: 0.9rem;
+            color: gray;
+            margin-bottom: 30px;
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .post-content p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .interaction-buttons {
+            margin-top: 20px;
+        }
+
+        .comments-section {
+            max-height: 400px;
+            overflow-y: auto; /* Cuộn nếu quá nhiều bình luận */
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .related-posts {
+            margin-top: 30px;
+        }
+
+        .comment-action {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+
+        .comment-input {
+            margin-top: 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .user-info img {
+            border-radius: 50%;
+            width: 40px; /* Chiều rộng ảnh đại diện */
+            height: 40px; /* Chiều cao ảnh đại diện */
+            margin-right: 10px; /* Khoảng cách giữa ảnh đại diện và tên người dùng */
+        }
+    </style>
 </head>
 <body>
 <div class="container-fluid p-0">
@@ -123,6 +127,7 @@
 				<div class="comments-section">
 					<div class="comment mb-4" ng-repeat="binhLuan in danhSachBinhLuan">
 						<div class="d-flex">
+							<img src="https://via.placeholder.com/50" class="rounded-circle me-3" alt="User Avatar">
 							<div>
 								<h6 class="mb-0">{{binhLuan.user.tenNguoiDung}}</h6>
 								<small class="text-muted">{{binhLuan.thoiGianDang}}</small>
@@ -147,6 +152,7 @@
 								<div ng-show="binhLuan.showReplies">
 									<div ng-repeat="reply in binhLuan.replies" class="ms-4">
 										<div class="d-flex">
+											<img src="https://via.placeholder.com/50" class="rounded-circle me-3" alt="User Avatar">
 											<div>
 												<h6 class="mb-0">{{reply.user.tenNguoiDung}}</h6>
 												<small class="text-muted">{{reply.thoiGianDang}}</small>
@@ -170,6 +176,7 @@
 												</div>
 												<div ng-show="reply.showReplies" ng-repeat="reply2 in reply.replies" class="ms-4">
 													<div class="d-flex">
+														<img src="https://via.placeholder.com/50" class="rounded-circle me-3" alt="User Avatar">
 														<div>
 															<h6 class="mb-0">{{reply2.user.tenNguoiDung}}</h6>
 															<small class="text-muted">{{reply2.thoiGianDang}}</small>
@@ -221,8 +228,8 @@
 <!-- AngularJS -->
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 <script th:inline="javascript">
-	const baiVietId = [[${baiVietId}]];
-	const currentUser = [[${session.currentUser}]];
+	var baiVietId = [[${baiVietId}]];
+	var currentUserId = [[${session.currentUser.id}]];
 </script>
 <script th:src="@{/js/MainApp.js}"></script>
 <script th:src="@{/js/DangNhap_ctrl.js}"></script>

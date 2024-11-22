@@ -3,13 +3,10 @@ package com.VietBlog.controller;
 import java.io.IOException;
 import java.time.LocalDate;
 
-import com.VietBlog.constraints.User.CoChu_User;
-import com.VietBlog.constraints.User.FontChu_User;
-import com.VietBlog.constraints.User.MauNen_User;
+import com.VietBlog.constraints.User.Theme_User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,8 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.VietBlog.entity.User;
 import com.VietBlog.service.UserService;
-
-import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class CaiDatController {
@@ -112,16 +107,16 @@ public class CaiDatController {
 	}
 
 	@PostMapping("/CaiDat/luuGiaoDien")
-	public String luuGiaoDien(@RequestParam("userId") Long userId, @RequestParam("mauNen") String mauNen,
-							  @RequestParam("fontChu") String fontChu, @RequestParam("coChu") String coChu) {
+	public String luuGiaoDien(@RequestParam("userId") Long userId, @RequestParam("theme") String theme,
+							  @RequestParam("fontChu") String font) {
 
 		User user = userService.findById(userId);
 
 		// Chuyển đổi giá trị String từ request sang enum
-		MauNen_User mauNen_User = MauNen_User.valueOf(mauNen.toUpperCase().replace(" ", "_"));
+		Theme_User theme_User = Theme_User.valueOf(theme.toUpperCase().replace(" ", "_"));
 
 
-		user.setMauNen(mauNen_User);
+		user.setTheme(theme_User);
 		userService.updateUser(user);
 
 		return "redirect:/cai-dat";

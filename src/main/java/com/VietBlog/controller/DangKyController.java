@@ -1,8 +1,5 @@
 package com.VietBlog.controller;
 
-import com.VietBlog.constraints.User.CoChu_User;
-import com.VietBlog.constraints.User.FontChu_User;
-import com.VietBlog.constraints.User.MauNen_User;
 import com.VietBlog.constraints.User.VaiTro_User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

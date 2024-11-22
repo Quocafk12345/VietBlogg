@@ -73,15 +73,11 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ThanhVien> thanhVien;
 
-    @Convert(converter = MauNen_Converter.class)
-    @Column(name = "Mau_Nen")
-    private MauNen_User mauNen;
+    @Convert(converter = Theme_Converter.class)
+    @Column(name = "Theme")
+    private Theme_User theme;
 
     @Convert(converter = FontChu_Converter.class)
     @Column(name = "Font_Chu")
     private FontChu_User fontChu;
-
-    @Convert(converter = CoChu_Converter.class)
-    @Column(name = "Co_Chu")
-    private CoChu_User coChu;
 }

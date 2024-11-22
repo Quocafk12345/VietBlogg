@@ -4,17 +4,17 @@ import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
 @Converter(autoApply = true)
-public class MauNen_Converter implements AttributeConverter<MauNen_User, String> {
+public class Theme_Converter implements AttributeConverter<Theme_User, String> {
 	@Override
-	public String convertToDatabaseColumn(MauNen_User mauNenUser) {
+	public String convertToDatabaseColumn(Theme_User mauNenUser) {
 		return mauNenUser.getValue();
 	}
 
 	@Override
-	public MauNen_User convertToEntityAttribute(String dbData) {
+	public Theme_User convertToEntityAttribute(String dbData) {
 		return switch (dbData) {
-			case "ĐEN" -> MauNen_User.BLACK;
-			case "TRẮNG" -> MauNen_User.WHITE;
+			case "TỐI" -> Theme_User.LIGHT;
+			case "SÁNG" -> Theme_User.DARK;
 			default -> throw new IllegalArgumentException("Unexpected database value: " + dbData);
 		};
 	}

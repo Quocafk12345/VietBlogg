@@ -3,6 +3,7 @@ package com.VietBlog.repository;
 import com.VietBlog.entity.BaiViet;
 import com.VietBlog.entity.LuotLike_BaiViet;
 import com.VietBlog.entity.LuotLike_BaiViet_ID;
+import com.VietBlog.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,5 +25,5 @@ public interface LuotLike_BaiViet_Repository extends JpaRepository<LuotLike_BaiV
 
     // Kiểm tra xem một người dùng đã like một bài viết chưa
     boolean existsById(@NonNull LuotLike_BaiViet_ID id);
-
+    void deleteById(LuotLike_BaiViet_ID id);
 }
