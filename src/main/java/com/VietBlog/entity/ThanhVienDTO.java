@@ -11,7 +11,6 @@ public class ThanhVienDTO {
     private String vaiTro;
     private String hinhDaiDien;
     private Long userId;
-
 }
 
 // Data Transfer Object (DTO), nó chỉ được sử dụng để chuyển đổi dữ liệu giữa các tầng của ứng dụng

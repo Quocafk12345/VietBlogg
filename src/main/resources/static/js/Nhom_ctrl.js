@@ -119,6 +119,7 @@ mainApp.controller("nhomController", function ($scope, $http, $window) {
             return;
         }
 
+
         // Tạo FormData và thêm object nhom vào
         var formData = new FormData();
         formData.append('nhom', JSON.stringify(nhom)); // Chuyển object nhom thành JSON string

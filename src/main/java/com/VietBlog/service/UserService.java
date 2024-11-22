@@ -22,18 +22,18 @@ public class UserService {
 
 	private final Cloudinary cloudinary;
 
-    private final UserRepository userRepository;
+	private final UserRepository userRepository;
 
-    @Autowired
-    public UserService(Cloudinary cloudinary, UserRepository userRepository) {
-	    this.cloudinary = cloudinary;
-	    this.userRepository = userRepository;
-    }
+	@Autowired
+	public UserService(Cloudinary cloudinary, UserRepository userRepository) {
+		this.cloudinary = cloudinary;
+		this.userRepository = userRepository;
+	}
 
 	// tìm theo email
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElse(null);
-    }
+	public User findByEmail(String email) {
+		return userRepository.findByEmail(email).orElse(null);
+	}
 
 	public User dangNhap(String identifier, String matKhau) {
 		Optional<User> optionalUser;
@@ -82,8 +82,8 @@ public class UserService {
 
 	// tìm theo SDT
 	public User findByDienThoai(String dienThoai) {
-        return userRepository.findByDienThoai(dienThoai).orElse(null);
-    }
+		return userRepository.findByDienThoai(dienThoai).orElse(null);
+	}
 
 	// cập nhật User
 	@Transactional
@@ -117,9 +117,9 @@ public class UserService {
 	}
 
 	// tìm User theo id
-    public User findById(Long userId) {
-        return userRepository.findById(userId).orElse(null);
-    }
+	public User findById(Long userId) {
+		return userRepository.findById(userId).orElse(null);
+	}
 
 	// Kiểm tra xem số điện thoại đã tồn tại chưa
 	public boolean isDienThoaiExists(String dienThoai) {
@@ -136,8 +136,8 @@ public class UserService {
 		return userRepository.findByTenNguoiDung(tenNguoiDung).orElse(null);
 	}
 
+	//phương thức xóa nhóm và xoá toàn bộ user có trong nhóm đó
 	public void xoaUser(User user) {
 		userRepository.delete(user);
 	}
 }
-

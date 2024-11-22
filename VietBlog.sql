@@ -392,6 +392,7 @@ INSERT INTO Thanh_Vien (Vai_Tro, Id_Nhom, User_Id, Ngay_Tham_Gia) VALUES
 INSERT INTO Thanh_Vien (Vai_Tro, Id_Nhom, User_Id, Ngay_Tham_Gia) VALUES
 (N'Quản trị viên', 8, 1, GETDATE());
 
+--Dùng để xóa nhóm
 -- Thêm ON DELETE CASCADE vào khóa ngoại trong bảng DS_Luat_Nhom
 ALTER TABLE DS_Luat_Nhom
 DROP CONSTRAINT FK__DS_Luat_N__Id_Nh__3B75D760;

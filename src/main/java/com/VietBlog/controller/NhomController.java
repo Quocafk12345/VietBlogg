@@ -244,5 +244,4 @@ public class NhomController {
         int soLuong = nhomService.demSoLuongThanhVien(nhomId);
         return ResponseEntity.ok(soLuong);
     }
-
 }

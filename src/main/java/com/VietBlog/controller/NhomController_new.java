@@ -17,4 +17,5 @@ public class NhomController_new {
     public String congDongPage() {
         return "CongDong";
     }
+
 }

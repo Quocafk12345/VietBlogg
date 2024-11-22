@@ -123,6 +123,7 @@ public class NhomService {
 		}
 	}
 
+	//Rời nhóm và nhượng quyền cho vai trò thành viên trong nhóm
 	public void roiKhoiNhomVaNhuongQuyen(Long nhomId, Long userId, Long nguoiNhanId) {
 		// 1. Kiểm tra vai trò của người dùng hiện tại
 		ThanhVien thanhVienHienTai = thanhVienRepository.findById(new ThanhVienId(nhomId, userId))

@@ -74,5 +74,4 @@ public class ThanhVienService {
 					.map(ThanhVien::getNhom) // Lấy đối tượng Nhom từ mỗi ThanhVien
 					.toList(); // Chuyển đổi thành List<Nhom>
 	}
-
 }

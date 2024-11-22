@@ -19,4 +19,5 @@ public interface ThanhVienRepository extends JpaRepository<ThanhVien, ThanhVienI
     //tối ưu câu truy vấn để chỉ lấy những thông tin tên và vai trò user , tránh việc fetch toàn bộ object ThanhVien
     @Query("SELECT u.tenNguoiDung, tv.vaiTro FROM ThanhVien tv JOIN tv.user u WHERE tv.nhom.id = :nhomId")
     List<Object[]> layTenNguoiDungVaVaiTro(@Param("nhomId") Long nhomId);
+
 }
