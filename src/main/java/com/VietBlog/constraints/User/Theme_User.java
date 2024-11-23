@@ -1,8 +1,8 @@
 package com.VietBlog.constraints.User;
 
 public enum Theme_User {
-	LIGHT("SÁNG"),
-	DARK("TỐI");
+	LIGHT("SANG"),
+	DARK("TOI");
 
 	private final String value;
 

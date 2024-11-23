@@ -207,7 +207,7 @@ Set Font = 'Helvetica Neue'
 GO
 
 UPDATE Users
-Set Theme = N'SÁNG'
+Set Theme = N'SANG'
 GO
 
 ALTER TABLE Thanh_Vien ADD Ngay_Tham_Gia DATE;
