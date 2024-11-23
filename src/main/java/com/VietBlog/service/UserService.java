@@ -5,9 +5,8 @@ import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
 
-import com.VietBlog.constraints.User.CoChu_User;
 import com.VietBlog.constraints.User.FontChu_User;
-import com.VietBlog.constraints.User.MauNen_User;
+import com.VietBlog.constraints.User.Theme_User;
 import com.VietBlog.constraints.User.VaiTro_User;
 import com.VietBlog.repository.LuotFollowRepository;
 import com.VietBlog.repository.LuotLike_BaiViet_Repository;
@@ -25,23 +24,18 @@ public class UserService {
 
 	private final Cloudinary cloudinary;
 
-    private final UserRepository userRepository;
+	private final UserRepository userRepository;
 
-	private final LuotFollowRepository luotFollowRepository;
-
-	private final LuotLike_BaiViet_Repository luotLike_BaiViet_Repository;
-    @Autowired
-    public UserService(Cloudinary cloudinary, UserRepository userRepository, LuotFollowRepository luotFollowRepository, LuotLike_BaiViet_Repository luotLikeBaiVietRepository) {
-	    this.cloudinary = cloudinary;
-	    this.userRepository = userRepository;
-        this.luotFollowRepository = luotFollowRepository;
-        luotLike_BaiViet_Repository = luotLikeBaiVietRepository;
-    }
+	@Autowired
+	public UserService(Cloudinary cloudinary, UserRepository userRepository) {
+		this.cloudinary = cloudinary;
+		this.userRepository = userRepository;
+	}
 
 	// tìm theo email
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElse(null);
-    }
+	public User findByEmail(String email) {
+		return userRepository.findByEmail(email).orElse(null);
+	}
 
 	public User dangNhap(String identifier, String matKhau) {
 		Optional<User> optionalUser;
@@ -67,10 +61,8 @@ public class UserService {
 	public void dangKy(User user) {
 		user.setNgayTao(LocalDate.now());
 		user.setVaiTro(VaiTro_User.USER);
-		user.setCoChu(CoChu_User.NHO);
+		user.setTheme(Theme_User.LIGHT);
 		user.setFontChu(FontChu_User.HELVETICA_NEUE);
-		user.setMauNen(MauNen_User.WHITE);
-
 
 		if (isEmailExists(user.getEmail())) {
 			return;
@@ -92,8 +84,8 @@ public class UserService {
 
 	// tìm theo SDT
 	public User findByDienThoai(String dienThoai) {
-        return userRepository.findByDienThoai(dienThoai).orElse(null);
-    }
+		return userRepository.findByDienThoai(dienThoai).orElse(null);
+	}
 
 	// cập nhật User
 	@Transactional
@@ -114,10 +106,7 @@ public class UserService {
 		existingUser.setTenDangNhap(user.getTenDangNhap() != null ? user.getTenDangNhap() : existingUser.getTenDangNhap());
 		existingUser.setEmail(user.getEmail() != null ? user.getEmail() : existingUser.getEmail());
 		existingUser.setMatKhau(user.getMatKhau() != null ? user.getMatKhau() : existingUser.getMatKhau());
-		existingUser.setMauNen(user.getMauNen() != null ? user.getMauNen() : existingUser.getMauNen());
-		existingUser.setFontChu(user.getFontChu() != null ? user.getFontChu() : existingUser.getFontChu());
-		existingUser.setCoChu(user.getCoChu() != null ? user.getCoChu() : existingUser.getCoChu());
-
+		existingUser.setTheme(user.getTheme() != null ? user.getTheme() : existingUser.getTheme());
 		userRepository.save(existingUser);
 	}
 
@@ -130,9 +119,9 @@ public class UserService {
 	}
 
 	// tìm User theo id
-    public User findById(Long userId) {
-        return userRepository.findById(userId).orElse(null);
-    }
+	public User findById(Long userId) {
+		return userRepository.findById(userId).orElse(null);
+	}
 
 	// Kiểm tra xem số điện thoại đã tồn tại chưa
 	public boolean isDienThoaiExists(String dienThoai) {
@@ -149,6 +138,7 @@ public class UserService {
 		return userRepository.findByTenNguoiDung(tenNguoiDung).orElse(null);
 	}
 
+	//phương thức xóa nhóm và xoá toàn bộ user có trong nhóm đó
 	public void xoaUser(User user) {
 		userRepository.delete(user);
 	}

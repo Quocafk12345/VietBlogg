@@ -40,9 +40,15 @@ public class GiaoDienController {
         return "redirect:/index"; // Redirect đến trang index
     }
 
-    @GetMapping("/chi-tiet-nhom")
-    public String Nhom(){
+    @GetMapping("/nhom/chi-tiet/{idNhom}")
+    public String chiTietNhom(@PathVariable Long idNhom, Model model) {
+        model.addAttribute("idNhom", idNhom);
         return "ChiTietNhom";
+    }
+
+    @GetMapping("/nhom")
+    public String trangNhom() {
+        return "page/Nhom_new";
     }
 
     @GetMapping("/register")
@@ -66,16 +72,15 @@ public class GiaoDienController {
     @GetMapping("/dang-bai")
     public String postPage(Model model) {
         model.addAttribute("bv",new BaiViet());
-        return "postPage";
+        return "page/DangBai";
     }
-
 
     @GetMapping("/index")
     public String index() {
         return "home";
     }
 
-    @GetMapping("/chi-tiet-bai-viet/{id}")
+    @GetMapping("/bai-viet/{id}")
     public String detail(@PathVariable Long id, Model model) {
         model.addAttribute("baiVietId", id);
         return "ChiTietBaiViet";
@@ -90,9 +95,7 @@ public class GiaoDienController {
         try {
             // Thêm thông tin giao diện vào model
             model.addAttribute("user", currentUser);
-            model.addAttribute("mauNen", currentUser.getMauNen());
-            model.addAttribute("fontChu", currentUser.getFontChu());
-            model.addAttribute("coChu", currentUser.getCoChu());
+            model.addAttribute("mauNen", currentUser.getTheme());
 
             return "CaiDat";
         } catch (Exception e) {

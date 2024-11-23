@@ -54,7 +54,7 @@ public class BaiViet implements Serializable {
     @Column(name = "Trang_Thai", nullable = false)
     private TrangThai_BaiViet trangThai;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "User_Id", nullable = false)
     private User user;
 
@@ -76,12 +76,11 @@ public class BaiViet implements Serializable {
     private List<LuotLike_BaiViet> luotLikeBaiViet;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
     @JoinColumn(name = "Id_Bai_Viet_Chia_Se")
     private BaiViet baiVietChiaSe;
 
     @JsonIgnore
     @OneToMany(mappedBy = "baiViet", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<DaPhuongTien> daPhuongTien = new LinkedHashSet<>();
+    private Set<DaPhuongTien> daPhuongTien;
 
 }

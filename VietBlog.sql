@@ -1,7 +1,4 @@
-﻿USE master
-GO
-
-CREATE DATABASE VietBlog
+﻿CREATE DATABASE VietBlog
 GO
 
 USE VietBlog
@@ -57,7 +54,7 @@ CREATE TABLE Bai_Viet
     Ngay_Tao DATETIME NOT NULL,
     Id_Nhom BIGINT,
     Id_Bai_Viet_Chia_Se BIGINT, -- Id bài viết được chia sẻ
-    Trang_Thai NVARCHAR(255) NOT NULL, -- "Bài Nháp" để lưu lại bản nháp, "Đã đăng" để hiện lên trang chủ
+    Trang_Thai NVARCHAR(255) NOT NULL, -- "Bài Nháp" để lưu lại bản nháp, "Đã ĐÃ ĐĂNG" để hiện lên trang chủ
     User_Id BIGINT NOT NULL,
     PRIMARY KEY (Id_Bai_Viet),
     FOREIGN KEY (User_Id) REFERENCES Users(User_Id),
@@ -160,7 +157,7 @@ CREATE TABLE Luot_Like_Binh_Luan
 );
 GO
 
--- Đặt Unique chống trùng lặp cho tên đăng nhập của User
+-- Đặt Unique chống trùng lặp cho tên ĐÃ ĐĂNG nhập của User
 ALTER TABLE Users
     ADD CONSTRAINT UQ_Ten_Dang_Nhap UNIQUE (Ten_Dang_Nhap);
 GO
@@ -174,22 +171,6 @@ GO
 ALTER TABLE Users ADD Mau_Nen NVARCHAR(255);
 ALTER TABLE Users ADD Font_Chu NVARCHAR(255);
 ALTER TABLE Users ADD Co_Chu FLOAT;
-GO
-
-UPDATE Users
-Set Ngay_Sinh = '2002-10-10'
-GO
-
-UPDATE Users
-Set Co_Chu = 16
-GO
-
-UPDATE Users
-Set Font_Chu = 'Helvetica Neue'
-GO
-
-UPDATE Users
-Set Mau_Nen = N'TRẮNG'
 GO
 
 ALTER TABLE Thanh_Vien ADD Ngay_Tham_Gia DATE;
@@ -247,11 +228,11 @@ INSERT INTO Bai_Viet (Id_Nhom ,Tieu_De, Noi_Dung, Ngay_Tao, Trang_Thai, User_Id,
 are standing right there.....if this mf came to hachinosu in his prime he would have saved coby plus captured/killed black beard pirate
 ''s captains....this mf was laughing his whole fight, scared the captains, injured everyone, destroyed town and said "not enough" and he
 is fking 70+ of age ....bro is the definition of "HIM"Is it just me or anyone else also want luffy to get angry when he hear about garp
-captured by BB and in war with BB saves garp', '2024-10-18 10:00:00', N'ĐĂNG', 1, NULL),
+captured by BB and in war with BB saves garp', '2024-10-18 10:00:00', N'ĐÃ ĐĂNG', 1, NULL),
 (NULL, N'Telegram: Mối đe dọa đến quyền riêng tư', N'Ê biết app nào nhắn tin bảo mật, an toàn không mậy? Xài telegram đi, tin tao, đảm bảo không bốc phét.
 Thiệt không vậy cha? TLDR (Dài quá không đọc): Điều khiến Telegram trở nên khác biệt (và là lý do chính khiến nó trở nên phổ biến)
 là các Channel (kênh) và những kênh này (và các cuộc trò chuyện nhóm) không an toàn để sử dụng. Nếu không có mã hóa đầu cuối, Telegram
-(hoặc bất kỳ ai có thể gây sức ép với Telegram hoặc truy cập vào hệ thống của Telegram) đều có thể toàn bộ nội dung được đăng trong các
+(hoặc bất kỳ ai có thể gây sức ép với Telegram hoặc truy cập vào hệ thống của Telegram) đều có thể toàn bộ nội dung được ĐÃ ĐĂNG trong các
 cuộc trò chuyện như vậy. Và vì tất cả người dùng Telegram đều được xác định bằng số điện thoại thực của họ (có thể ẩn khỏi những người
 dùng khác trên các kênh nhưng lại hiển thị với Telegram), nên họ có thể dễ dàng bị xác định danh tính.
 Tham khảo**:** https://protonvpn.com/blog/is-telegram-safe', '2023-02-01 10:00:00', N'NHÁP', 2, NULL),
@@ -269,7 +250,7 @@ nhỏ thấy mấy tụi có bồ chỉ cần có điểm chung gì với nửa 
 toàn bị đối phương soi lý lịch như tôn giáo, mindset, nghề nghiệp, tài chính... đủ thứ trên đời coi mình có đủ tốt với họ không :( .
 Mình pass được mớ tiêu chí đó thì đến lúc gặp người ta mình cứ auto tụt mood nên sau đó cũng không còn có sau đó. Bằng tuổi mình có người
 vẫn chung thủy với tình đầu lâu năm của họ, có người lăng nhăng thay bồ như thay áo. Chỉ còn mỗi mình cứ cô đơn lăn lộn 1 mình giữa lòng
-thủ đô chỉ để tìm hình bóng của 1 người mà mình có thể yêu thương vô điều kiện :( :(', '2024-10-18 10:00:00', N'ĐĂNG', 1, NULL);
+thủ đô chỉ để tìm hình bóng của 1 người mà mình có thể yêu thương vô điều kiện :( :(', '2024-10-18 10:00:00', N'ĐÃ ĐĂNG', 1, NULL);
 GO
 
 -- Thêm dữ liệu mẫu cho bảng Da_Phuong_Tien
@@ -326,3 +307,116 @@ INSERT INTO Luot_Like_Binh_Luan (User_Id, Id_Binh_Luan) VALUES
                                                             (1, 1),
                                                             (2, 2);
 GO
+
+-- DƯỚI ĐÂY LÀ CÁC CÂU LỆNH CẬP NHẬT DATABASE CẦN BẮT BUỘC PHẢI CHẠY CHO DỰ ÁN VIETBLOG
+USE VietBlog
+GO
+UPDATE Users
+Set Ngay_Sinh = '2002-10-10'
+GO
+
+UPDATE Users
+Set Co_Chu = 16
+GO
+
+UPDATE Users
+Set Font_Chu = 'Helvetica Neue'
+GO
+
+UPDATE Users
+Set Mau_Nen = N'TRẮNG'
+GO
+
+UPDATE Bai_Viet
+SET Trang_Thai = N'ĐÃ ĐĂNG'
+WHERE Trang_Thai = N'ĐĂNG'
+GO
+
+-- Thêm mới để sẵn các nhóm
+-- Thêm nhóm Âm nhạc
+INSERT INTO Nhom (Ten, Gioi_Thieu, Hinh_Dai_Dien, Ngay_Tao) VALUES
+(N'Nhóm Âm nhạc', N'Nhóm dành cho những người yêu âm nhạc', 'hinhmau_nhomnhac.jpg', GETDATE());
+
+-- Thêm nhóm Thể thao
+INSERT INTO Nhom (Ten, Gioi_Thieu, Hinh_Dai_Dien, Ngay_Tao) VALUES
+(N'Nhóm Thể thao', N'Nhóm thảo luận về các môn thể thao', 'hinhmau_nhomthethao.jpg', GETDATE());
+
+-- Thêm nhóm Đọc sách
+INSERT INTO Nhom (Ten, Gioi_Thieu, Hinh_Dai_Dien, Ngay_Tao) VALUES
+(N'Nhóm Đọc sách', N'Nhóm chia sẻ về sách và đam mê đọc sách', 'hinhmau_nhomsach.jpg', GETDATE());
+
+-- Thêm nhóm Phim ảnh
+INSERT INTO Nhom (Ten, Gioi_Thieu, Hinh_Dai_Dien, Ngay_Tao) VALUES
+(N'Nhóm Phim ảnh', N'Nhóm dành cho những người yêu thích phim ảnh', 'hinhmau_nhomphim.jpg', GETDATE());
+
+-- Thêm nhóm Game
+INSERT INTO Nhom (Ten, Gioi_Thieu, Hinh_Dai_Dien, Ngay_Tao) VALUES
+(N'Nhóm Game', N'Nhóm thảo luận về các trò chơi', 'hinhmau_nhomgame.jpg', GETDATE());
+
+-- Thêm nhóm Học tập
+INSERT INTO Nhom (Ten, Gioi_Thieu, Hinh_Dai_Dien, Ngay_Tao) VALUES
+(N'Nhóm Học tập', N'Nhóm hỗ trợ học tập và chia sẻ kiến thức', 'hinhmau_nhomhoctap.jpg', GETDATE());
+
+-- Khai báo tất cả các biến ở đây
+DECLARE @NhomAmNhacId BIGINT;
+DECLARE @NhomTheThaoId BIGINT;
+DECLARE @NhomDocSachId BIGINT;
+DECLARE @NhomPhimAnhId BIGINT;
+DECLARE @NhomGameId BIGINT;
+DECLARE @NhomHocTapId BIGINT;
+
+-- Lấy danh sách Id_Nhom của các nhóm vừa tạo
+SET @NhomAmNhacId = (SELECT Id_Nhom FROM Nhom WHERE Ten = N'Nhóm Âm nhạc');
+SET @NhomTheThaoId = (SELECT Id_Nhom FROM Nhom WHERE Ten = N'Nhóm Thể thao');
+SET @NhomDocSachId = (SELECT Id_Nhom FROM Nhom WHERE Ten = N'Nhóm Đọc sách');
+SET @NhomPhimAnhId = (SELECT Id_Nhom FROM Nhom WHERE Ten = N'Nhóm Phim ảnh');
+SET @NhomGameId = (SELECT Id_Nhom FROM Nhom WHERE Ten = N'Nhóm Game');
+SET @NhomHocTapId = (SELECT Id_Nhom FROM Nhom WHERE Ten = N'Nhóm Học tập');
+
+-- Thêm User_Id = 1 vào các nhóm với vai trò "Quản trị viên"
+INSERT INTO Thanh_Vien (Vai_Tro, Id_Nhom, User_Id, Ngay_Tham_Gia) VALUES
+(N'Quản trị viên', 3, 1, GETDATE());
+
+INSERT INTO Thanh_Vien (Vai_Tro, Id_Nhom, User_Id, Ngay_Tham_Gia) VALUES
+(N'Quản trị viên', 4, 1, GETDATE());
+
+INSERT INTO Thanh_Vien (Vai_Tro, Id_Nhom, User_Id, Ngay_Tham_Gia) VALUES
+(N'Quản trị viên', 5, 1, GETDATE());
+
+INSERT INTO Thanh_Vien (Vai_Tro, Id_Nhom, User_Id, Ngay_Tham_Gia) VALUES
+(N'Quản trị viên', 6, 1, GETDATE());
+
+INSERT INTO Thanh_Vien (Vai_Tro, Id_Nhom, User_Id, Ngay_Tham_Gia) VALUES
+(N'Quản trị viên', 7, 1, GETDATE());
+
+INSERT INTO Thanh_Vien (Vai_Tro, Id_Nhom, User_Id, Ngay_Tham_Gia) VALUES
+(N'Quản trị viên', 8, 1, GETDATE());
+
+--Dùng để xóa nhóm
+-- Thêm ON DELETE CASCADE vào khóa ngoại trong bảng DS_Luat_Nhom
+ALTER TABLE DS_Luat_Nhom
+DROP CONSTRAINT FK__DS_Luat_N__Id_Nh__3B75D760;
+
+ALTER TABLE DS_Luat_Nhom
+ADD CONSTRAINT FK_DS_Luat_Nhom_Nhom 
+FOREIGN KEY (Id_Nhom) REFERENCES Nhom(Id_Nhom) ON DELETE CASCADE; 
+
+
+-- Thêm ON DELETE CASCADE vào khóa ngoại trong bảng Bai_Viet
+ALTER TABLE Bai_Viet
+DROP CONSTRAINT FK__Bai_Viet__Id_Nho__3F466844;
+
+ALTER TABLE Bai_Viet
+ADD CONSTRAINT FK_Bai_Viet_Nhom
+FOREIGN KEY (Id_Nhom) REFERENCES Nhom(Id_Nhom) ON DELETE CASCADE;
+
+
+-- Thêm ON DELETE CASCADE vào khóa ngoại trong bảng Thanh_Vien
+ALTER TABLE Thanh_Vien
+DROP CONSTRAINT FK__Thanh_Vie__Id_Nh__4D94879B;
+
+ALTER TABLE Thanh_Vien
+ADD CONSTRAINT FK_Thanh_Vien_Nhom 
+FOREIGN KEY (Id_Nhom) REFERENCES Nhom(Id_Nhom) ON DELETE CASCADE;
+
+

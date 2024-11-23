@@ -39,6 +39,7 @@ public class DS_LuatNhom_Service {
 		return dsLuatNhomRepository.save(dsLuatNhom);
 	}
 
+
 	// Xóa luật của một nhóm
 	public void xoaLuatNhom(Long luatId) {
 		dsLuatNhomRepository.deleteById(luatId);

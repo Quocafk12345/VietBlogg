@@ -1,5 +1,6 @@
 package com.VietBlog.controller;
 
+import com.VietBlog.constraints.BaiViet.TrangThai_BaiViet;
 import com.VietBlog.entity.BaiViet;
 import com.VietBlog.entity.LuuBaiViet;
 import com.VietBlog.entity.LuuBaiViet_ID;
@@ -58,6 +59,14 @@ public class BaiVietController {
         return ResponseEntity.ok(baiVietService.getBaiVietById(id));
     }
 
+    @GetMapping("/nhom/{nhomId}/user/{userId}")
+    public ResponseEntity<List<BaiViet>> layDanhSachBaiVietCuaUserTrongNhom(
+            @PathVariable Long nhomId,
+            @PathVariable Long userId) {
+
+        List<BaiViet> baiVietList = baiVietService.getBaiVietByNhomIdAndUserId(nhomId, userId);
+        return ResponseEntity.ok(baiVietList);
+    }
     @Operation(summary = "Lấy tất cả bài viết của người dùng", description = "Lấy thông tin chi tiết của tất cả bài viết của người dùng theo userId.")
     @ApiResponse(responseCode = "200", description = "Thành công", content = @Content(schema = @Schema(implementation = BaiViet.class)))
     @ApiResponse(responseCode = "404", description = "Không tìm thấy bài viết của người dùng")
@@ -117,8 +126,10 @@ public class BaiVietController {
     @Transactional
     public ResponseEntity<BaiViet> dangBaiViet(@RequestBody BaiViet baiViet) {
         try {
-            // Sử dụng BaiVietService
-            return ResponseEntity.ok(baiVietService.themBaiViet(baiViet));
+             // Sử dụng BaiVietService
+            baiViet.setTrangThai(TrangThai_BaiViet.DA_DANG);
+            baiVietService.themBaiViet(baiViet);
+            return ResponseEntity.ok(baiViet);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build(); // Hoặc trả về thông báo lỗi cụ thể hơn
         }
@@ -174,7 +185,6 @@ public class BaiVietController {
             return ResponseEntity.badRequest().build();
         }
     }
-
     @PostMapping("/{id}/like")
     public ResponseEntity<?> toggleLike(@PathVariable("id") Long idBaiViet, @RequestParam("userId")Long userId) {
         try {
@@ -184,6 +194,4 @@ public class BaiVietController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
-
-
 }

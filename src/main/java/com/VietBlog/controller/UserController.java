@@ -51,8 +51,8 @@ public class UserController {
 	}
 
 	@Operation(summary = "Đăng nhập tài khoản", description = "Nhận thông tin chi tiết của người dùng và lưu vào session.")
-	@ApiResponse(responseCode = "200", description = "Thành công", content = @Content(schema = @Schema(implementation = BaiViet.class)))
-	@ApiResponse(responseCode = "404", description = "Không tìm thấy tài khoản", content = @Content(schema = @Schema(implementation = BaiViet.class)))
+	@ApiResponse(responseCode = "200", description = "Thành công", content = @Content(schema = @Schema(implementation = User.class)))
+	@ApiResponse(responseCode = "404", description = "Không tìm thấy tài khoản", content = @Content(schema = @Schema(implementation = User.class)))
 	@PostMapping("/dang-nhap")
 	public User login(@RequestParam("identifiers") String identifier,
 					  @RequestParam("password") String password) {

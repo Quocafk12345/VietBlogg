@@ -22,4 +22,15 @@ public interface BaiVietRepository extends JpaRepository<BaiViet, Long> {
             + "(bv.tieuDe LIKE %:keyword% OR bv.noiDung LIKE %:keyword%)"
             + " AND (bv.user.tenNguoiDung LIKE %:keyword%)")
     List<BaiViet> findByKeyword(@Param("keyword") String keyword);
+
+    void deleteAllByNhom_Id(Long nhomId);
+
+    //Bài viết nhóm
+    List<BaiViet> findByNhom_Id(Long nhomId);
+    @Query("SELECT bv FROM BaiViet bv WHERE bv.nhom.id = :nhomId")
+    List<BaiViet> findBaiVietByNhomId(@Param("nhomId") Long nhomId);
+
+    //Bài vieest user trong nhóm
+    @Query("SELECT bv FROM BaiViet bv WHERE bv.nhom.id = :nhomId AND bv.user.id = :userId")
+    List<BaiViet> findByNhomIdAndUserId(@Param("nhomId") Long nhomId, @Param("userId") Long userId);
 }

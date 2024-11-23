@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -26,4 +27,19 @@ public class ThanhVienId implements Serializable {
     @NotNull
     @Column(name = "User_Id", nullable = false)
     private Long userId;
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ThanhVienId entity = (ThanhVienId) o;
+        return Objects.equals(this.idNhom, entity.idNhom) &&
+                Objects.equals(this.userId, entity.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idNhom, userId);
+    }
 }

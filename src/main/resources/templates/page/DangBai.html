@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="mainApp" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1.0" name="viewport">
+	<title>VietBlog</title>
+	
+	<!-- bootstrap 5 -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+	
+	<!-- css -->
+	<link rel="stylesheet" th:href="@{/css/include/navbar_new.css}">
+	<link rel="stylesheet" th:href="@{/css/include/navbar.css}">
+	<link rel="stylesheet" th:href="@{/css/Page/home.css}">
+	
+	<style>
+		.rounded-circle {
+			width: 20px;
+			height: 20px;
+		}
+	</style>
+
+</head>
+<body>
+<div class="container-fluid p-0">
+	<div th:replace="~{include/navbar :: navbar}"></div>
+	<main class="row">
+		<div class="col-3" th:replace="~{include/sidebar :: sidebar}"></div>
+		<!--	Giao diện đăng bài	-->
+		<div class="col-10" ng-controller="BaiVietController">
+			<div class="col-8 p-3 m-auto">
+				<div class="container mt-4" ng-controller="nhomController">
+					<h2>Tạo bài viết</h2>
+					<div class="mb-3">
+						<div class="dropdown">
+							<button aria-expanded="false" class="btn btn-secondary dropdown-toggle"
+							        data-bs-toggle="dropdown"
+							        id="dropdownMenuButton" type="button">
+									<span class="selected-item">
+										<img alt="Icon" class="rounded-circle" ng-if="mucDuocChon.hinhAnh">
+										{{mucDuocChon.ten}}
+									</span>
+							</button>
+							<ul aria-labelledby="dropdownMenuButton" class="dropdown-menu">
+								<li><h6 class="dropdown-header">Trang cá nhân</h6></li>
+								<li class="dropdown-item" ng-repeat="profile in thongTinUser">
+									<a class="dropdown-item" href="#" ng-click="chonNoiDangBai(profile)">
+										<img alt="Icon" class="rounded-circle" ng-src="{{profile.hinhDaiDien}}">
+										{{profile.ten}}
+									</a>
+								</li>
+								<li>
+									<hr class="dropdown-divider">
+								</li>
+								<li><h6 class="dropdown-header">Nhóm của bạn</h6></li>
+								<li class="dropdown-item" ng-repeat="group in DSnhom">
+									<a class="dropdown-item" href="#" ng-click="chonNoiDangBai(group)">
+										<img alt="Icon" class="rounded-circle" ng-src="{{group.hinhDaiDien}}">
+										{{group.ten}}
+										<span class="text-muted ms-2">{{group.soLuongThanhVien}} thành viên</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="mb-3">
+						<label class="form-label" for="tieuDe">Tiêu đề <span class="text-danger">*</span></label>
+						<input class="form-control border border-1 rounded" id="tieuDe" name="tieuDe"
+						       placeholder="Nhập tiêu đề bài viết" type="text">
+					</div>
+					<div class="mb-3">
+						<label class="form-label" for="noiDung">Nội dung <span class="text-danger">*</span></label>
+						<textarea class="form-control border border-1 rounded" id="noiDung"
+						          name="noiDung" placeholder="Nhập nội dung bài viết" rows="10"></textarea>
+					</div>
+					<button class="btn btn-primary" ng-click="dangBai()">Đăng bài</button>
+					<button class="btn btn-secondary">Lưu nháp</button>
+				</div>
+			</div>
+		</div>
+	</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+<script th:inline="javascript">
+	var currentUser = [[${session.currentUser}]];
+</script>
+<script th:src="@{/js/MainApp.js}"></script>
+<script th:src="@{/js/BaiViet_ctrl.js}"></script>
+<script th:src="@{/js/Nhom_ctrl.js}"></script>
+<script th:src="@{/js/DangNhap_ctrl.js}"></script>
+</body>
+</html>

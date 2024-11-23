@@ -50,6 +50,8 @@ mainApp.controller('BinhLuanController', function($scope, $http, timeService) {
                 binhLuan.replies = resp.data;
                 angular.forEach(binhLuan.replies, function(reply) {
                     reply.thoiGianDang = $scope.tinhThoiGianDang(reply.ngayTao);
+                    if (reply.binhLuanCha)
+                    $scope.layBinhLuanConCap2(reply.replies);
                 });
             })
             .catch(error => {
@@ -57,11 +59,11 @@ mainApp.controller('BinhLuanController', function($scope, $http, timeService) {
             });
     };
 
-    $scope.themBinhLuan = function(binhLuanCha) {
+    $scope.themBinhLuan = function(binhLuan) {
         var noiDung;
-        if (binhLuanCha) {
+        if (binhLuan) {
             // Lấy nội dung từ input Phản hồi
-            var replyInputId = 'replyInput-' + binhLuanCha.id;
+            var replyInputId = 'replyInput-' + binhLuan.id;
             noiDung = document.getElementById(replyInputId).value;
         } else {
             // Lấy nội dung từ input bình luận gốc
@@ -75,17 +77,19 @@ mainApp.controller('BinhLuanController', function($scope, $http, timeService) {
         var binhLuanMoi = {
             noiDung: noiDung,
             baiViet: { id: baiVietId }, // Gửi kèm ID bài viết
-            user: { id: currentUserId } // Thay 1 bằng ID người dùng hiện tại
+            user: { id: currentUser.id } // Thay 1 bằng ID người dùng hiện tại
         };
 
-        if (binhLuanCha) {
-            binhLuanMoi.binhLuanCha = { id: binhLuanCha.id }; // Gán ID bình luận cha
+        if (binhLuan.level === 'CAP_2') {
+            binhLuanMoi.binhLuanCha = { id: binhLuan.binhLuanCha.id }; // Gán ID bình luận cha
+        } else {
+            binhLuanMoi.binhLuanCha = { id: binhLuan.id }; // Gán ID bình luận cha
         }
 
         $http.post(`${host_BinhLuan}/${baiVietId}`, binhLuanMoi)
             .then(resp => {
                 console.log("Bình luận đã được thêm:", resp.data);
-                $scope.layBinhLuan(baiVietId);
+                $scope.layBinhLuanGoc(baiVietId);
                 document.getElementById('binhLuanInput').value = "";
             })
             .catch(error => {

@@ -3,8 +3,27 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     $scope.bangTin = [];
     $scope.dangTheoDoi = [];
     $scope.chiTietBaiViet = {};
-    $scope.daLike = false;
-    $scope.userId = currentUserId;
+
+    $scope.loaiBaiDang = "caNhan";
+    $scope.loaiBaiDang = "";
+
+    $scope.mucDuocChon = {ten: 'Chọn nhóm'};
+
+    $scope.thongTinUser = [
+        {ten: currentUser.tenNguoiDung, hinhDaiDien: 'https://via.placeholder.com/20x20'}
+    ];
+
+    $scope.chonNoiDangBai = function (mucDuocChon) {
+        $scope.mucDuocChon = mucDuocChon;
+        if (mucDuocChon.ten === currentUser.tenNguoiDung) { // Kiểm tra nếu chọn "Trang cá nhân"
+            $scope.loaiBaiDang = "caNhan";
+        } else {
+            $scope.loaiBaiDang = "nhom";
+        }
+    };
+
+    // $scope.daLike = false;
+    // $scope.userId = currentUserId;
     $scope.tinhThoiGianDang = timeService.tinhThoiGianDang; // Gán hàm từ service
     $scope.baiVietNguoiDung = []; // Dữ liệu bài viết của người dùng
 
@@ -136,6 +155,43 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
+    $scope.dangBai = function () {
+        var url = `${host_BaiViet}/dang-bai`;
+        // Tạo object bài viết mới
+
+        var baiViet = {
+            tieuDe: document.getElementById('tieuDe').value, // Lấy tiêu đề từ input
+            noiDung: document.getElementById('noiDung').value, // Lấy nội dung từ textarea
+            user: {id: currentUser.id}, // Lấy thông tin user từ biến currentUser
+            nhom: {id: null}
+        };
+
+        // Nếu có nhóm được chọn, thêm thông tin nhóm vào bài viết
+        if ($scope.loaiBaiDang === "nhom") {
+            baiViet.nhom.id = $scope.mucDuocChon.id;
+        }
+
+        // Gọi API để thêm bài viết mới
+        $http.post(url, baiViet)
+            .then(function (response) {
+                // Xử lý khi thêm bài viết thành công
+                console.log('Thêm bài viết thành công:', response.data);
+
+                // Cập nhật danh sách bài viết
+                $scope.bangTin.unshift(response.data);
+
+                // Reset form
+                document.getElementById('tieuDe').value = '';
+                document.getElementById('noiDung').value = '';
+                $scope.nhomDuocChon = {ten: 'Chọn nhóm'};
+
+            })
+            .catch(function (error) {
+                // Xử lý khi thêm bài viết thất bại
+                console.error('Lỗi khi thêm bài viết:', error);
+            });
+    };
+
     $scope.getBaiVietByUserId($scope.userId);
     $scope.load_bai_viet();
 
@@ -143,5 +199,35 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     if (typeof baiVietId !== 'undefined') {
         $scope.loadBaiVietDuocChon(baiVietId);
     }
+
+    //Bài Vit nhóm trong CHITIETNHOm
+    $scope.loadBaiVietNhom = function() {
+        // Lấy danh sách bài viết của nhóm từ API
+        $http.get(`${host_Nhom}/${$rootScope.idNhom}/baiviet`)
+            .then(resp => {
+                $scope.baiVietNhom = resp.data;
+
+                // Xử lý lượt like, lượt bình luận, thời gian đăng cho mỗi bài viết
+                var promises = [];
+                angular.forEach($scope.baiVietNhom, function (baiViet) {
+                    promises.push($scope.demLuotLike(baiViet.id));
+                    promises.push($scope.demLuotBinhLuan(baiViet.id));
+                });
+                $q.all(promises).then(function (results) {
+                    for (var i = 0; i < $scope.baiVietNhom.length; i++) {
+                        $scope.baiVietNhom[i].luotLike = results[i * 2];
+                        $scope.baiVietNhom[i].luotBinhLuan = results[i * 2 + 1];
+                        $scope.baiVietNhom[i].thoiGianDang = $scope.tinhThoiGianDang($scope.baiVietNhom[i].ngayTao);
+                    }
+                });
+            })
+            .catch(error => {
+                console.error("Lỗi khi lấy bài viết của nhóm:", error);
+            });
+    };
+
+    $scope.$on('loadBaiVietNhom', function() {
+        $scope.loadBaiVietNhom();
+    });
 
 });

@@ -20,4 +20,7 @@ public interface DS_LuatNhom_Repository extends JpaRepository<DS_LuatNhom, Long>
 
 	// Đếm số lượng luật của một nhóm theo idNhom
 	int countByNhom_Id(Long idNhom);
+
+	//Xóa luật nhóm
+	void deleteAllByNhom_Id(Long nhomId);
 }
