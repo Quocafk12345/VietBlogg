@@ -6,6 +6,32 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     $scope.daLike = false;
     $scope.userId = currentUserId;
     $scope.tinhThoiGianDang = timeService.tinhThoiGianDang; // Gán hàm từ service
+    $scope.baiVietNguoiDung = []; // Dữ liệu bài viết của người dùng
+
+    $scope.getBaiVietByUserId = function (userId) {
+        var url = `${host_BaiViet}/user/${userId}`;
+        $http.get(url)
+            .then(resp => {
+                $scope.baiVietNguoiDung = resp.data;
+                var promises = [];
+                angular.forEach($scope.baiVietNguoiDung, function (baiViet) {
+                    // Sử dụng baiViet.id thay cho baiVietId
+                    promises.push($scope.demLuotLike(baiViet.id));
+                    promises.push($scope.demLuotBinhLuan(baiViet.id));
+                });
+                $q.all(promises).then(function (result) {
+                    for (var i = 0; i < $scope.baiVietNguoiDung.length; i++) {
+                        $scope.baiVietNguoiDung[i].luotLike = result[i * 2];
+                        $scope.baiVietNguoiDung[i].luotBinhLuan = result[i * 2 + 1];
+                        $scope.baiVietNguoiDung[i].thoiGianDang = $scope.tinhThoiGianDang($scope.baiVietNguoiDung[i].ngayTao);
+                    }
+                });
+            })
+            .catch((error) => {
+                console.error("Error", error);
+            });
+    };
+
 
     $scope.load_bai_viet = function () {
         var url = `${host_BaiViet}`;
@@ -110,10 +136,12 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
+    $scope.getBaiVietByUserId($scope.userId);
     $scope.load_bai_viet();
 
     // Kiểm tra xem có baiVietId được truyền từ Thymeleaf không
     if (typeof baiVietId !== 'undefined') {
         $scope.loadBaiVietDuocChon(baiVietId);
     }
+
 });

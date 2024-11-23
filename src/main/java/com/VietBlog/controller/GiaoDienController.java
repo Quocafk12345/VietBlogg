@@ -1,6 +1,7 @@
 package com.VietBlog.controller;
 
 import com.VietBlog.entity.BaiViet;
+import com.VietBlog.entity.LuotLike_BaiViet;
 import com.VietBlog.entity.User;
 import com.VietBlog.service.BaiVietService;
 import com.VietBlog.service.UserService;
@@ -100,14 +101,8 @@ public class GiaoDienController {
         }
     }
     // Profile page
-    @GetMapping("/trang-ca-nhan")
-    public String showProfile(@RequestParam(value = "userId", required = false) Long userId, Model model) {
-        // Check if userId is provided
-        if (userId == null) {
-            model.addAttribute("error", "Vui lòng đăng nhập để truy cập trang cá nhân.");
-            return "redirect:/login"; // Redirect to login page if userId is not provided
-        }
-
+    @GetMapping("/trang-ca-nhan/{userId}")
+    public String showProfile(@PathVariable(value = "userId", required = false) Long userId, Model model) {
         // Fetch user by ID
         User user = userService.findById(userId);
         if (user != null) {
@@ -123,10 +118,11 @@ public class GiaoDienController {
             int totalBaiViet = baiVietService.countBaiVietByUserId(userId);
             model.addAttribute("totalBaiViet", totalBaiViet);
 
-            // Get the list of user's posts
-            List<BaiViet> baiVietList = baiVietService.getBaiVietByUserId(userId);
-            model.addAttribute("baiVietList", baiVietList);
+            int totalLike = userService.countLikesByUserId(userId);
+            model.addAttribute("totalLikes", totalLike);
 
+            int totalFollow = userService.countFollowsByUserId(userId);
+            model.addAttribute("totalFollows", totalFollow);
         } else {
             // Handle case where user is not found
             model.addAttribute("error", "User không tồn tại.");

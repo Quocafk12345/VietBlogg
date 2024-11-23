@@ -119,7 +119,7 @@ body {
 }
 .topics {
     flex: 7; /* Chiếm 7 phần trong tỉ lệ 3:7 */
-    overflow-x: auto; /* Thêm thanh cuộn ngang nếu nội dung quá dài */
+    width: 100%;
     white-space: nowrap;
     background-color: #fff;
     border-radius: 12px;

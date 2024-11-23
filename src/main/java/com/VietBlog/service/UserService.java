@@ -9,6 +9,8 @@ import com.VietBlog.constraints.User.CoChu_User;
 import com.VietBlog.constraints.User.FontChu_User;
 import com.VietBlog.constraints.User.MauNen_User;
 import com.VietBlog.constraints.User.VaiTro_User;
+import com.VietBlog.repository.LuotFollowRepository;
+import com.VietBlog.repository.LuotLike_BaiViet_Repository;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +27,15 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+	private final LuotFollowRepository luotFollowRepository;
+
+	private final LuotLike_BaiViet_Repository luotLike_BaiViet_Repository;
     @Autowired
-    public UserService(Cloudinary cloudinary, UserRepository userRepository) {
+    public UserService(Cloudinary cloudinary, UserRepository userRepository, LuotFollowRepository luotFollowRepository, LuotLike_BaiViet_Repository luotLikeBaiVietRepository) {
 	    this.cloudinary = cloudinary;
 	    this.userRepository = userRepository;
+        this.luotFollowRepository = luotFollowRepository;
+        luotLike_BaiViet_Repository = luotLikeBaiVietRepository;
     }
 
 	// tìm theo email
@@ -145,5 +152,14 @@ public class UserService {
 	public void xoaUser(User user) {
 		userRepository.delete(user);
 	}
+
+	public int countLikesByUserId(Long userId){
+		return luotLike_BaiViet_Repository.countLuotLike_BaiVietByUserId(userId);
+	}
+
+	public int countFollowsByUserId(Long userId){
+		return luotFollowRepository.countFollowersByUserId(userId);
+	}
+
 }
 

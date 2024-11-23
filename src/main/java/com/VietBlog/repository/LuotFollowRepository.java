@@ -17,8 +17,7 @@ public interface LuotFollowRepository extends JpaRepository<LuotFollow, LuotFoll
 	// Kiểm tra xem một người dùng đã follow người dùng khác chưa
 	boolean existsById(@NonNull LuotFollowId luotFollowId);
 
-	// Đếm số lượng người dùng mà một người dùng đang follow
-	@Query("SELECT COUNT(lf) FROM LuotFollow lf WHERE lf.id = :userId")
+	@Query("SELECT COUNT(lf) FROM LuotFollow lf WHERE lf.userFollow.id = :userId")
 	int countFollowingByUserId(@Param("userId") Long userId);
 
 	// Đếm số lượng người dùng follow của một người dùng

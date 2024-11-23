@@ -1,147 +1,120 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" ng-app="mainApp">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trang Cá Nhân</title>
-	<link rel="stylesheet" href="../css/profilepage.css">
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Cá Nhân</title>
+    <link rel="stylesheet" href="../css/profilepage.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
 </head>
 <body>
-	<div class="profile-container">
-		<div class="profile-header">
-			<div class="profile-avatar">
-				<img th:src="@{'/img/' + ${user.hinhDaiDien}}" alt="Avatar">
-			</div>
-			<h1 th:text="${user.tenNguoiDung}"></h1>
-			<p class="level">
-				<span class="member-level"><img class="vip-icon"
-					src="https://via.placeholder.com/20" alt="VIP"> VIP |</span> <span
-					class="member-time"
-					th:text="'Tham gia: ' + ${daysSinceRegistration} + ' ngày'"></span>
-			</p>
-			<div class="profile-stats">
-				<div class="stat-item">
-					<span>Tổng số bài viết:</span> <strong><p>
-							<span th:text="${totalBaiViet}">0</span>
-						</p></strong>
-				</div>
-				<div class="stat-item">
-					<span>Lượt Like:</span> <strong><p>
-							<span th:text="${totalLikes}">0</span>
-						</p></strong>
-				</div>
-				<div class="stat-item">
-					<span>Lượt theo dõi:</span> <strong><p>
-							<span th:text="${totalFollows}">0</span>
-						</p></strong>
-				</div>
-			</div>
-		</div>
-		<div class="main-content">
-			<div class="right-content">
-				<div class="topics" id="topicContainer">
-					<h2>Chủ đề bài đã viết</h2>
-					<div class="topic-container">
-						<!-- Loop through each post once -->
-						<div class="topic-item"
-							th:each="baiViet, iterStat : ${baiVietList}">
-							<button th:text="${baiViet.tieuDe}"
-								data-id="${baiViet.idBaiViet}"
-								onclick="filterPosts('${baiViet.idBaiViet}')"></button>
-						</div>
-					</div>
-				</div>
-				<div class="post-container">
-					<!-- Loop through each post once to display its details -->
-					<div th:each="baiViet : ${baiVietList}" class="post-card">
-						<div class="post-header">
-							<div class="profile-info">
-								<img th:src="@{'/img/' + ${user.hinhDaiDien}}" alt="Avatar"
-									class="profile-avatar">
-								<div class="profile-details">
-									<div class="name-row">
-										<h3 class="username" th:text="${user.tenNguoiDung}">MinhTriND</h3>
-									</div>
-									<p class="post-time"
-									   th:text="${baiViet.ngayTao != null ? #dates.format(baiViet.getNgayTao(), 'HH:mm, dd/MM') : 'N/A'}">8
-										phút trước</p>
-								</div>
-							</div>
-						</div>
-						<div class="post-content">
-<!--							<div class="image-container">-->
-<!--								<img th:src="@{'/img/' + ${baiViet.thumbnail}}"-->
-<!--									alt="Thumbnail Image" />-->
-<!--							</div>-->
-							<div class="post-content">
-								<p class="post-text" style="display: inline;">
-									<!-- Văn bản ngắn gọn (150 ký tự) -->
-									<span th:if="${#strings.length(baiViet.noiDung) > 150}">
-										<span class="short-text"
-										th:text="${#strings.substring(baiViet.noiDung, 0, 150)} + '...'"></span>
-										<span class="full-text" th:text="${baiViet.noiDung}"
-										style="display: none;"></span>
-									</span> <span th:if="${#strings.length(baiViet.noiDung) <= 150}"
-										th:text="${baiViet.noiDung}"></span>
-								</p>
+<div class="profile-container" ng-controller="BaiVietController">
+    <div class="profile-header">
+        <div class="profile-avatar">
+            <img th:src="@{'/img/' + ${user.hinhDaiDien}}" alt="Avatar">
+        </div>
+        <h1 th:text="${user.tenNguoiDung}"></h1>
+        <p class="level">
+            <span class="member-level"><img class="vip-icon"
+                                            src="https://via.placeholder.com/20" alt="VIP"> VIP |</span>
+            <span class="member-time" th:text="'Tham gia: ' + ${daysSinceRegistration} + ' ngày'"></span>
+        </p>
+        <div class="profile-stats">
+            <div class="stat-item">
+                <span>Tổng số bài viết:</span> <strong><p><span th:text="${totalBaiViet}">0</span></p></strong>
+            </div>
+            <div class="stat-item">
+                <span>Lượt Like:</span> <strong><p><span th:text="${totalLikes}">0</span></p></strong>
+            </div>
+            <div class="stat-item">
+                <span>Lượt theo dõi:</span> <strong><p><span th:text="${totalFollows}">0</span></p></strong>
+            </div>
+        </div>
+    </div>
 
-								<!-- Nút "Xem thêm" và "Thu gọn" -->
-								<a href="javascript:void(0);" class="toggle-button"
-									style="display: inline;" onclick="toggleContent(this)">Xem
-									thêm</a>
-							</div>
+    <!-- Khu vực quản lý nút Theo dõi -->
+    <div class="profile-stats" ng-controller="UserController">
+        <div class="stat-item">
+            <button ng-click="toggleFollow(userId)">Follow</button>
+        </div>
+    </div>
+    <!-- Tab Navigation -->
+    <div class="tabs">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Bài viết</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Giới thiệu</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Bạn bè</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="photo-tab" data-bs-toggle="tab" href="#photo" role="tab" aria-controls="photo" aria-selected="false">Ảnh</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="video-tab" data-bs-toggle="tab" href="#video" role="tab" aria-controls="video" aria-selected="false">Video</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="more-tab" data-bs-toggle="tab" href="#more" role="tab" aria-controls="more" aria-selected="false">Xem thêm</a>
+            </li>
+        </ul>
+    </div>
 
-							<hr class="divider">
-							<div class="interaction">
-								<button class="like-btn">
-									<i class="fas fa-heart"></i> Thích
-								</button>
-								<button class="comment-btn">
-									<i class="fas fa-comment"></i> Bình luận
-								</button>
-								<button class="share-btn">
-									<i class="fas fa-share"></i> Chia sẻ
-								</button>
-							</div>
-							<hr class="divider">
-							<div class="footer">
-								<p class="comment-first">
-									1 <i class="fas fa-heart"></i>
-								</p>
-								<p class="login-prompt" th:if="${user.getId()    == null}">
-									<a href="../../../../../../../../../FPT/Final_DEV/TanAn_project/src/main/resources/templates/account/login.html">Đăng nhập một phát, tha hồ bình luận
-										(^ 3 ^)</a>
-								</p>
-								<p class="comment-count">1 bình luận</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+    <!-- Tab Content -->
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div class="topics" id="topicContainer">
+                <h2>Chủ đề bài đã viết</h2>
+                <div class="topic-container" ng-repeat="baiViet in baiVietNguoiDung">
+                    <a th:href="@{/chi-tiet-bai-viet/}" style="color: #000000" ng-click="chuyenTrang($event, baiViet.id)" class="text-decoration-none text-dark">
+                        <div class="topic-item">
+                            <h3>{{baiViet.tieuDe}}</h3>
+                            <small>Thời gian đăng: <span>{{baiViet.thoiGianDang}}</span></small>
+                            <hr>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <h3>Giới thiệu</h3>
+            <p>Thông tin giới thiệu về người dùng...</p>
+        </div>
+        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+            <h3>Bạn bè</h3>
+            <p>Danh sách bạn bè của người dùng...</p>
+        </div>
+        <div class="tab-pane fade" id="photo" role="tabpanel" aria-labelledby="photo-tab">
+            <h3>Ảnh</h3>
+            <p>Ảnh của người dùng...</p>
+        </div>
+        <div class="tab-pane fade" id="video" role="tabpanel" aria-labelledby="video-tab">
+            <h3>Video</h3>
+            <p>Video của người dùng...</p>
+        </div>
+        <div class="tab-pane fade" id="more" role="tabpanel" aria-labelledby="more-tab">
+            <h3>Xem thêm</h3>
+            <p>Thông tin thêm về người dùng...</p>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- AngularJS -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+<script th:inline="javascript">
+    var currentUserId = [[${session.currentUser.id}]];
+</script>
+<script th:src="@{/js/MainApp.js}"></script>
+<script th:src="@{/js/BaiViet_ctrl.js}"></script>
+<script th:src="@{/js/DangNhap_ctrl.js}"></script>
+<script th:src="@{/js/Follow_ctrl.js}"></script>
+
 </body>
 </html>
-<script>
-	function toggleContent(button) {
-		// Lấy phần tử văn bản cha
-		var postContent = button.parentElement;
-
-		// Lấy đoạn văn bản ngắn gọn và đầy đủ
-		var shortText = postContent.querySelector('.short-text');
-		var fullText = postContent.querySelector('.full-text');
-
-		// Kiểm tra trạng thái hiện tại và thay đổi hiển thị
-		if (shortText.style.display === "none") {
-			shortText.style.display = "inline";
-			fullText.style.display = "none";
-			button.innerText = "Xem thêm"; // Đổi tên nút thành "Xem thêm"
-		} else {
-			shortText.style.display = "none";
-			fullText.style.display = "inline";
-			button.innerText = "Thu gọn"; // Đổi tên nút thành "Thu gọn"
-		}
-	}
-</script>

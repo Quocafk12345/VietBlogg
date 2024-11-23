@@ -24,28 +24,29 @@ public class LuotFollowService {
 		this.userRepository = userRepository;
 	}
 
-	// Follow một người dùng
 	@Transactional
-	public LuotFollow follow(Long userId, Long userFollowId) {
+	public boolean toggleFollow(Long userFollowId, Long userId) {
 		LuotFollowId luotFollowId = new LuotFollowId(userId, userFollowId);
+
+		// Kiểm tra mối quan hệ follow
 		if (luotFollowRepository.existsById(luotFollowId)) {
-			throw new RuntimeException("Người dùng đã follow người dùng này rồi");
+			luotFollowRepository.deleteById(luotFollowId);
+			return false;  // Đã unfollow
+		} else {
+			// Lấy thông tin người dùng
+			User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Người dùng không tồn tại."));
+			User currentUser = userRepository.findById(userFollowId).orElseThrow(() -> new RuntimeException("Người dùng được follow không tồn tại."));
+
+			LuotFollow luotFollow = new LuotFollow();
+			luotFollow.setId(luotFollowId);
+			luotFollow.setUser(user);
+			luotFollow.setUserFollow(currentUser);
+			luotFollowRepository.save(luotFollow);
+			return true; // Đã follow
 		}
-		LuotFollow luotFollow = new LuotFollow(luotFollowId,
-				userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng")),
-				userRepository.findById(userFollowId).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng được follow")));
-		return luotFollowRepository.save(luotFollow);
 	}
 
-	// Unfollow một người dùng
-	@Transactional
-	public void unfollow(Long userId, Long userFollowId) {
-		LuotFollowId luotFollowId = new LuotFollowId(userId, userFollowId);
-		if (!luotFollowRepository.existsById(luotFollowId)) {
-			throw new RuntimeException("Người dùng chưa follow người dùng này");
-		}
-		luotFollowRepository.deleteById(luotFollowId);
-	}
+
 
 	// Kiểm tra xem một người dùng đã follow người dùng khác chưa
 	public boolean daFollow(Long userId, Long userFollowId) {

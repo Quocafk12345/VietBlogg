@@ -77,8 +77,7 @@
 					</button>
 					<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
 						<li>
-							<form th:action="@{/trang-ca-nhan}" method="get">
-								<input type="hidden" name="userId" th:value="${session.currentUser.id}">
+							<form th:action="@{/trang-ca-nhan/{userId}(userId=${session.currentUser.id})}" method="get">
 								<button type="submit" class="dropdown-item">Trang cá nhân</button>
 							</form>
 						</li>

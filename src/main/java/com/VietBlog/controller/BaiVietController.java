@@ -58,6 +58,19 @@ public class BaiVietController {
         return ResponseEntity.ok(baiVietService.getBaiVietById(id));
     }
 
+    @Operation(summary = "Lấy tất cả bài viết của người dùng", description = "Lấy thông tin chi tiết của tất cả bài viết của người dùng theo userId.")
+    @ApiResponse(responseCode = "200", description = "Thành công", content = @Content(schema = @Schema(implementation = BaiViet.class)))
+    @ApiResponse(responseCode = "404", description = "Không tìm thấy bài viết của người dùng")
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<BaiViet>> findByUserId(@PathVariable Long userId){
+        List<BaiViet> baiViets = baiVietService.getBaiVietByUserId(userId);
+        if (baiViets.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(baiViets);
+        }
+    }
+
 
     /**
      * Phương thức đếm số lượt like của một bài viết
@@ -161,6 +174,7 @@ public class BaiVietController {
             return ResponseEntity.badRequest().build();
         }
     }
+
     @PostMapping("/{id}/like")
     public ResponseEntity<?> toggleLike(@PathVariable("id") Long idBaiViet, @RequestParam("userId")Long userId) {
         try {
@@ -170,4 +184,6 @@ public class BaiVietController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+
 }
