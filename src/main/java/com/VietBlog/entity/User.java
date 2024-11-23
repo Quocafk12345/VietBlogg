@@ -78,6 +78,6 @@ public class User implements Serializable {
     private Theme_User theme;
 
     @Convert(converter = FontChu_Converter.class)
-    @Column(name = "Font")
+    @Column(name = "Font_Chu")
     private FontChu_User fontChu;
 }

@@ -5,7 +5,6 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     $scope.chiTietBaiViet = {};
 
     $scope.loaiBaiDang = "caNhan";
-    $scope.loaiBaiDang = "";
 
     $scope.mucDuocChon = {ten: 'Chọn nhóm'};
 
@@ -161,15 +160,15 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
 
         var baiViet = {
             tieuDe: document.getElementById('tieuDe').value, // Lấy tiêu đề từ input
-            noiDung: document.getElementById('noiDung').value, // Lấy nội dung từ textarea
+            noiDung: CKEDITOR.instances.editor1.getData(), // Lấy nội dung từ textarea
             user: {id: currentUser.id}, // Lấy thông tin user từ biến currentUser
-            nhom: {id: null}
+            nhom: null
         };
 
         // Nếu có nhóm được chọn, thêm thông tin nhóm vào bài viết
         if ($scope.loaiBaiDang === "nhom") {
-            baiViet.nhom.id = $scope.mucDuocChon.id;
-        }
+            baiViet.nhom = $scope.mucDuocChon;
+        } else baiViet.nhom = null;
 
         // Gọi API để thêm bài viết mới
         $http.post(url, baiViet)
@@ -182,7 +181,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
 
                 // Reset form
                 document.getElementById('tieuDe').value = '';
-                document.getElementById('noiDung').value = '';
+                CKEDITOR.instances.editor1.setData = '';
                 $scope.nhomDuocChon = {ten: 'Chọn nhóm'};
 
             })

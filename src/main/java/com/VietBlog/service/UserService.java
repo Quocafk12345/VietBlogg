@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
 
-import com.VietBlog.constraints.User.FontChu_User;
+import com.VietBlog.constraints.User.Font_User;
 import com.VietBlog.constraints.User.Theme_User;
 import com.VietBlog.constraints.User.VaiTro_User;
 import com.VietBlog.repository.LuotFollowRepository;
@@ -66,7 +66,7 @@ public class UserService {
 		user.setNgayTao(LocalDate.now());
 		user.setVaiTro(VaiTro_User.USER);
 		user.setTheme(Theme_User.LIGHT);
-		user.setFontChu(FontChu_User.HELVETICA_NEUE);
+		user.setFont(Font_User.HELVETICA_NEUE);
 
 		if (isEmailExists(user.getEmail())) {
 			return;

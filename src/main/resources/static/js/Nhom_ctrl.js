@@ -187,7 +187,7 @@ mainApp.controller("nhomController", function ($scope, $http, $window) {
                     // Xử lý kết quả
                     alert('Rời nhóm thành công!');
                     // Chuyển hướng về trang chủ hoặc trang danh sách nhóm
-                    $window.location.href = '/api/nhom/CongDong';
+                    $window.location.href = '/CongDong';
                 })
                 .catch(function(error) {
                     console.error('Lỗi:', error);

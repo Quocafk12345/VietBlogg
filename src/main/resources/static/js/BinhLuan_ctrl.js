@@ -60,30 +60,29 @@ mainApp.controller('BinhLuanController', function($scope, $http, timeService) {
     };
 
     $scope.themBinhLuan = function(binhLuan) {
-        var noiDung;
-        if (binhLuan) {
-            // Lấy nội dung từ input Phản hồi
-            var replyInputId = 'replyInput-' + binhLuan.id;
-            noiDung = document.getElementById(replyInputId).value;
-        } else {
-            // Lấy nội dung từ input bình luận gốc
-            noiDung = document.getElementById('binhLuanInput').value;
-        }
-
-        if (noiDung.trim() === "") {
-            console.log("Vui lòng nhập nội dung bình luận.");
-        }
-
         var binhLuanMoi = {
-            noiDung: noiDung,
+            noiDung: null,
             baiViet: { id: baiVietId }, // Gửi kèm ID bài viết
-            user: { id: currentUser.id } // Thay 1 bằng ID người dùng hiện tại
+            user: { id: currentUser.id }, // Thay 1 bằng ID người dùng hiện tại
+            binhLuanCha: null
         };
 
-        if (binhLuan.level === 'CAP_2') {
-            binhLuanMoi.binhLuanCha = { id: binhLuan.binhLuanCha.id }; // Gán ID bình luận cha
+        if (binhLuan !== undefined) {
+            // Lấy nội dung từ input Phản hồi
+            var replyInputId = 'replyInput-' + binhLuan.id;
+            binhLuanMoi.noiDung = document.getElementById(replyInputId).value;
+            if (binhLuan.level === 'CAP_2') {
+                binhLuanMoi.binhLuanCha = { id: binhLuan.binhLuanCha.id }; // Gán ID bình luận cha
+            } else {
+                binhLuanMoi.binhLuanCha = { id: binhLuan.id }; // Gán ID bình luận cha
+            }
         } else {
-            binhLuanMoi.binhLuanCha = { id: binhLuan.id }; // Gán ID bình luận cha
+            // Lấy nội dung từ input bình luận gốc
+            binhLuanMoi.noiDung = document.getElementById('binhLuanInput').value;
+        }
+
+        if (binhLuanMoi.noiDung.trim() === "") {
+            console.log("Vui lòng nhập nội dung bình luận.");
         }
 
         $http.post(`${host_BinhLuan}/${baiVietId}`, binhLuanMoi)

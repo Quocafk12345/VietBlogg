@@ -20,7 +20,52 @@
     <div th:replace="~{include/navbar :: navbar}"></div>
     <main class="row">
         <div th:replace="~{include/sidebar :: sidebar}" class="col-3"></div>
-        <div class="col-9">
+        <div class="col-10">
+<!--            <div class="story-carousel d-flex overflow-auto p-3">-->
+<!--                &lt;!&ndash; Story 1 &ndash;&gt;-->
+<!--                <div class="story-item me-3">-->
+<!--                    <div class="story-avatar position-relative">-->
+<!--                        <img src="https://via.placeholder.com/100" class="rounded-circle border border-primary" width="100%" alt="Story 1">-->
+<!--                        <div class="story-add position-absolute bottom-0 end-0">-->
+<!--                            <i class="bi bi-plus-circle-fill text-primary"></i>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="text-center mt-2">Nguyễn Văn A</div>-->
+<!--                </div>-->
+<!--            -->
+<!--                &lt;!&ndash; Story 2 &ndash;&gt;-->
+<!--                <div class="story-item me-3">-->
+<!--                    <div class="story-avatar">-->
+<!--                        <img src="https://via.placeholder.com/100" class="rounded-circle" alt="Story 2">-->
+<!--                    </div>-->
+<!--                    <div class="text-center mt-2">Nguyễn Văn B</div>-->
+<!--                </div>-->
+<!--            -->
+<!--                &lt;!&ndash; Story 3 &ndash;&gt;-->
+<!--                <div class="story-item me-3">-->
+<!--                    <div class="story-avatar">-->
+<!--                        <img src="https://via.placeholder.com/100" class="rounded-circle" alt="Story 3">-->
+<!--                    </div>-->
+<!--                    <div class="text-center mt-2">Nguyễn Văn C</div>-->
+<!--                </div>-->
+<!--            -->
+<!--                &lt;!&ndash; Story 4 &ndash;&gt;-->
+<!--                <div class="story-item me-3">-->
+<!--                    <div class="story-avatar">-->
+<!--                        <img src="https://via.placeholder.com/100" class="rounded-circle" alt="Story 4">-->
+<!--                    </div>-->
+<!--                    <div class="text-center mt-2">Nguyễn Văn D</div>-->
+<!--                </div>-->
+<!--            -->
+<!--                &lt;!&ndash; Story 5 &ndash;&gt;-->
+<!--                <div class="story-item me-3">-->
+<!--                    <div class="story-avatar">-->
+<!--                        <img src="https://via.placeholder.com/100" class="rounded-circle" alt="Story 5">-->
+<!--                    </div>-->
+<!--                    <div class="text-center mt-2">Nguyễn Văn E</div>-->
+<!--                </div>-->
+<!--            </div>-->
+
             <div class="w-50 m-auto">
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -32,7 +77,7 @@
 		            <div aria-labelledby="nav-news-tab" class="tab-pane fade show active" id="nav-news" ng-repeat="bai in bangTin"
 		                 role="tabpanel">
 			            <!-- Tab Bảng tin -->
-			            <a th:href="@{/chi-tiet-bai-viet/}" ng-click="chuyenTrang($event, bai.id)" class="text-decoration-none text-dark">
+			            <a th:href="@{/bai-viet/}" ng-click="chuyenTrang($event, bai.id)" class="text-decoration-none text-dark">
 			            <!-- Bài viết 1 -->
 				            <div class="card mb-3">
 					            <div class="card-body">
@@ -114,7 +159,7 @@
    <!-- AngularJS -->
    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
    <script th:inline="javascript">
-	   var currentUserId = [[${session.currentUser.id}]];
+	   var currentUser = [[${session.currentUser}]];
    </script>
    <script th:src="@{/js/MainApp.js}"></script>
    <script th:src="@{/js/BaiViet_ctrl.js}"></script>

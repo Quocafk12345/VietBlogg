@@ -1,5 +1,5 @@
 // MainApp.js
-var mainApp = angular.module('mainApp', []);
+var mainApp = angular.module('mainApp', ['ngSanitize']);
 
 mainApp.service('timeService', function () {
     this.tinhThoiGianDang = function (ngayTao) {

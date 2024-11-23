@@ -70,8 +70,8 @@
 						       placeholder="Nhập tiêu đề bài viết" type="text">
 					</div>
 					<div class="mb-3">
-						<label class="form-label" for="noiDung">Nội dung <span class="text-danger">*</span></label>
-						<textarea class="form-control border border-1 rounded" id="noiDung"
+						<label class="form-label" for="editor1">Nội dung <span class="text-danger">*</span></label>
+						<textarea class="form-control border border-1 rounded" id="editor1"
 						          name="noiDung" placeholder="Nhập nội dung bài viết" rows="10"></textarea>
 					</div>
 					<button class="btn btn-primary" ng-click="dangBai()">Đăng bài</button>
@@ -86,6 +86,14 @@
 <script th:inline="javascript">
 	var currentUser = [[${session.currentUser}]];
 </script>
+<script th:src="@{/js/CKEditor/ckeditor.js}"></script>
+<script>
+	CKEDITOR.replace( 'editor1', {
+		// Đường dẫn đến file config.js
+		customConfig: '/js/CKEditor/config.js'
+	});
+</script>
+<script th:src="@{/js/Sanitize/node_modules/angular-sanitize/angular-sanitize.js}"></script>
 <script th:src="@{/js/MainApp.js}"></script>
 <script th:src="@{/js/BaiViet_ctrl.js}"></script>
 <script th:src="@{/js/Nhom_ctrl.js}"></script>

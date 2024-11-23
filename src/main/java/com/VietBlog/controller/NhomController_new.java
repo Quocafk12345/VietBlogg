@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/api/nhom")
 public class NhomController_new {
 
     @GetMapping("/tao-nhom")
@@ -13,7 +12,7 @@ public class NhomController_new {
         return "TaoNhom";
     }
 
-    @GetMapping(value = {"/CongDong", "/nhom/CongDong", "/CongDong"}) // Thêm value attribute
+    @GetMapping(value = {"/CongDong", "/nhom/CongDong"}) // Thêm value attribute
     public String congDongPage() {
         return "CongDong";
     }
