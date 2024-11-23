@@ -25,11 +25,15 @@ public class UserService {
 	private final Cloudinary cloudinary;
 
 	private final UserRepository userRepository;
+	private final LuotLike_BaiViet_Repository luotLike_BaiViet_Repository;
+	private final LuotFollowRepository luotFollowRepository;
 
 	@Autowired
-	public UserService(Cloudinary cloudinary, UserRepository userRepository) {
+	public UserService(Cloudinary cloudinary, UserRepository userRepository, LuotLike_BaiViet_Repository luotLike_BaiViet_Repository, LuotFollowRepository luotFollowRepository) {
 		this.cloudinary = cloudinary;
 		this.userRepository = userRepository;
+		this.luotLike_BaiViet_Repository = luotLike_BaiViet_Repository;
+		this.luotFollowRepository = luotFollowRepository;
 	}
 
 	// tìm theo email
