@@ -35,7 +35,7 @@
 							<a class="nav-link active" aria-current="page" href="#baivietnhom" data-bs-toggle="tab">Bài viết nhóm</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="#baivietcanhan" data-bs-toggle="tab">Bài viết cá nhân</a>
+							<a class="nav-link" href="#baivietcanhan" data-bs-toggle="tab">Bài viết của bản thân</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="#thanhvien" data-bs-toggle="tab">
@@ -64,7 +64,7 @@
 												<div ng-if="baiViet.daPhuongTien.length > 0">
 													<img alt="Post Image" class="img-fluid rounded mb-3" src="https://via.placeholder.com/500x300 ">
 												</div>
-												<p>{{baiViet.noiDung}}</p>
+												<p ng-bind-html="baiViet.noiDung"></p>
 												<div class="d-flex justify-content-between">
 													<div>
 														<button class="btn btn-light me-2"><i class="bi bi-hand-thumbs-up"></i> Thích {{ baiViet.luotLike }}</button>
@@ -99,7 +99,7 @@
 												<div ng-if="baiViet.daPhuongTien.length > 0">
 													<img alt="Post Image" class="img-fluid rounded mb-3" src="https://via.placeholder.com/500x300 ">
 												</div>
-												<p>{{baiViet.noiDung}}</p>
+												<p ng-bind-html="baiViet.noiDung"></p>
 												<div class="d-flex justify-content-between">
 													<div>
 														<button class="btn btn-light me-2"><i class="bi bi-hand-thumbs-up"></i> Thích {{ baiViet.luotLike }}</button>

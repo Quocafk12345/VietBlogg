@@ -168,7 +168,7 @@ mainApp.controller("nhomController", function ($scope, $http, $window) {
                     // Xử lý kết quả
                     alert('Giải tán nhóm thành công!');
                     // Chuyển hướng về trang chủ hoặc trang danh sách nhóm
-                    $window.location.href = '/api/nhom/CongDong';
+                    $window.location.href = '/cong-dong';
                 })
                 .catch(function(error) {
                     console.error('Lỗi:', error);
@@ -185,7 +185,7 @@ mainApp.controller("nhomController", function ($scope, $http, $window) {
                     // Xử lý kết quả
                     alert('Rời nhóm thành công!');
                     // Chuyển hướng về trang chủ hoặc trang danh sách nhóm
-                    $window.location.href = '/CongDong';
+                    $window.location.href = '/cong-dong';
                 })
                 .catch(function(error) {
                     console.error('Lỗi:', error);
@@ -224,7 +224,7 @@ mainApp.controller("nhomController", function ($scope, $http, $window) {
                         $scope.capNhatVaiTroTrongNhom(nhomId, nguoiNhanId);
 
                         // Chuyển hướng về trang chủ hoặc trang danh sách nhómw  
-                        $window.location.href = '/api/nhom/CongDong';
+                        $window.location.href = '/cong-dong';
                     })
                     .catch(function(error) {
                         console.error('Lỗi:', error);
