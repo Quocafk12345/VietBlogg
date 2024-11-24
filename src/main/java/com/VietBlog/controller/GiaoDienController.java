@@ -29,6 +29,7 @@ public class GiaoDienController {
         this.baiVietService = baiVietService;
     }
 
+    // trang đăng nhập
     @GetMapping("/login")
     public String login() {
         return "account/login";
@@ -40,6 +41,7 @@ public class GiaoDienController {
         return "redirect:/index"; // Redirect đến trang index
     }
 
+    // trang chi tiết nhóm
     @GetMapping("/nhom/chi-tiet/{idNhom}")
     public String chiTietNhom(@PathVariable Long idNhom, Model model) {
         model.addAttribute("idNhom", idNhom);
@@ -50,6 +52,18 @@ public class GiaoDienController {
     public String trangNhom() {
         return "page/Nhom_new";
     }
+
+
+    @GetMapping("/tao-nhom")
+    public String hienThiTrangTaoNhom() {
+        return "TaoNhom";
+    }
+
+    @GetMapping("/cong-dong") // Thêm value attribute
+    public String congDongPage() {
+        return "CongDong";
+    }
+
 
     @GetMapping("/register")
     public String sign_up() {

@@ -13,8 +13,8 @@ public class Theme_Converter implements AttributeConverter<Theme_User, String> {
 	@Override
 	public Theme_User convertToEntityAttribute(String dbData) {
 		return switch (dbData) {
-			case "TOI" -> Theme_User.LIGHT;
-			case "SANG" -> Theme_User.DARK;
+			case "SANG" -> Theme_User.LIGHT;
+			case "TOI" -> Theme_User.DARK;
 			default -> throw new IllegalArgumentException("Unexpected database value: " + dbData);
 		};
 	}

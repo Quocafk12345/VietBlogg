@@ -1,5 +1,5 @@
 let host_BaiViet = "http://localhost:8080/api/bai-viet";
-mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService) {  // Inject $q
+mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService, $sce) {  // Inject $q
     $scope.bangTin = [];
     $scope.dangTheoDoi = [];
     $scope.chiTietBaiViet = {};
@@ -67,7 +67,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
                         $scope.bangTin[i].luotLike = results[i * 2]; // Kết quả lượt like ở vị trí i * 2
                         $scope.bangTin[i].luotBinhLuan = results[i * 2 + 1]; // Kết quả lượt bình luận ở vị trí i * 2 + 1
                         $scope.bangTin[i].thoiGianDang = $scope.tinhThoiGianDang($scope.bangTin[i].ngayTao);
-                        $scope.bangTin[i].daLike = results[i*3+1];
+                        // $scope.bangTin[i].daLike = results[i*3+1];
                     }
                 });
             })
@@ -126,7 +126,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     $scope.chuyenTrang = function($event, baiVietId) {
         console.log(baiVietId);
         $event.preventDefault();
-        $event.target.href = '/chi-tiet-bai-viet/' + baiVietId;
+        $event.target.href = '/bai-viet/' + baiVietId;
         window.location.href = $event.target.href;
     };
 
@@ -148,11 +148,19 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
                         $scope.chiTietBaiViet.luotBinhLuan = luotBinhLuan;
                     });
                 $scope.chiTietBaiViet.thoiGianDang = $scope.tinhThoiGianDang($scope.chiTietBaiViet.ngayTao);
+                $scope.chiTietBaiViet.noiDung = $sce.trustAsHtml(DOMPurify.sanitize($scope.chiTietBaiViet.noiDung, {
+                    ALLOWED_TAGS: ['b', 'i', 'u', 'p', 'br', 'span', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ol', 'ul', 'li', 'a'],
+                    ALLOWED_ATTR: ['href', 'style']
+                }));
             })
             .catch((error) => {
                 console.log("Error", error);
             });
     };
+    //
+    // $scope.sanitizeNoiDungBaiViet = function (baiVietId) {
+    //
+    // }
 
     $scope.dangBai = function () {
         var url = `${host_BaiViet}/dang-bai`;
@@ -181,7 +189,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
 
                 // Reset form
                 document.getElementById('tieuDe').value = '';
-                CKEDITOR.instances.editor1.setData = '';
+                CKEDITOR.instances.editor1 = '';
                 $scope.nhomDuocChon = {ten: 'Chọn nhóm'};
 
             })
