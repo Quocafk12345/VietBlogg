@@ -72,11 +72,11 @@ public class BaiVietController {
     @ApiResponse(responseCode = "404", description = "Không tìm thấy bài viết của người dùng")
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<BaiViet>> findByUserId(@PathVariable Long userId){
-        List<BaiViet> baiViets = baiVietService.getBaiVietByUserId(userId);
-        if (baiViets.isEmpty()) {
+        List<BaiViet> baiViet = baiVietService.getBaiVietByUserId(userId);
+        if (baiViet.isEmpty()) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(baiViets);
+            return ResponseEntity.ok(baiViet);
         }
     }
 

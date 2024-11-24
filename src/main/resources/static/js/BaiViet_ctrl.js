@@ -3,11 +3,11 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     $scope.bangTin = [];
     $scope.dangTheoDoi = [];
     $scope.chiTietBaiViet = {};
-
     $scope.loaiBaiDang = "caNhan";
-
     $scope.mucDuocChon = {ten: 'Chọn nhóm'};
-
+    const url = window.location.href;
+    const userId = url.split("/").pop(); // Lấy phần cuối URL
+    console.log(userId);
     $scope.thongTinUser = [
         {ten: currentUser.tenNguoiDung, hinhDaiDien: 'https://via.placeholder.com/20x20'}
     ];
@@ -21,8 +21,6 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
         }
     };
 
-    // $scope.daLike = false;
-    // $scope.userId = currentUserId;
     $scope.tinhThoiGianDang = timeService.tinhThoiGianDang; // Gán hàm từ service
     $scope.baiVietNguoiDung = []; // Dữ liệu bài viết của người dùng
 
@@ -76,7 +74,6 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
-
     $scope.toggleLike = function (baiViet) {
         if (!baiViet || !baiViet.id) {
             console.error("Bài viết không hợp lệ:", baiViet);
@@ -85,7 +82,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
         $scope.toggleSuccess = function () {
             $scope.daLike = !$scope.daLike;
         };
-        var url = `${host_BaiViet}/${baiViet.id}/like?userId=${currentUserId}`;
+        var url = `${host_BaiViet}/${baiViet.id}/like?userId=${currentUser.id}`;
         $http.post(url)
             .then((resp) => {
                 console.log("Like thành công:", resp.data);
@@ -191,7 +188,6 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
-    $scope.getBaiVietByUserId($scope.userId);
     $scope.load_bai_viet();
 
     // Kiểm tra xem có baiVietId được truyền từ Thymeleaf không
@@ -228,5 +224,5 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     $scope.$on('loadBaiVietNhom', function() {
         $scope.loadBaiVietNhom();
     });
-
+    $scope.getBaiVietByUserId(userId);
 });

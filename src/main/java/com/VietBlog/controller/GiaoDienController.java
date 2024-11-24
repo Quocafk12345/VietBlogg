@@ -80,7 +80,7 @@ public class GiaoDienController {
         return "home";
     }
 
-    @GetMapping("/bai-viet/{id}")
+    @GetMapping("/chi-tiet-bai-viet/{id}")
     public String detail(@PathVariable Long id, Model model) {
         model.addAttribute("baiVietId", id);
         return "ChiTietBaiViet";
