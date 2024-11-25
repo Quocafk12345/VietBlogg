@@ -1,5 +1,6 @@
 package com.VietBlog.controller;
 
+import com.VietBlog.entity.BlockUserID;
 import com.VietBlog.entity.LuotFollow;
 import com.VietBlog.entity.LuotFollowId;
 import com.VietBlog.entity.User;

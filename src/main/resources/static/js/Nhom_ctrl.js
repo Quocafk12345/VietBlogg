@@ -41,8 +41,6 @@ mainApp.controller("nhomController", function ($scope, $http, $window) {
             });
     };
 
-    $scope.loadNhom();
-
     $scope.chuyenTrang = function($event, idNhom) {
         console.log(idNhom);
         $event.preventDefault();
@@ -112,7 +110,7 @@ mainApp.controller("nhomController", function ($scope, $http, $window) {
             gioiThieu: document.getElementById("moTa").value  // Lấy giá trị từ textarea
         };
         // Sử dụng currentUser từ Thymeleaf
-        if (currentUser) {
+        if (currentUserId) {
             nhom.nguoiTao = { id: currentUser.id }; // Thêm userId vào object nguoiTao
         } else {
             alert("Vui lòng đăng nhập để tạo nhóm.");
