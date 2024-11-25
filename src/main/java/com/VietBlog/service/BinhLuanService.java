@@ -93,4 +93,8 @@ public class BinhLuanService {
 		return binhLuanRepository.save(existingBinhLuan);
 	}
 
+	public int demLuotBinhLuan(Long baiVietId) {
+		return binhLuanRepository.countBinhLuanByBaiVietId(baiVietId);
+	}
+
 }

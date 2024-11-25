@@ -97,7 +97,10 @@
 						            <div class="d-flex justify-content-between">
 							            <!-- Bên trái: Thích, Không thích, Bình luận -->
 							            <div>
-								            <button class="btn btn-light me-2"><i class="bi bi-hand-thumbs-up"></i>
+								            <button class="btn btn-light me-2" ng-if="!bai.daLike" ng-click="toggleLike(bai)"><i class="bi bi-hand-thumbs-up"></i>
+									            Thích {{ bai.luotLike }}
+								            </button>
+								            <button class="btn btn-primary me-2" ng-if="bai.daLike" ng-click="toggleLike(bai)"><i class="bi bi-hand-thumbs-up"></i>
 									            Thích {{ bai.luotLike }}
 								            </button>
 								            <button class="btn btn-light"><i class="bi bi-chat-left-text"></i> Bình luận

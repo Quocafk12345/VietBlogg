@@ -29,15 +29,15 @@ public class LuotLike_BaiViet_Service {
 		this.luotLike_BaiViet_Repository = luotLike_BaiViet_Repository;
 	}
 
-	public boolean toggleLike(Long id, Long userId) {
+	public boolean toggleLike(Long idBaiViet, Long userId) {
 		// Kiểm tra người dùng và bài viết có tồn tại không
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new RuntimeException("User không tồn tại."));
-		BaiViet baiViet = baiVietRepository.findById(id)
+		BaiViet baiViet = baiVietRepository.findById(idBaiViet)
 				.orElseThrow(() -> new RuntimeException("Bài viết không tồn tại."));
 
 		// Tạo ID cho bảng trung gian
-		LuotLike_BaiViet_ID luotLikeId = new LuotLike_BaiViet_ID(userId, id);
+		LuotLike_BaiViet_ID luotLikeId = new LuotLike_BaiViet_ID(userId, idBaiViet);
 
 		if (luotLike_BaiViet_Repository.existsById(luotLikeId)) {
 			// Nếu đã like, xóa bản ghi
@@ -66,7 +66,7 @@ public class LuotLike_BaiViet_Service {
 	}
 
 	// Kiểm tra xem một người dùng đã like một bài viết chưa
-	public boolean daLikeBaiViet(Long userId, Long baiVietId) {
+	public boolean kiemTraLikeBaiViet(Long userId, Long baiVietId) {
 		LuotLike_BaiViet_ID id = new LuotLike_BaiViet_ID(userId, baiVietId);
 		return luotLikeRepository.existsById(id);
 	}

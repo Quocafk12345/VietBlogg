@@ -4,17 +4,17 @@ mainApp.controller('loginController', function ($scope, $http, $window) {
     $scope.login = function() {
 
         // Tạo FormData để gửi dữ liệu dạng form-urlencoded
-        var formData = new FormData();
-        formData.append('identifiers', $scope.identifiers);
-        formData.append('password', $scope.password);
+        var duLieu_dangNhap = new FormData();
+        duLieu_dangNhap.append('identifiers', $scope.identifiers);
+        duLieu_dangNhap.append('password', $scope.password);
 
-        $http.post(`${host_DangNhap}/api/user/dang-nhap`, formData, {
+        $http.post(`${host_DangNhap}/api/user/dang-nhap`, duLieu_dangNhap, {
             transformRequest: angular.identity, // Không serialize dữ liệu
             headers: {'Content-Type': undefined} // Để browser tự set Content-Type
         }).then(function successCallback(response) {
             var user = response.data; // Lấy User từ response
 
-            $http.post(`${host_DangNhap}/login-success`, user)
+            $http.post(`${host_DangNhap}/dang-nhap-thanh-cong`, user)
                 .then(function () {
                     $window.location.href = `${host_DangNhap}/index`; // Chuyển hướng đến /index
             });
@@ -29,7 +29,7 @@ mainApp.controller('loginController', function ($scope, $http, $window) {
             url: `${host_DangNhap}/api/user/dang-xuat`,
             responseType: 'text' // Chỉ định responseType là 'text' nếu máy chủ trả về chuỗi
         }).then(function(response) {
-            $window.location.href = `${host_DangNhap}/login`; // Redirect đến /logout
+            $window.location.href = `${host_DangNhap}/dang-nhap`; // Redirect đến /logout
             console.log(response.data); // xử lý phản hồi ở đây
             // Thêm xử lý điều hướng nếu cần
         }, function(error) {

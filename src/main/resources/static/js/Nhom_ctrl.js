@@ -236,7 +236,7 @@ mainApp.controller("nhomController", function ($scope, $http, $window) {
         }
     };
 
-// Hàm cập nhật vai trò trong thông tin nhóm của ChiTietNhom.html
+// Hàm cập nhật vai trò trong thông tin nhóm của chi-tiet-nhom.html
     $scope.capNhatVaiTroTrongNhom = function(nhomId, nguoiNhanId) {
         // Gọi API để lấy thông tin nhóm mới nhất
         $http.get(`${host_Nhom}/${nhomId}`)

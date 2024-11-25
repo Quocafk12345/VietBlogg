@@ -1,11 +1,9 @@
 package com.VietBlog.controller;
 
 import com.VietBlog.entity.BaiViet;
-import com.VietBlog.entity.LuotLike_BaiViet;
 import com.VietBlog.entity.User;
 import com.VietBlog.service.BaiVietService;
 import com.VietBlog.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.TimeZone;
 
 @Controller
 @SessionAttributes("currentUser")
@@ -30,12 +26,12 @@ public class GiaoDienController {
     }
 
     // trang đăng nhập
-    @GetMapping("/login")
+    @GetMapping("/dang-nhap")
     public String login() {
-        return "account/login";
+        return "account/dang-nhap";
     }
 
-    @PostMapping("/login-success") // Endpoint mới để lưu User vào session
+    @PostMapping("/dang-nhap-thanh-cong") // Endpoint mới để lưu User vào session
     public String loginSuccess(@RequestBody User user, Model model) {
         model.addAttribute("currentUser", user);
         return "redirect:/index"; // Redirect đến trang index
@@ -45,65 +41,71 @@ public class GiaoDienController {
     @GetMapping("/nhom/chi-tiet/{idNhom}")
     public String chiTietNhom(@PathVariable Long idNhom, Model model) {
         model.addAttribute("idNhom", idNhom);
-        return "ChiTietNhom";
+        return "page/chi-tiet-nhom";
     }
 
     @GetMapping("/nhom")
     public String trangNhom() {
-        return "page/Nhom_new";
+        return "page/kham-pha-nhom";
     }
 
 
     @GetMapping("/tao-nhom")
     public String hienThiTrangTaoNhom() {
-        return "TaoNhom";
+        return "page/tao-nhom";
     }
 
-    @GetMapping("/cong-dong") // Thêm value attribute
-    public String congDongPage() {
-        return "CongDong";
+//    @GetMapping("/cong-dong") // Thêm value attribute
+//    public String congDongPage() {
+//        return "cong-dong";
+//    }
+
+    @GetMapping("/tim-kiem")
+    public String KetQuaTimKiem() {
+        return "page/ket-qua-tim-kiem";
     }
 
 
-    @GetMapping("/register")
+    @GetMapping("/dang-ky")
     public String sign_up() {
-        return "account/register";
-    }
-    @GetMapping("/forgot-password")
-    public String forgot_pass() {
-        return "account/forgot-password";
+        return "account/dang-ky";
     }
 
-    @GetMapping("/reset-password")
-    public String Reset() {
-        return "account/reset-password";
+    @GetMapping("/quen-mat-khau")
+    public String forgot_pass() {
+        return "account/quen-mat-khau";
     }
-    @GetMapping("/verify-token")
+
+    @GetMapping("/nhap-mat-khau-moi")
+    public String Reset() {
+        return "account/nhap-mat-khau-moi";
+    }
+
+    @GetMapping("/nhap-otp")
     public String showVerifyTokenForm() {
-        return "account/verify-token"; // Trả về trang nhập mã xác thực
+        return "account/nhap-otp"; // Trả về trang nhập mã xác thực
     }
 
     @GetMapping("/dang-bai")
-    public String postPage(Model model) {
-        model.addAttribute("bv",new BaiViet());
-        return "page/DangBai";
+    public String postPage() {
+        return "page/dang-bai";
     }
 
     @GetMapping("/index")
     public String index() {
-        return "home";
+        return "trang-chu";
     }
 
     @GetMapping("/bai-viet/{id}")
     public String detail(@PathVariable Long id, Model model) {
         model.addAttribute("baiVietId", id);
-        return "ChiTietBaiViet";
+        return "page/chi-tiet-bai-viet";
     }
 
     @GetMapping("/cai-dat")
     public String hienThiCaiDat(Model model, @ModelAttribute("currentUser") User currentUser) {
         if (currentUser == null) {
-            return "redirect:/login"; // Chuyển hướng đến trang đăng nhập nếu chưa đăng nhập
+            return "redirect:/dang-nhap"; // Chuyển hướng đến trang đăng nhập nếu chưa đăng nhập
         }
 
         try {
@@ -111,7 +113,7 @@ public class GiaoDienController {
             model.addAttribute("user", currentUser);
             model.addAttribute("mauNen", currentUser.getTheme());
 
-            return "CaiDat";
+            return "cai-dat-ca-nhan";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Có lỗi xảy ra khi xử lý yêu cầu.");
             return "error";
@@ -143,10 +145,10 @@ public class GiaoDienController {
         } else {
             // Handle case where user is not found
             model.addAttribute("error", "User không tồn tại.");
-            return "redirect:/login"; // Redirect to login if the user is not found
+            return "redirect:/dang-nhap"; // Redirect to login if the user is not found
         }
 
-        return "account/profilepage"; // Return to profile page
+        return "account/trang-ca-nhan"; // Return to profile page
     }
 
 
