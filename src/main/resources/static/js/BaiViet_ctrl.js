@@ -3,11 +3,15 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     $scope.bangTin = [];
     $scope.dangTheoDoi = [];
     $scope.chiTietBaiViet = {};
+
     $scope.loaiBaiDang = "caNhan";
+
     $scope.mucDuocChon = {ten: 'Chọn nhóm'};
-    const url = window.location.href;
-    const userId = url.split("/").pop(); // Lấy phần cuối URL
-    console.log(userId);
+
+    $scope.tinhThoiGianDang = timeService.tinhThoiGianDang; // Gán hàm từ service
+
+    $scope.baiVietCaNhan = []; // Dữ liệu bài viết của người dùng
+
     $scope.thongTinUser = [
         {ten: currentUser.tenNguoiDung, hinhDaiDien: 'https://via.placeholder.com/20x20'}
     ];
@@ -21,25 +25,23 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
         }
     };
 
-    $scope.tinhThoiGianDang = timeService.tinhThoiGianDang; // Gán hàm từ service
-    $scope.baiVietNguoiDung = []; // Dữ liệu bài viết của người dùng
-
-    $scope.getBaiVietByUserId = function (userId) {
+    $scope.layBaiVietCuaUser = function (userId) {
         var url = `${host_BaiViet}/user/${userId}`;
         $http.get(url)
             .then(resp => {
-                $scope.baiVietNguoiDung = resp.data;
+                $scope.baiVietCaNhan = resp.data;
                 var promises = [];
-                angular.forEach($scope.baiVietNguoiDung, function (baiViet) {
+                angular.forEach($scope.baiVietCaNhan, function (baiViet) {
                     // Sử dụng baiViet.id thay cho baiVietId
                     promises.push($scope.demLuotLike(baiViet.id));
                     promises.push($scope.demLuotBinhLuan(baiViet.id));
                 });
                 $q.all(promises).then(function (result) {
-                    for (var i = 0; i < $scope.baiVietNguoiDung.length; i++) {
-                        $scope.baiVietNguoiDung[i].luotLike = result[i * 2];
-                        $scope.baiVietNguoiDung[i].luotBinhLuan = result[i * 2 + 1];
-                        $scope.baiVietNguoiDung[i].thoiGianDang = $scope.tinhThoiGianDang($scope.baiVietNguoiDung[i].ngayTao);
+                    for (var i = 0; i < $scope.baiVietCaNhan.length; i++) {
+                        $scope.baiVietCaNhan[i].luotLike = result[i * 2];
+                        $scope.baiVietCaNhan[i].luotBinhLuan = result[i * 2 + 1];
+                        $scope.baiVietCaNhan[i].thoiGianDang = $scope.tinhThoiGianDang($scope.baiVietCaNhan[i].ngayTao);
+                        $scope.baiVietCaNhan[i].daLike = $scope.kiemTraLike($scope.baiVietCaNhan[i]);
                     }
                 });
             })
@@ -48,8 +50,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
-
-    $scope.load_bai_viet = function () {
+    $scope.taiBaiViet = function () {
         var url = `${host_BaiViet}`;
         $http
             .get(url)
@@ -65,7 +66,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
                         $scope.bangTin[i].luotLike = results[i * 2]; // Kết quả lượt like ở vị trí i * 2
                         $scope.bangTin[i].luotBinhLuan = results[i * 2 + 1]; // Kết quả lượt bình luận ở vị trí i * 2 + 1
                         $scope.bangTin[i].thoiGianDang = $scope.tinhThoiGianDang($scope.bangTin[i].ngayTao);
-                        // $scope.bangTin[i].daLike = results[i*3+1];
+                        $scope.bangTin[i].daLike = $scope.kiemTraLike($scope.bangTin[i]);
                     }
                 });
             })
@@ -74,27 +75,54 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
+    $scope.kiemTraLike = function (baiViet) {
+        if (!baiViet || !baiViet.id) {
+            console.error("Bài viết không hợp lệ:", baiViet);
+            return;
+        }
+
+        var url = `${host_BaiViet}/thich/kiem-tra`;
+
+        var duLieu_luotLike = new FormData();
+        duLieu_luotLike.append('idBaiViet', baiViet.id);
+        duLieu_luotLike.append('userId', currentUser.id);
+
+        return $http.get(url, duLieu_luotLike, {
+            transformRequest: angular.identity, // Không serialize dữ liệu
+            headers: {'Content-Type': undefined} // Để browser tự set Content-Type
+        }).then(function (response) {
+            return response.data;
+        })
+    }
+
     $scope.toggleLike = function (baiViet) {
         if (!baiViet || !baiViet.id) {
             console.error("Bài viết không hợp lệ:", baiViet);
             return;
         }
-        $scope.toggleSuccess = function () {
-            $scope.daLike = !$scope.daLike;
-        };
-        var url = `${host_BaiViet}/${baiViet.id}/like?userId=${currentUser.id}`;
-        $http.post(url)
-            .then((resp) => {
-                console.log("Like thành công:", resp.data);
-                baiViet.daLike = !baiViet.daLike; // Đổi trạng thái like
-                baiViet.luotLike += baiViet.daLike ? -1 : 1; // Cập nhật lượt like
+        var url = `${host_BaiViet}/thich`;
+
+        var duLieu_luotLike = new FormData();
+        duLieu_luotLike.append('idBaiViet', baiViet.id);
+        duLieu_luotLike.append('userId', currentUser.id);
+
+        $http.post(url, duLieu_luotLike, {
+            transformRequest: angular.identity, // Không serialize dữ liệu
+            headers: {'Content-Type': undefined} // Để browser tự set Content-Type
+        })
+            .then(function (response) {
+                baiViet.daLike = response.data;
+                baiViet.luotLike += response.data ? 1 : -1;
+                if (baiViet.daLike) {
+                    console.log("Like thành công");
+                } else {
+                    console.log("Hủy like thành công");
+                }
             })
             .catch((error) => {
                 console.error("Lỗi khi toggle like:", error);
             });
     };
-
-
 
     $scope.demLuotLike = function (idBaiViet) {
         var url = `${host_BaiViet}/${idBaiViet}/luot-like`;
@@ -144,20 +172,24 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
                     .then(function(luotBinhLuan) {
                         $scope.chiTietBaiViet.luotBinhLuan = luotBinhLuan;
                     });
+
+                $scope.kiemTraLike($scope.chiTietBaiViet)
+                    .then(function(daLike) {
+                        $scope.chiTietBaiViet.daLike = daLike;
+                    });
+
                 $scope.chiTietBaiViet.thoiGianDang = $scope.tinhThoiGianDang($scope.chiTietBaiViet.ngayTao);
                 $scope.chiTietBaiViet.noiDung = $sce.trustAsHtml(DOMPurify.sanitize($scope.chiTietBaiViet.noiDung, {
                     ALLOWED_TAGS: ['b', 'i', 'u', 'p', 'br', 'span', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ol', 'ul', 'li', 'a'],
                     ALLOWED_ATTR: ['href', 'style']
                 }));
+
+                console.log($scope.chiTietBaiViet);
             })
             .catch((error) => {
                 console.log("Error", error);
             });
     };
-    //
-    // $scope.sanitizeNoiDungBaiViet = function (baiVietId) {
-    //
-    // }
 
     $scope.dangBai = function () {
         var url = `${host_BaiViet}/dang-bai`;
@@ -196,7 +228,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
-    $scope.load_bai_viet();
+    // $scope.layBaiVietCuaUser($scope.userId);
 
     // Kiểm tra xem có baiVietId được truyền từ Thymeleaf không
     if (typeof baiVietId !== 'undefined') {
@@ -221,6 +253,8 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
                         $scope.baiVietNhom[i].luotLike = results[i * 2];
                         $scope.baiVietNhom[i].luotBinhLuan = results[i * 2 + 1];
                         $scope.baiVietNhom[i].thoiGianDang = $scope.tinhThoiGianDang($scope.baiVietNhom[i].ngayTao);
+                        $scope.baiVietNhom[i].daLike = $scope.kiemTraLike($scope.baiVietNhom[i]);
+
                     }
                 });
             })
@@ -229,8 +263,10 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
+    $scope.taiBaiViet();
+
     $scope.$on('loadBaiVietNhom', function() {
         $scope.loadBaiVietNhom();
     });
-    $scope.getBaiVietByUserId(userId);
+
 });

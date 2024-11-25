@@ -15,12 +15,12 @@ public class DangKyController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/register")
+    @PostMapping("/dang-ky")
     public String registerUser(@ModelAttribute("user") User user, Model model) {
         user.setVaiTro(VaiTro_User.USER);
         if (userService.isEmailExists(user.getEmail())) {
             model.addAttribute("error", "Email đã tồn tại");
-            return "account/register";
+            return "dang-ky";
         }
         user.setHinhDaiDien(null);
         // Handle the optional Ngày sinh field
@@ -30,7 +30,7 @@ public class DangKyController {
         }
 
         userService.dangKy(user);
-        return "redirect:/login"; // Redirect to login page after successful registration
+        return "redirect:/dang-nhap"; // Redirect to login page after successful registration
     }
 }
 

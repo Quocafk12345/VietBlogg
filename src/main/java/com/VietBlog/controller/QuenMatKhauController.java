@@ -35,10 +35,10 @@ public class QuenMatKhauController {
 			// Gửi mã xác thực qua email
 			emailService.sendResetCode(email, resetToken);
 			model.addAttribute("message", "Mã xác thực đã được gửi qua email.");
-			return "account/verify-token"; // Chuyển đến trang nhập mã xác thực
+			return "nhap-otp"; // Chuyển đến trang nhập mã xác thực
 		} else {
 			model.addAttribute("error", "Email không tồn tại!");
-			return "account/forgot-password"; // Quay lại trang nhập email
+			return "quen-mat-khau"; // Quay lại trang nhập email
 		}
 	}
 
@@ -46,10 +46,10 @@ public class QuenMatKhauController {
 	public String processVerifyToken(Model model, @RequestParam String token) {
 		if (resetToken != null && resetToken.equals(token)) {
 			// Nếu mã xác thực đúng, cho phép người dùng nhập mật khẩu mới
-			return "account/reset-password"; // Chuyển đến trang nhập mật khẩu mới
+			return "nhap-mat-khau-moi"; // Chuyển đến trang nhập mật khẩu mới
 		} else {
 			model.addAttribute("error", "Mã xác thực không hợp lệ! Vui lòng kiểm tra lại.");
-			return "account/verify-token"; // Quay lại trang nhập mã xác thực
+			return "nhap-otp"; // Quay lại trang nhập mã xác thực
 		}
 	}
 
@@ -59,7 +59,7 @@ public class QuenMatKhauController {
 	                                   Model model) {
 		if (!password.equals(confirmPassword)) {
 			model.addAttribute("error", "Mật khẩu xác nhận không khớp!");
-			return "account/reset-password"; // Quay lại trang nhập mật khẩu mới
+			return "nhap-mat-khau-moi"; // Quay lại trang nhập mật khẩu mới
 		}
 
 		User user = userService.findByEmail(this.email); // Sử dụng email đã lưu
@@ -67,10 +67,10 @@ public class QuenMatKhauController {
 			user.setMatKhau(password); // Cập nhật mật khẩu mới
 			userService.updateUser(user); // Lưu vào cơ sở dữ liệu
 			model.addAttribute("message", "Mật khẩu đã được cập nhật thành công!");
-			return "account/login"; // Chuyển về trang đăng nhập
+			return "dang-nhap"; // Chuyển về trang đăng nhập
 		} else {
 			model.addAttribute("error", "Người dùng không tồn tại!");
-			return "account/reset-password"; // Quay lại trang nhập mật khẩu mới
+			return "nhap-mat-khau-moi"; // Quay lại trang nhập mật khẩu mới
 		}
 	}
 

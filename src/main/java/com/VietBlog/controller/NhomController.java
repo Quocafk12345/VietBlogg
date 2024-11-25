@@ -86,7 +86,7 @@ public class NhomController {
 //        List<Nhom> DSnhom = nhomService.layToanBoNhom();
 //        return ResponseEntity.ok(DSnhom);
 //    }
-    //lấy danh sách nhóm trả về thêm thông tin về vai trò của người dùng hiện tại trong mỗi nhóm lên CongDong.html
+    //lấy danh sách nhóm trả về thêm thông tin về vai trò của người dùng hiện tại trong mỗi nhóm lên cong-dong.html
     //Thay vì chỉ trả về danh sách Nhom, bạn sẽ trả về một danh sách các object, mỗi object chứa thông tin về
     // nhóm (Nhom) và vai trò của người dùng trong nhóm đó (vaiTro)
     @GetMapping("/danh-sach")
@@ -184,7 +184,7 @@ public class NhomController {
         return ResponseEntity.ok().build();
     }
 
-    // API rời khỏi nhóm và nhượng quyền trong ChiTietNhom.html
+    // API rời khỏi nhóm và nhượng quyền trong chi-tiet-nhom.html
     @PostMapping("/{nhomId}/roi-nhom/{userId}/nhuong-quyen/{nguoiNhanId}")
     public ResponseEntity<Void> roiKhoiNhomVaNhuongQuyen(
             @PathVariable Long nhomId,
