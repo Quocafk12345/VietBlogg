@@ -16,12 +16,12 @@ public class LuotFollow implements Serializable {
     @EmbeddedId
     private LuotFollowId id;
 
-    @MapsId
+    @MapsId("userId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "User_Id", nullable = false)
     private User user;
 
-    @MapsId
+    @MapsId("userFollow_Id")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "User_Follow_Id", nullable = false)
     private User userFollow;

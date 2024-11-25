@@ -1,14 +1,10 @@
 package com.VietBlog.service;
 
-import com.VietBlog.entity.LuotFollow;
-import com.VietBlog.entity.LuotFollowId;
-import com.VietBlog.entity.User;
+import com.VietBlog.entity.*;
 import com.VietBlog.repository.LuotFollowRepository;
 import com.VietBlog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 @Service
@@ -24,25 +20,27 @@ public class LuotFollowService {
 		this.userRepository = userRepository;
 	}
 
-	@Transactional
-	public boolean toggleFollow(Long userFollowId, Long userId) {
+	public boolean toggleFollow(Long userId, Long userFollowId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new RuntimeException("User không tồn tại."));
+		User currentUser = userRepository.findById(userFollowId)
+				.orElseThrow(() -> new RuntimeException("Chưa login."));
+
+		// Tạo ID cho bảng trung gian
 		LuotFollowId luotFollowId = new LuotFollowId(userId, userFollowId);
 
-		// Kiểm tra mối quan hệ follow
 		if (luotFollowRepository.existsById(luotFollowId)) {
+			// Nếu đã follow, xóa bản ghi
 			luotFollowRepository.deleteById(luotFollowId);
-			return false;  // Đã unfollow
+			return false; // Trả về trạng thái "không follow"
 		} else {
-			// Lấy thông tin người dùng
-			User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Người dùng không tồn tại."));
-			User currentUser = userRepository.findById(userFollowId).orElseThrow(() -> new RuntimeException("Người dùng được follow không tồn tại."));
-
+			// Nếu chưa follow, thêm bản ghi
 			LuotFollow luotFollow = new LuotFollow();
 			luotFollow.setId(luotFollowId);
 			luotFollow.setUser(user);
 			luotFollow.setUserFollow(currentUser);
 			luotFollowRepository.save(luotFollow);
-			return true; // Đã follow
+			return true; // Trả về trạng thái "đã follow"
 		}
 	}
 

@@ -1,44 +1,106 @@
-let host_Follow = "https://localhost:8080/api/user";
-mainApp.controller("UserController", function ($scope, $http, $q, timeService, $window) {
+let host_Follow = "http://localhost:8080/api/user";
+mainApp.controller("UserController", function ($scope, $http) {
     $scope.isFollowing = false;
+    $scope.isBlock = false;
     $scope.userProfile={};
-    $scope.currentUserId = currentUserId;
+    const url = window.location.href;
+    const userId = url.split("/").pop(); // Lấy phần cuối URL , người dùng cần follow
+    const userFollowId = currentUser;// Ngươi dùng đăng nhập
+    let socket = new WebSocket("ws://localhost:8080/ws/follow-status");
+    const blockUserId = currentUser;// Ngươi dùng đăng nhập
 
-    // Cập nhật lại logic toggleFollow
-    $scope.toggleFollow = function (userIdToFollow){
-        if(!userIdToFollow){
-            console.error("Không hợp lệ:", userIdToFollow);
+    socket.onmessage = function (event) {
+        const data = JSON.parse(event.data);
+        if (data.userId === parseInt(userId)) {
+            $scope.isFollowing = data.isFollowing;
+            $scope.$apply();
+        }
+    }
+    // Kiểm tra nếu là trang cá nhân
+    $scope.isOwnProfile = currentUser === userFollowId;
+
+
+    // Lấy trạng thái follow ban đầu
+    const checkFollowStatus = function() {
+        if (!userId) {
+            console.error("Không hợp lệ:", userId);
             return;
         }
 
-        // Lấy userId của người đang đăng nhập từ session và userId của người được theo dõi
-        var userFollowerId = $scope.currentUserId; // Người dùng đang đăng nhập
-        var url = `${host_Follow}/${userIdToFollow}/follow?currentUserId=${userFollowerId}`;
+        var checkUrl = `${host_Follow}/${userId}/checkFollowStatus?userFollowId=${userFollowId}`;
+
+        $http.get(checkUrl)
+            .then((resp) => {
+                $scope.isFollowing = resp.data.isFollowing;  // Lưu trạng thái follow
+                console.log("Follow status:", $scope.isFollowing);
+            })
+            .catch((error) => {
+                console.error("Error checking follow status:", error);
+            });
+    };
+
+    const checkBlockStatus = function () {
+        if (!userId) {
+            console.log("Không hợp lệ", userId);
+            return;
+        }
+        var checkUrl = `${host_Follow}/${userId}/checkBlockStatus?blockUserId=${blockUserId}`;
+        $http.get(checkUrl)
+        .then((resp) => {
+            $scope.isBlocking = resp.data.isBlocking;
+            console.log("Block status:", $scope.isBlocking);
+        })
+        .catch((error) => {
+            console.error("Error checking block status:", error);
+        });
+    };
+    // Gọi hàm kiểm tra trạng thái follow khi trang được tải
+    checkFollowStatus();
+    checkBlockStatus();
+    // Logic toggle follow
+    $scope.toggleFollow = function() {
+        if (!userId) {
+            console.error("Không hợp lệ:", userId);
+            return;
+        }
+
+        var url = `${host_Follow}/${userId}/toggleFollow?userFollowId=${userFollowId}`;
 
         $http.post(url)
             .then((resp) => {
-                console.log("Follow successfully", resp.data);
-                $scope.dangTheoDoi[userIdToFollow] = !$scope.dangTheoDoi[userIdToFollow]; // Cập nhật trạng thái follow
+                // Ngay sau khi thay đổi trạng thái, cập nhật isFollowing
+                $scope.isFollowing = !$scope.isFollowing;  // Đảo ngược trạng thái follow
+                $scope.totalFollows += $scope.isFollowing?-1:1;
+                console.log("Follow status toggled:", $scope.isFollowing);
             })
             .catch((error) => {
                 console.error("Error:", error);
             });
     };
 
-    // Kiểm tra trạng thái theo dõi
-    $scope.kiemTraDangTheoDoi = function (userIdToCheck) {
-        var url = `${host_Follow}/${userIdToCheck}/follow?currentUserId=${$scope.currentUserId}`;
-        $http.get(url)
-            .then((resp) => {
-                $scope.dangTheoDoi[userIdToCheck] = resp.data;
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
+    $scope.toggleBlock = function() {
+        if (!userId) {
+            console.error("Không hợp lệ:", userId);
+            return;
+        }
+        var url = `${host_Follow}/${userId}/toggleBlock?blockUserId=${blockUserId}`;
+        $http.post(url)
+        .then((resp) => {
+            $scope.isBlock = !$scope.isBlock;
+            $scope.totalFollows += $scope.isFollowing?-1:1;
+            console.log("Block status:", $scope.isBlock);
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
     };
 
-    $scope.loadTrangCaNhan = function (userId) {
-        $scope.getBaiVietByUserId(userId);
-        $scope.kiemTraDangTheoDoi(userId);
+    $scope.handleAction = function (action) {
+        if(action === "unfollow") {
+            $scope.toggleFollow();
+        }else if (action === "toggleBlock") {
+             $scope.toggleBlock();
+        }
     }
+
 })

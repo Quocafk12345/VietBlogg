@@ -77,7 +77,8 @@ public class User implements Serializable {
     @Column(name = "Theme")
     private Theme_User theme;
 
-    @Convert(converter = FontChu_Converter.class)
-    @Column(name = "Font_Chu")
-    private FontChu_User fontChu;
+    @Convert(converter = Font_Converter.class)
+    @Column(name = "Font")
+    private Font_User font;
+
 }
