@@ -1,5 +1,5 @@
 let host_BaiViet = "http://localhost:8080/api/bai-viet";
-mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService, $sce) {  // Inject $q
+mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService) {  // Inject $q
     $scope.bangTin = [];
     $scope.dangTheoDoi = [];
     $scope.chiTietBaiViet = {};
@@ -7,11 +7,9 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     $scope.loaiBaiDang = "caNhan";
 
     $scope.mucDuocChon = {ten: 'Chọn nhóm'};
-
-    $scope.tinhThoiGianDang = timeService.tinhThoiGianDang; // Gán hàm từ service
-
-    $scope.baiVietCaNhan = []; // Dữ liệu bài viết của người dùng
-
+    const url = window.location.href;
+    const userId = url.split("/").pop(); // Lấy phần cuối URL
+    console.log(userId);
     $scope.thongTinUser = [
         {ten: currentUser.tenNguoiDung, hinhDaiDien: 'https://via.placeholder.com/20x20'}
     ];
@@ -24,6 +22,9 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             $scope.loaiBaiDang = "nhom";
         }
     };
+
+    $scope.tinhThoiGianDang = timeService.tinhThoiGianDang; // Gán hàm từ service
+    $scope.baiVietNguoiDung = []; // Dữ liệu bài viết của người dùng
 
     $scope.layBaiVietCuaUser = function (userId) {
         var url = `${host_BaiViet}/user/${userId}`;
@@ -124,6 +125,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
+
     $scope.demLuotLike = function (idBaiViet) {
         var url = `${host_BaiViet}/${idBaiViet}/luot-like`;
         return $http
@@ -148,7 +150,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
-    $scope.chuyenTrang = function($event, baiVietId) {
+    $scope.chuyenTrang = function ($event, baiVietId) {
         console.log(baiVietId);
         $event.preventDefault();
         $event.target.href = '/bai-viet/' + baiVietId;
@@ -164,17 +166,17 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
 
                 // Lấy lượt like và lượt bình luận cho bài viết đơn lẻ
                 $scope.demLuotLike($scope.chiTietBaiViet.id)
-                    .then(function(luotLike) {
+                    .then(function (luotLike) {
                         $scope.chiTietBaiViet.luotLike = luotLike;
                     });
 
                 $scope.demLuotBinhLuan($scope.chiTietBaiViet.id)
-                    .then(function(luotBinhLuan) {
+                    .then(function (luotBinhLuan) {
                         $scope.chiTietBaiViet.luotBinhLuan = luotBinhLuan;
                     });
 
                 $scope.kiemTraLike($scope.chiTietBaiViet)
-                    .then(function(daLike) {
+                    .then(function (daLike) {
                         $scope.chiTietBaiViet.daLike = daLike;
                     });
 
@@ -228,7 +230,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
-    // $scope.layBaiVietCuaUser($scope.userId);
+    $scope.layBaiVietCuaUser($scope.userId);
 
     // Kiểm tra xem có baiVietId được truyền từ Thymeleaf không
     if (typeof baiVietId !== 'undefined') {
@@ -236,7 +238,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     }
 
     //Bài Vit nhóm trong CHITIETNHOm
-    $scope.loadBaiVietNhom = function() {
+    $scope.loadBaiVietNhom = function () {
         // Lấy danh sách bài viết của nhóm từ API
         $http.get(`${host_Nhom}/${$rootScope.idNhom}/baiviet`)
             .then(resp => {
@@ -265,8 +267,9 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
 
     $scope.taiBaiViet();
 
-    $scope.$on('loadBaiVietNhom', function() {
+    $scope.$on('loadBaiVietNhom', function () {
         $scope.loadBaiVietNhom();
     });
 
 });
+
