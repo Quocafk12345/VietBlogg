@@ -1,5 +1,5 @@
 let host_BaiViet = "http://localhost:8080/api/bai-viet";
-mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService, $sce) {  // Inject $q
+mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService) {  // Inject $q
     $scope.bangTin = [];
     $scope.dangTheoDoi = [];
     $scope.chiTietBaiViet = {};
@@ -7,11 +7,9 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     $scope.loaiBaiDang = "caNhan";
 
     $scope.mucDuocChon = {ten: 'Chọn nhóm'};
-
-    $scope.tinhThoiGianDang = timeService.tinhThoiGianDang; // Gán hàm từ service
-
-    $scope.baiVietCaNhan = []; // Dữ liệu bài viết của người dùng
-
+    const url = window.location.href;
+    const userId = url.split("/").pop(); // Lấy phần cuối URL
+    console.log(userId);
     $scope.thongTinUser = [
         {ten: currentUser.tenNguoiDung, hinhDaiDien: 'https://via.placeholder.com/20x20'}
     ];
@@ -25,6 +23,10 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
         }
     };
 
+    $scope.tinhThoiGianDang = timeService.tinhThoiGianDang; // Gán hàm từ service
+    $scope.baiVietNguoiDung = []; // Dữ liệu bài viết của người dùng
+
+    $scope.getBaiVietByUserId = function (userId) {
     $scope.layBaiVietCuaUser = function (userId) {
         var url = `${host_BaiViet}/user/${userId}`;
         $http.get(url)
@@ -123,6 +125,8 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
                 console.error("Lỗi khi toggle like:", error);
             });
     };
+
+
 
     $scope.demLuotLike = function (idBaiViet) {
         var url = `${host_BaiViet}/${idBaiViet}/luot-like`;

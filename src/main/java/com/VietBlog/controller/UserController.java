@@ -1,8 +1,6 @@
 package com.VietBlog.controller;
 
-import com.VietBlog.entity.BaiViet;
 import com.VietBlog.entity.LuotFollow;
-import com.VietBlog.entity.LuotFollowId;
 import com.VietBlog.entity.User;
 import com.VietBlog.repository.BaiVietRepository;
 import com.VietBlog.repository.LuotFollowRepository;
@@ -23,7 +21,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
-import java.util.Optional;
 
 @CrossOrigin("*")
 @RestController
@@ -34,20 +31,12 @@ public class UserController {
 	private final UserService userService;
 	private final LuotFollowService luotFollowService;
 	private final LuotFollowRepository luotFollowRepository;
-	private final BaiVietRepository baiVietRepository;
-	private final BaiVietService baiVietService;
-	private final LuotLike_BaiViet_Service luotLike_BaiViet_Service;
-	private final UserRepository userRepository;
 
 	@Autowired
 	public UserController(UserService userService, LuotFollowService luotFollowService, LuotFollowRepository luotFollowRepository, BaiVietRepository baiVietRepository, BaiVietService baiVietService, LuotLike_BaiViet_Service luotLike_BaiViet_Service, UserRepository userRepository) {
 		this.userService = userService;
 		this.luotFollowService = luotFollowService;
 		this.luotFollowRepository = luotFollowRepository;
-		this.baiVietRepository = baiVietRepository;
-		this.baiVietService = baiVietService;
-		this.luotLike_BaiViet_Service = luotLike_BaiViet_Service;
-		this.userRepository = userRepository;
 	}
 
 	@Operation(summary = "Đăng nhập tài khoản", description = "Nhận thông tin chi tiết của người dùng và lưu vào session.")
