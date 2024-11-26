@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -15,7 +16,7 @@ import java.io.Serializable;
 @Embeddable
 public class LuotFollowId implements Serializable {
     @Serial
-    private static final long serialVersionUID = 4743733207428332071L;
+    private static final long serialVersionUID = 1L;
     @NotNull
     @Column(name = "User_Id", nullable = false)
     private Long userId;
@@ -23,5 +24,18 @@ public class LuotFollowId implements Serializable {
     @NotNull
     @Column(name = "User_Follow_Id", nullable = false)
     private Long userFollow_Id;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LuotFollowId entity = (LuotFollowId) o;
+        return Objects.equals(this.userFollow_Id, entity.userId) &&
+                Objects.equals(this.userId, entity.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userFollow_Id, userId);
+    }
 
 }

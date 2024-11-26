@@ -38,8 +38,26 @@
     <!-- Khu vực quản lý nút Theo dõi -->
     <div class="profile-stats" ng-controller="UserController">
         <div class="stat-item">
-            <button ng-click="toggleFollow(userId)">Follow</button>
+            <!-- Nút Follow/Unfollow -->
+            <div ng-if="!isFollowing || !isOwnProfile">
+                <button ng-click="toggleFollow()" class="btn btn-primary" ng-if="!isFollowing">follow</button>
+            </div>
+            <div ng-if="isFollowing || !isOwnProfile">
+                <select class="form-select" ng-model="selectedAction" ng-change="handleAction(selectedAction)">
+                    <option value="" disabled>Đang theo dõi</option>
+                    <option value="unfollow">Hủy Follow</option>
+                    <option value="toggleBlock">Chặn</option>
+                </select>
+            </div>
+
+            <div ng-if="!isBlock || !isOwnProfile">
+                <button ng-click="toggleBlock()" class="btn btn-primary">Chặn</button>
+            </div>
+            <div ng-if="isBlock || !isOwnProfile">
+                <button ng-click="toggleBlock()" class="btn btn-danger">Bỏ chặn</button>
+            </div>
         </div>
+
     </div>
     <!-- Tab Navigation -->
     <div class="tabs">

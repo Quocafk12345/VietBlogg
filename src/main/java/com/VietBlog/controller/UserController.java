@@ -1,14 +1,15 @@
 package com.VietBlog.controller;
 
+import com.VietBlog.entity.BlockUserID;
 import com.VietBlog.entity.LuotFollow;
+import com.VietBlog.entity.LuotFollowId;
 import com.VietBlog.entity.User;
+import com.VietBlog.handle.FollowStatusWebSocketHandler;
 import com.VietBlog.repository.BaiVietRepository;
+import com.VietBlog.repository.BlockUserRepository;
 import com.VietBlog.repository.LuotFollowRepository;
 import com.VietBlog.repository.UserRepository;
-import com.VietBlog.service.BaiVietService;
-import com.VietBlog.service.LuotFollowService;
-import com.VietBlog.service.LuotLike_BaiViet_Service;
-import com.VietBlog.service.UserService;
+import com.VietBlog.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @CrossOrigin("*")
@@ -31,12 +33,18 @@ public class UserController {
 	private final UserService userService;
 	private final LuotFollowService luotFollowService;
 	private final LuotFollowRepository luotFollowRepository;
+	private final FollowStatusWebSocketHandler webSocketHandler;
+	private final BlockUserService blockUserService;
+	private final BlockUserRepository blockUserRepository;
 
 	@Autowired
-	public UserController(UserService userService, LuotFollowService luotFollowService, LuotFollowRepository luotFollowRepository, BaiVietRepository baiVietRepository, BaiVietService baiVietService, LuotLike_BaiViet_Service luotLike_BaiViet_Service, UserRepository userRepository) {
+	public UserController(UserService userService, LuotFollowService luotFollowService, LuotFollowRepository luotFollowRepository, BaiVietRepository baiVietRepository, BaiVietService baiVietService, LuotLike_BaiViet_Service luotLike_BaiViet_Service, UserRepository userRepository, FollowStatusWebSocketHandler webSocketHandler, BlockUserService blockUserService, BlockUserRepository blockUserRepository) {
 		this.userService = userService;
 		this.luotFollowService = luotFollowService;
 		this.luotFollowRepository = luotFollowRepository;
+        this.webSocketHandler = webSocketHandler;
+		this.blockUserService = blockUserService;
+		this.blockUserRepository = blockUserRepository;
 	}
 
 	@Operation(summary = "Đăng nhập tài khoản", description = "Nhận thông tin chi tiết của người dùng và lưu vào session.")
@@ -83,22 +91,48 @@ public class UserController {
 		}
 	}
 
-	@PostMapping("/{userFollowId}/toggleFollow")
-	public ResponseEntity<?> toggleFollow(@PathVariable("userFollowId") Long userFollowId, @RequestParam Long userId) {
-		if (userFollowId.equals(userId)) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bạn không thể tự follow chính mình.");
-		}
+	@PostMapping("/{userId}/toggleFollow")
+	public ResponseEntity<?> toggleFollow(@PathVariable("userId") Long userId, @RequestParam Long userFollowId) {
 		try {
-			boolean isFollowed = luotFollowService.toggleFollow(userFollowId, userId);
-			String message = isFollowed ? "Follow thành công." : "Unfollow thành công.";
-			return ResponseEntity.ok(message);
-		} catch (RuntimeException e) {
+			boolean isFollowing = luotFollowService.toggleFollow(userId,userFollowId);
+			webSocketHandler.sendFollowStatusChange(userId, !isFollowing);
+			return ResponseEntity.ok(isFollowing);
+		}catch (RuntimeException e){
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
 
+	@PostMapping("/{userId}/toggleBlock")
+	public ResponseEntity<?> toggleBlock(@PathVariable("userId") Long userId, @RequestParam Long blockUserId){
+		try {
+			boolean isBlocking = blockUserService.toggleBlock(blockUserId,userId);
+			webSocketHandler.sendFollowStatusChange(userId, !isBlocking);
+			return ResponseEntity.ok(isBlocking);
+		}catch (RuntimeException e){
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+		}
+	}
 
+	@GetMapping("/{userId}/checkBlockStatus")
+	public ResponseEntity<?> checkBlockStatus(@PathVariable("userId") Long userId, @RequestParam Long blockUserId){
+		BlockUserID blockUserID = new BlockUserID(userId,blockUserId);
+		boolean isBlocking = blockUserRepository.existsById(blockUserID);
+
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("isBlocking", isBlocking);
+		return ResponseEntity.ok(response);
+	}
+	@GetMapping("/{userId}/checkFollowStatus")
+	public ResponseEntity<Map<String, Boolean>> checkFollowStatus(@PathVariable Long userId, @RequestParam Long userFollowId) {
+		LuotFollowId followId = new LuotFollowId(userFollowId, userId);
+		boolean isFollowing = luotFollowRepository.existsById(followId);
+
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("isFollowing", isFollowing);
+		return ResponseEntity.ok(response);
+	}
 
 	@Operation(summary = "Đếm số lượt follow", description = "Đếm số lượt follow của một người dung")
 	@ApiResponse(responseCode = "200", description = "Thành công", content = @Content(schema = @Schema(implementation = LuotFollow.class)))

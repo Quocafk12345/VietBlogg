@@ -147,6 +147,17 @@ CREATE TABLE Luot_Like_Bai_Viet
 );
 GO
 
+CREATE TABLE Block_User
+(
+    User_Id BIGINT NOT NULL,
+    Block_User_Id BIGINT NOT NULL,
+    PRIMARY KEY (User_Id, Block_User_Id),
+    FOREIGN KEY (User_Id) REFERENCES Users(User_Id),
+    FOREIGN KEY (Block_User_Id) REFERENCES Users(User_Id)
+);
+
+
+GO
 CREATE TABLE Luot_Like_Binh_Luan
 (
     User_Id BIGINT NOT NULL,

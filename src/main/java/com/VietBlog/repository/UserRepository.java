@@ -27,5 +27,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // Kiểm tra xem tên đăng nhập đã tồn tại chưa
     boolean existsByTenDangNhap(String tenDangNhap);
 
-
 }
