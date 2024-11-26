@@ -96,9 +96,9 @@ public class GiaoDienController {
         return "trang-chu";
     }
 
-    @GetMapping("/chi-tiet-bai-viet/{id}")
+    @GetMapping("/bai-viet/{id}")
     public String detail(@PathVariable Long id, Model model) {
-        model.addAttribute("baiVietId", id);
+        model.addAttribute("idBaiViet", id);
         return "page/chi-tiet-bai-viet";
     }
 

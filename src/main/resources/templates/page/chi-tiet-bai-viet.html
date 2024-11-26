@@ -232,9 +232,11 @@
 <!-- AngularJS -->
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 <script th:inline="javascript">
-	var baiVietId = [[${baiVietId}]];
-	var currentUserId = [[${session.currentUser.id}]];
+	var baiVietId = [[${idBaiViet}]];
+	var currentUser = [[${session.currentUser}]];
 </script>
+<script th:src="@{/js/Sanitize/node_modules/angular-sanitize/angular-sanitize.js}"></script>
+<script th:src="@{/js/DOMPurify/node_modules/dompurify/dist/purify.min.js}"></script>
 <script th:src="@{/js/MainApp.js}"></script>
 <script th:src="@{/js/DangNhap_ctrl.js}"></script>
 <script th:src="@{/js/BaiViet_ctrl.js}"></script>
