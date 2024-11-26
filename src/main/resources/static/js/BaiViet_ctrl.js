@@ -1,5 +1,5 @@
 let host_BaiViet = "http://localhost:8080/api/bai-viet";
-mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService) {  // Inject $q
+mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService, $sce) {  // Inject $q
     $scope.bangTin = [];
     $scope.dangTheoDoi = [];
     $scope.chiTietBaiViet = {};
