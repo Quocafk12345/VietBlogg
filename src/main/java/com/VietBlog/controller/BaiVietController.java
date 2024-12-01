@@ -193,6 +193,7 @@ public class BaiVietController {
         try {
             return luotLike_BaiViet_Service.kiemTraLikeBaiViet(userId, idBaiViet);
         } catch (RuntimeException e){
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage()).hasBody();
         }
     }
