@@ -98,7 +98,7 @@
 							            <!-- Bên trái: Thích, Không thích, Bình luận -->
 							            <div>
 								            <button class="btn me-2 like-button"
-								                    ng-class="{'btn-light': !bai.daLike.$$unwrapTrustedValue(), 'btn-primary': bai.daLike.$$unwrapTrustedValue()}"
+								                    ng-class="{'btn-light': !bai.daLike, 'btn-primary': bai.daLike}"
 								                    ng-click="toggleLike(bai)">
 									            <i class="bi bi-hand-thumbs-up"></i> Thích {{ bai.luotLike }}
 								            </button>

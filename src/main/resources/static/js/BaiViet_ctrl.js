@@ -59,16 +59,18 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
                 angular.forEach($scope.bangTin, function (baiViet) {
                     promises.push($scope.demLuotLike(baiViet.id));
                     promises.push($scope.demLuotBinhLuan(baiViet.id)); // Thêm promise cho lượt bình luận
+                    promises.push($scope.kiemTraLike(baiViet)
+                        .then(function (daLike) {
+                            baiViet.daLike = daLike;
+                        }));
                 });
                 $q.all(promises).then(function (results) {
                     for (var i = 0; i < $scope.bangTin.length; i++) {
-                        $scope.bangTin[i].luotLike = results[i * 2]; // Kết quả lượt like ở vị trí i * 2
-                        $scope.bangTin[i].luotBinhLuan = results[i * 2 + 1]; // Kết quả lượt bình luận ở vị trí i * 2 + 1
+                        $scope.bangTin[i].luotLike = results[i * 3]; // Kết quả lượt like ở vị trí i * 2
+                        $scope.bangTin[i].luotBinhLuan = results[i * 3 + 1]; // Kết quả lượt bình luận ở vị trí i * 2 + 1
                         $scope.bangTin[i].thoiGianDang = $scope.tinhThoiGianDang($scope.bangTin[i].ngayTao);
-                        $scope.bangTin[i].daLike = $scope.kiemTraLike($scope.bangTin[i]);
                     }
                 });
-                console.log($scope.bangTin[5]);
             })
             .catch((error) => {
                 console.log("Error", error);
@@ -88,8 +90,6 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
                 return response.data; // Trả về giá trị boolean trực tiếp
             });
     }
-
-    console.log($scope.kiemTraLike($scope.bangTin[0]));
 
     $scope.toggleLike = function (baiViet) {
         if (!baiViet || !baiViet.id) {
@@ -231,40 +231,40 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     if (typeof baiVietId !== 'undefined') {
         $scope.loadBaiVietDuocChon(baiVietId);
     }
-    //
-    // //Bài Vit nhóm trong CHITIETNHOm
-    // $scope.loadBaiVietNhom = function () {
-    //     // Lấy danh sách bài viết của nhóm từ API
-    //     $http.get(`${host_Nhom}/${$rootScope.idNhom}/baiviet`)
-    //         .then(resp => {
-    //             $scope.baiVietNhom = resp.data;
-    //
-    //             // Xử lý lượt like, lượt bình luận, thời gian đăng cho mỗi bài viết
-    //             var promises = [];
-    //             angular.forEach($scope.baiVietNhom, function (baiViet) {
-    //                 promises.push($scope.demLuotLike(baiViet.id));
-    //                 promises.push($scope.demLuotBinhLuan(baiViet.id));
-    //             });
-    //             $q.all(promises).then(function (results) {
-    //                 for (var i = 0; i < $scope.baiVietNhom.length; i++) {
-    //                     $scope.baiVietNhom[i].luotLike = results[i * 2];
-    //                     $scope.baiVietNhom[i].luotBinhLuan = results[i * 2 + 1];
-    //                     $scope.baiVietNhom[i].thoiGianDang = $scope.tinhThoiGianDang($scope.baiVietNhom[i].ngayTao);
-    //                     $scope.baiVietNhom[i].daLike = $scope.kiemTraLike($scope.baiVietNhom[i]);
-    //
-    //                 }
-    //             });
-    //         })
-    //         .catch(error => {
-    //             console.error("Lỗi khi lấy bài viết của nhóm:", error);
-    //         });
-    // };
-    //
+
+    //Bài Vit nhóm trong CHITIETNHOm
+    $scope.loadBaiVietNhom = function () {
+        // Lấy danh sách bài viết của nhóm từ API
+        $http.get(`${host_Nhom}/${$rootScope.idNhom}/baiviet`)
+            .then(resp => {
+                $scope.baiVietNhom = resp.data;
+
+                // Xử lý lượt like, lượt bình luận, thời gian đăng cho mỗi bài viết
+                var promises = [];
+                angular.forEach($scope.baiVietNhom, function (baiViet) {
+                    promises.push($scope.demLuotLike(baiViet.id));
+                    promises.push($scope.demLuotBinhLuan(baiViet.id));
+                });
+                $q.all(promises).then(function (results) {
+                    for (var i = 0; i < $scope.baiVietNhom.length; i++) {
+                        $scope.baiVietNhom[i].luotLike = results[i * 2];
+                        $scope.baiVietNhom[i].luotBinhLuan = results[i * 2 + 1];
+                        $scope.baiVietNhom[i].thoiGianDang = $scope.tinhThoiGianDang($scope.baiVietNhom[i].ngayTao);
+                        $scope.baiVietNhom[i].daLike = $scope.kiemTraLike($scope.baiVietNhom[i]);
+
+                    }
+                });
+            })
+            .catch(error => {
+                console.error("Lỗi khi lấy bài viết của nhóm:", error);
+            });
+    };
+
     $scope.taiBaiViet();
-    //
-    // $scope.$on('loadBaiVietNhom', function () {
-    //     $scope.loadBaiVietNhom();
-    // });
+
+    $scope.$on('loadBaiVietNhom', function () {
+        $scope.loadBaiVietNhom();
+    });
 
 });
 
