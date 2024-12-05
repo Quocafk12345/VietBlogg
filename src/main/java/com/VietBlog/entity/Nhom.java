@@ -54,8 +54,4 @@ public class Nhom {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "Ngay_Tao", nullable = false)
 	private Timestamp ngayTao;
-
-
-    @Transient // Thuộc tính này sẽ không được lưu vào database
-    private boolean daThamGia;
 }

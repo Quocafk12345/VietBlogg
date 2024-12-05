@@ -134,7 +134,7 @@ public class GiaoDienController {
             model.addAttribute("daysSinceRegistration", daysSinceRegistration);
 
             // Get total number of posts by user
-            int totalBaiViet = baiVietService.countBaiVietByUserId(userId);
+            int totalBaiViet = baiVietService.demSoLuongBaiVietChoUser(userId);
             model.addAttribute("totalBaiViet", totalBaiViet);
 
             int totalLike = userService.countLikesByUserId(userId);

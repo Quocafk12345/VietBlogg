@@ -3,10 +3,7 @@ package com.VietBlog.controller;
 import com.VietBlog.constraints.BaiViet.TrangThai_BaiViet;
 import com.VietBlog.entity.BaiViet;
 import com.VietBlog.entity.User;
-import com.VietBlog.service.BaiVietService;
-import com.VietBlog.service.BinhLuanService;
-import com.VietBlog.service.LuotLike_BaiViet_Service;
-import com.VietBlog.service.LuuBaiVietService;
+import com.VietBlog.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -28,13 +25,15 @@ public class BaiVietController {
     private final LuuBaiVietService luuBaiVietService;
     private final LuotLike_BaiViet_Service luotLike_BaiViet_Service;
     private final BinhLuanService binhLuanService;
+    private final NhomService nhomService;
 
     @Autowired
-    public BaiVietController(BaiVietService baiVietService, LuotLike_BaiViet_Service luotLike_BaiViet_Service, LuuBaiVietService luuBaiVietService, BinhLuanService binhLuanService) {
+    public BaiVietController(BaiVietService baiVietService, LuotLike_BaiViet_Service luotLike_BaiViet_Service, LuuBaiVietService luuBaiVietService, BinhLuanService binhLuanService, NhomService nhomService) {
         this.baiVietService = baiVietService;
         this.luotLike_BaiViet_Service = luotLike_BaiViet_Service;
         this.luuBaiVietService = luuBaiVietService;
         this.binhLuanService = binhLuanService;
+        this.nhomService = nhomService;
     }
 
     /**
@@ -59,7 +58,7 @@ public class BaiVietController {
             @PathVariable Long nhomId,
             @PathVariable Long userId) {
 
-        List<BaiViet> baiVietList = baiVietService.getBaiVietByNhomIdAndUserId(nhomId, userId);
+        List<BaiViet> baiVietList = nhomService.layBaiVietCuaUser(nhomId, userId);
         return ResponseEntity.ok(baiVietList);
     }
     @Operation(summary = "Lấy tất cả bài viết của người dùng", description = "Lấy thông tin chi tiết của tất cả bài viết của người dùng theo userId.")

@@ -1,6 +1,7 @@
 package com.VietBlog.controller;
 
 import com.VietBlog.constraints.User.VaiTro_User;
+import com.VietBlog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,13 +13,19 @@ import com.VietBlog.service.UserService;
 @Controller
 public class DangKyController {
 
-    @Autowired
+    private UserRepository userRepository;
     private UserService userService;
 
-    @PostMapping("/dang-ky")
+    @Autowired
+	public DangKyController(UserRepository userRepository, UserService userService) {
+		this.userRepository = userRepository;
+		this.userService = userService;
+	}
+
+	@PostMapping("/dang-ky")
     public String registerUser(@ModelAttribute("user") User user, Model model) {
         user.setVaiTro(VaiTro_User.USER);
-        if (userService.isEmailExists(user.getEmail())) {
+        if (userRepository.existsByEmail(user.getEmail())) {
             model.addAttribute("error", "Email đã tồn tại");
             return "dang-ky";
         }

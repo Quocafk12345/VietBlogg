@@ -1,6 +1,6 @@
 package com.VietBlog.controller;
 
-import com.VietBlog.entity.BlockUserID;
+import com.VietBlog.entity.BlockUser_ID;
 import com.VietBlog.entity.LuotFollow;
 import com.VietBlog.entity.LuotFollowId;
 import com.VietBlog.entity.User;
@@ -117,7 +117,7 @@ public class UserController {
 
 	@GetMapping("/{userId}/checkBlockStatus")
 	public ResponseEntity<?> checkBlockStatus(@PathVariable("userId") Long userId, @RequestParam Long blockUserId){
-		BlockUserID blockUserID = new BlockUserID(userId,blockUserId);
+		BlockUser_ID blockUserID = new BlockUser_ID(userId,blockUserId);
 		boolean isBlocking = blockUserRepository.existsById(blockUserID);
 
 		Map<String, Boolean> response = new HashMap<>();

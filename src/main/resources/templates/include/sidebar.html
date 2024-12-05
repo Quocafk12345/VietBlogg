@@ -165,7 +165,7 @@
                     </li>
 
                     <div>
-                        <li class="nav-item" ng-repeat="nhom in DSnhom">
+                        <li class="nav-item" ng-repeat="nhom in DSnhom_daThamGia">
                             <a class="nav-link" th:href="@{/nhom/chi-tiet/}" ng-click="chuyenTrang($event, nhom.id)">
                                 <img ng-src="{{ nhom.hinhDaiDien }}" alt="Avatar Group 1" class="rounded-circle"> {{ nhom.ten }}
                             </a>
@@ -177,7 +177,5 @@
         </ul>
     </div>
 </nav>
-
-<script th:src="@{/js/Nhom_ctrl.js}"></script>
 </body>
 </html>

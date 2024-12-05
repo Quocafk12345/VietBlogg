@@ -67,11 +67,4 @@ public class ThanhVienService {
 		return thanhVienRepository.findByNhom_Id(nhomId);
 	}
 
-	// Lấy danh sách nhóm mà người dùng đã tham gia
-	public List<Nhom> layDanhSachNhomDaThamGia(Long userId) {
-			List<ThanhVien> thanhVien = thanhVienRepository.findByUser_Id(userId); // Lấy danh sách thành viên
-			return thanhVien.stream()
-					.map(ThanhVien::getNhom) // Lấy đối tượng Nhom từ mỗi ThanhVien
-					.toList(); // Chuyển đổi thành List<Nhom>
-	}
 }

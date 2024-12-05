@@ -16,11 +16,11 @@ public interface NhomRepository extends JpaRepository<Nhom, Long> {
 	Nhom findByTen(String ten);
 
 	// Tìm nhóm theo id người tạo (userId)
-	@Query("SELECT n FROM Nhom n WHERE n.id IN (SELECT tv.id.idNhom FROM ThanhVien tv WHERE tv.id.userId = :userId AND tv.vaiTro = 'CHỦ NHÓM')")
+	@Query("SELECT n FROM Nhom n JOIN FETCH n.thanhVien tv WHERE tv.id.userId = :userId AND tv.vaiTro = 'Quản trị viên'")
 	List<Nhom> findNhomByNguoiTao(@Param("userId") Long userId);
 
 	// Tìm nhóm theo userId người dùng
-	@Query("SELECT tv.nhom FROM ThanhVien tv WHERE tv.id.userId = :userId")
+	@Query("SELECT n FROM Nhom n JOIN FETCH n.thanhVien tv WHERE tv.id.userId = :userId")
 	List<Nhom> findNhomByUserId(@Param("userId") Long userId);
 
 	// Đếm số lượng thành viên của một nhóm
@@ -28,6 +28,6 @@ public interface NhomRepository extends JpaRepository<Nhom, Long> {
 	int countThanhVienByNhomId(@Param("nhomId") Long nhomId);
 
 	// Lấy danh sách bài viết của một nhóm
-	@Query("SELECT bv FROM BaiViet bv WHERE bv.nhom.id = :nhomId")
+	@Query("SELECT n FROM Nhom n JOIN FETCH n.baiViet bv WHERE n.id = :nhomId")
 	List<BaiViet> findBaiVietByNhomId(@Param("nhomId") Long nhomId);
 }

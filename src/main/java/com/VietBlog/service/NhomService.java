@@ -6,14 +6,19 @@ import com.VietBlog.entity.Nhom;
 import com.VietBlog.entity.ThanhVien;
 import com.VietBlog.entity.ThanhVienId;
 import com.VietBlog.repository.*;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -22,46 +27,36 @@ public class NhomService {
 	private final NhomRepository nhomRepository;
 	private final ThanhVienRepository thanhVienRepository;
 	private final UserRepository userRepository;
+	private final Cloudinary cloudinary;
+	private final DS_LuatNhom_Repository dsLuatNhomRepository;
+	private final BaiVietRepository baiVietRepository;
 
 	@Autowired
-	public NhomService(NhomRepository nhomRepository, ThanhVienRepository thanhVienRepository, UserRepository userRepository) {
+	public NhomService(NhomRepository nhomRepository, ThanhVienRepository thanhVienRepository, UserRepository userRepository, Cloudinary cloudinary, DS_LuatNhom_Repository dsLuatNhomRepository, BaiVietRepository baiVietRepository) {
 		this.nhomRepository = nhomRepository;
 		this.thanhVienRepository = thanhVienRepository;
 		this.userRepository = userRepository;
+		this.cloudinary = cloudinary;
+		this.dsLuatNhomRepository = dsLuatNhomRepository;
+		this.baiVietRepository = baiVietRepository;
 	}
 
-	@Autowired
-	private BaiVietRepository baiVietRepository; // Khai báo BaiVietRepository
-
-	@Autowired
-	private DS_LuatNhom_Repository dsLuatNhomRepository;
-	// Tạo nhóm mới
-//	@Transactional
-//	public Nhom taoNhom(Nhom nhom, Long chuNhomId) {
-//		nhom.setNgayTao(Timestamp.from(Instant.now()));
-//		Nhom nhomMoi = nhomRepository.save(nhom);
-//
-//		// Thêm người tạo vào nhóm với vai trò "CHỦ NHÓM"
-//		ThanhVienId thanhVienId = new ThanhVienId(nhomMoi.getId(), chuNhomId);
-//		ThanhVien thanhVien = new ThanhVien(thanhVienId, nhomMoi,
-//				userRepository.findById(chuNhomId).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng")),
-//				VaiTro_ThanhVien.CHU_NHOM, LocalDate.now());
-//		thanhVienRepository.save(thanhVien);
-//
-//		return nhomMoi;
-//	}
-
+	// tạo nhóm mới
 	@Transactional
-	public Nhom taoNhom(Nhom nhom, Long chuNhomId) {
+	public Nhom taoNhom(Nhom nhom, Long chuNhomId, MultipartFile anhDaiDien) throws IOException {
 		nhom.setNgayTao(Timestamp.from(Instant.now()));
-		// Xử lý lưu hình ảnh (nếu có)
+		if (!anhDaiDien.isEmpty()){
+			Map uploadResult = cloudinary.uploader().upload(anhDaiDien.getBytes(), ObjectUtils.emptyMap());
+			String imageUrl = (String) uploadResult.get("secure_url");
+			nhom.setHinhDaiDien(imageUrl);
+		}
 		Nhom nhomMoi = nhomRepository.save(nhom);
 
 		// Thêm người tạo vào nhóm với vai trò "CHỦ NHÓM"
 		ThanhVienId thanhVienId = new ThanhVienId(nhomMoi.getId(), chuNhomId);
 		ThanhVien thanhVien = new ThanhVien(thanhVienId, nhomMoi,
-				userRepository.findById(chuNhomId).orElseThrow(),
-				VaiTro_ThanhVien.CHU_NHOM, LocalDate.now());
+				userRepository.findById(chuNhomId).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng")),
+				VaiTro_ThanhVien.QUAN_TRI_VIEN, LocalDate.now());
 		thanhVienRepository.save(thanhVien);
 
 		return nhomMoi;
@@ -69,7 +64,7 @@ public class NhomService {
 
 	// Tham gia nhóm
 	@Transactional
-	public ThanhVien thamGiaNhom(Long nhomId, Long userId) {
+	public void thamGiaNhom(Long nhomId, Long userId) {
 		ThanhVienId thanhVienId = new ThanhVienId(nhomId, userId);
 		if (thanhVienRepository.existsById(thanhVienId)) {
 			throw new RuntimeException("Người dùng đã tham gia nhóm này rồi");
@@ -78,7 +73,7 @@ public class NhomService {
 				nhomRepository.findById(nhomId).orElseThrow(() -> new RuntimeException("Không tìm thấy nhóm")),
 				userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng")),
 				VaiTro_ThanhVien.THANH_VIEN, LocalDate.now());
-		return thanhVienRepository.save(thanhVien);
+		thanhVienRepository.save(thanhVien);
 	}
 
 	// Rời khỏi nhóm
@@ -124,23 +119,22 @@ public class NhomService {
 	}
 
 	//Rời nhóm và nhượng quyền cho vai trò thành viên trong nhóm
-	public void roiKhoiNhomVaNhuongQuyen(Long nhomId, Long userId, Long nguoiNhanId) {
+	@Transactional
+	public void roiKhoiNhomVaNhuongQuyen(Long nhomId, Long Id_QTVHienTai, Long Id_QTVMoi) {
 		// 1. Kiểm tra vai trò của người dùng hiện tại
-		ThanhVien thanhVienHienTai = thanhVienRepository.findById(new ThanhVienId(nhomId, userId))
+		ThanhVien QTVHienTai = thanhVienRepository.findById(new ThanhVienId(nhomId, Id_QTVHienTai))
 				.orElseThrow(() -> new RuntimeException("Không tìm thấy thành viên"));
 
-		if (thanhVienHienTai.getVaiTro() == VaiTro_ThanhVien.CHU_NHOM ||
-				thanhVienHienTai.getVaiTro() == VaiTro_ThanhVien.QUAN_TRI_VIEN) {
-
+		if (QTVHienTai.getVaiTro() == VaiTro_ThanhVien.QUAN_TRI_VIEN) {
 			// 2. Cập nhật vai trò của người được nhượng quyền
-			ThanhVien thanhVienNhanQuyen = thanhVienRepository.findById(new ThanhVienId(nhomId, nguoiNhanId))
+			ThanhVien thanhVienNhuongQuyen = thanhVienRepository.findById(new ThanhVienId(nhomId, Id_QTVMoi))
 					.orElseThrow(() -> new RuntimeException("Không tìm thấy thành viên được nhượng quyền"));
-			thanhVienNhanQuyen.setVaiTro(thanhVienHienTai.getVaiTro()); // Nhượng quyền
-			thanhVienRepository.save(thanhVienNhanQuyen);
+			thanhVienNhuongQuyen.setVaiTro(QTVHienTai.getVaiTro()); // Nhượng quyền
+			thanhVienRepository.save(thanhVienNhuongQuyen);
 		}
 
 		// 3. Rời khỏi nhóm
-		roiKhoiNhom(nhomId, userId);
+		thanhVienRepository.delete(QTVHienTai);
 	}
 
 	// Lấy danh sách nhóm theo người tạo
@@ -149,8 +143,12 @@ public class NhomService {
 	}
 
 	// Lấy danh sách bài viết của một nhóm
-	public List<BaiViet> layDanhSachBaiVietCuaNhom(Long nhomId) {
+	public List<BaiViet> layDSBaiVietCuaNhom(Long nhomId) {
 		return nhomRepository.findBaiVietByNhomId(nhomId);
+	}
+
+	public List<BaiViet> layBaiVietCuaUser(Long nhomId, Long userId) {
+		return baiVietRepository.findByNhomIdAndUserId(nhomId, userId);
 	}
 
 	public List<Nhom> layToanBoNhom(){
@@ -163,11 +161,6 @@ public class NhomService {
 	}
 
 	public List<Nhom> layDanhSachNhomDaThamGia(Long userId) {
-		return nhomRepository.findNhomByUserId(userId);
-	}
-
-	// Lấy danh sách nhóm của một người dùng
-	public List<Nhom> layDanhSachNhomCuaThanhVien(Long userId) {
 		return nhomRepository.findNhomByUserId(userId);
 	}
 

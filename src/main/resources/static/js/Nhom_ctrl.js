@@ -3,30 +3,33 @@ let host_Nhom = "http://localhost:8080/api/nhom";
 mainApp.controller("nhomController", function ($scope, $http, $window) {
     $scope.DSnhom_daThamGia = [];
     $scope.DSnhom_tong = [];
-    $scope.nhomDuocChon = {};
-    $scope.nguoiNhanId = null; // Khai báo biến nguoiNhanId cho hàm nhượng quyền
 
-    $scope.loadNhom = function () {
-        //DSNhom trong sidebar
+    //DSNhom trong sidebar
+    $scope.loadDSNhomDaThamGia = function () {
         $http.get(`${host_Nhom}/user/${currentUser.id}`)
-            .then(resp => {
-                $scope.DSnhom = resp.data;
+            .then(function (resp) {
+                $scope.DSnhom_daThamGia = resp.data;
             })
             .catch(error => {
                 console.log("Error", error);
             });
+    }
 
-        // Lấy danh sách tất cả nhóm hiển thij trong trang Cộng Đồng
+    // Lấy danh sách tất cả nhóm hiển thị trong trang Cộng Đồng
+    $scope.layDSNhomTong = function () {
         $http.get(`${host_Nhom}/danh-sach`)
             .then(resp => {
                 $scope.DSnhom_tong = resp.data;
+                // Duyệt qua từng nhóm trong danh sách nhóm tổng
+                $scope.DSnhom_tong.forEach(nhomTong => {
+                    nhomTong.daThamGia = false; // Khởi tạo giá trị mặc định là false
 
-                $scope.DSnhom_tong.forEach(nhom => {
-                    $http.get(`${host_Nhom}/${nhom.id}`)
-                        .then(response => {
-                            nhom.daThamGia = response.data.daThamGia;
-                            nhom.vaiTro = response.data.vaiTro; // Lấy vai trò từ response
-                        });
+                    // Kiểm tra xem nhóm này có trong danh sách nhóm đã tham gia hay không
+                    $scope.DSnhom_daThamGia.forEach(nhomDaThamGia => {
+                        if (nhomTong.id === nhomDaThamGia.id) {
+                            nhomTong.daThamGia = true;
+                        }
+                    });
                 });
             })
             .catch(error => {
@@ -34,12 +37,19 @@ mainApp.controller("nhomController", function ($scope, $http, $window) {
             });
     }
 
+    $scope.nhomDuocChon = {};
+    $scope.nguoiNhanId = null; // Khai báo biến nguoiNhanId cho hàm nhượng quyền
+
+    $scope.loadDSNhomDaThamGia();
+    $scope.layDSNhomTong();
+
     $scope.layThongTinNhom = function (idNhom) {
-        $http.get('/api/nhom/' + idNhom)
+        $http.get(`/api/nhom/` + idNhom)
             .then(function (response) {
                 $scope.thongTinNhom = response.data;
             });
     };
+
 
     $scope.chuyenTrang = function($event, idNhom) {
         console.log(idNhom);
@@ -193,24 +203,24 @@ mainApp.controller("nhomController", function ($scope, $http, $window) {
                 });
         }
     };
-//
-//     //Hàm rời khỏi nhóm và nhượng quyền cho quản trị viên trong ChiTietNhom
-//     // $scope.roiNhomVaNhuongQuyen = function(nhomId, nguoiNhanId) {
-//     //     if (confirm('Bạn có chắc chắn muốn rời khỏi nhóm này và nhượng quyền cho người đã chọn?')) {
-//     //         $http.post(`${host_Nhom}/${nhomId}/roi-nhom/${currentUser.id}/nhuong-quyen/${nguoiNhanId}`)
-//     //             .then(function(response) {
-//     //                 // Xử lý kết quả
-//     //                 alert('Rời nhóm thành công!');
-//     //                 // Chuyển hướng về trang chủ hoặc trang danh sách nhóm
-//     //                 $window.location.href = '/api/nhom/CongDong';
-//     //             })
-//     //             .catch(function(error) {
-//     //                 console.error('Lỗi:', error);
-//     //                 alert('Đã có lỗi xảy ra.');
-//     //             });
-//     //     }
-//     // };
-//
+
+    //Hàm rời khỏi nhóm và nhượng quyền cho quản trị viên trong ChiTietNhom
+    // $scope.roiNhomVaNhuongQuyen = function(nhomId, nguoiNhanId) {
+    //     if (confirm('Bạn có chắc chắn muốn rời khỏi nhóm này và nhượng quyền cho người đã chọn?')) {
+    //         $http.post(`${host_Nhom}/${nhomId}/roi-nhom/${currentUser.id}/nhuong-quyen/${nguoiNhanId}`)
+    //             .then(function(response) {
+    //                 // Xử lý kết quả
+    //                 alert('Rời nhóm thành công!');
+    //                 // Chuyển hướng về trang chủ hoặc trang danh sách nhóm
+    //                 $window.location.href = '/api/nhom/CongDong';
+    //             })
+    //             .catch(function(error) {
+    //                 console.error('Lỗi:', error);
+    //                 alert('Đã có lỗi xảy ra.');
+    //             });
+    //     }
+    // };
+
     $scope.roiNhomVaNhuongQuyen = function(nhomId, nguoiNhanId) {
         if (confirm('Bạn có chắc chắn muốn rời khỏi nhóm này và nhượng quyền cho người đã chọn?')) {
             console.log("người nhận id: ",nguoiNhanId);
@@ -246,8 +256,6 @@ mainApp.controller("nhomController", function ($scope, $http, $window) {
                 console.error('Lỗi khi cập nhật vai trò:', error);
             });
     };
-
-
 
     //Hàm tham gia nhóm trong CongDong
     $scope.thamGiaNhom = function(nhomId) {

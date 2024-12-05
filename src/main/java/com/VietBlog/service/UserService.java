@@ -23,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserService {
 
 	private final Cloudinary cloudinary;
-
 	private final UserRepository userRepository;
 	private final LuotLike_BaiViet_Repository luotLike_BaiViet_Repository;
 	private final LuotFollowRepository luotFollowRepository;
@@ -37,7 +36,7 @@ public class UserService {
 	}
 
 	// tìm theo email
-	public User findByEmail(String email) {
+	public User timTheoEmail(String email) {
 		return userRepository.findByEmail(email).orElse(null);
 	}
 
@@ -68,23 +67,19 @@ public class UserService {
 		user.setTheme(Theme_User.LIGHT);
 		user.setFont(Font_User.HELVETICA_NEUE);
 
-		if (isEmailExists(user.getEmail())) {
+		if (userRepository.existsByEmail(user.getEmail())) {
 			return;
 		}
-		if (isDienThoaiExists(user.getDienThoai())) {
+		if (userRepository.existsByDienThoai(user.getDienThoai())) {
 			return;
 		}
-		if (isTenDangNhapExists(user.getTenDangNhap())) {
+		if (userRepository.existsByTenDangNhap(user.getTenDangNhap())) {
 			return;
 		}
 
 		userRepository.save(user);
 	}
 
-	// kiểm tra email đã tồn tại hay chưa
-	public boolean isEmailExists(String email) {
-		return userRepository.existsByEmail(email);
-	}
 
 	// tìm theo SDT
 	public User findByDienThoai(String dienThoai) {
@@ -125,16 +120,6 @@ public class UserService {
 	// tìm User theo id
 	public User findById(Long userId) {
 		return userRepository.findById(userId).orElse(null);
-	}
-
-	// Kiểm tra xem số điện thoại đã tồn tại chưa
-	public boolean isDienThoaiExists(String dienThoai) {
-		return userRepository.existsByDienThoai(dienThoai);
-	}
-
-	// Kiểm tra xem tên đăng nhập đã tồn tại chưa
-	public boolean isTenDangNhapExists(String tenDangNhap) {
-		return userRepository.existsByTenDangNhap(tenDangNhap);
 	}
 
 	// Tìm kiếm người dùng theo tên người dùng

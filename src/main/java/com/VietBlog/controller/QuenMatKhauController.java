@@ -25,7 +25,7 @@ public class QuenMatKhauController {
 
 	@PostMapping("/forgot-password")
 	public String processForgotPassword(Model model, @RequestParam String email) {
-		User user = userService.findByEmail(email);
+		User user = userService.timTheoEmail(email);
 
 		if (user != null) {
 			// Tạo mã xác thực ngẫu nhiên
@@ -62,7 +62,7 @@ public class QuenMatKhauController {
 			return "account/nhap-mat-khau-moi"; // Quay lại trang nhập mật khẩu mới
 		}
 
-		User user = userService.findByEmail(this.email); // Sử dụng email đã lưu
+		User user = userService.timTheoEmail(this.email); // Sử dụng email đã lưu
 		if (user != null) {
 			user.setMatKhau(password); // Cập nhật mật khẩu mới
 			userService.updateUser(user); // Lưu vào cơ sở dữ liệu

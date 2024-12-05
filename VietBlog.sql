@@ -432,4 +432,7 @@ CREATE TABLE Block_User
     FOREIGN KEY (Block_User_Id) REFERENCES Users(User_Id)
 );
 
-
+UPDATE Thanh_Vien
+SET Vai_Tro = N'Quản trị viên'
+WHERE Vai_Tro = N'Chủ nhóm'
+GO
