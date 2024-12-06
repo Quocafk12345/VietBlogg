@@ -35,4 +35,5 @@ public interface LuotFollowRepository extends JpaRepository<LuotFollow, LuotFoll
 	// Xóa một mối quan hệ follow
 	void deleteById(@NonNull LuotFollowId luotFollowId);
 
+
 }

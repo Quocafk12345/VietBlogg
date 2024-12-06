@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Đăng nhập - VietBlog</title>
+	<link rel="stylesheet" href="../css/login.css">
+</head>
+<body>
+<div class="login-container">
+	<div class="brand">
+		<h1>VietBlog</h1>
+		<p>Nơi chia sẻ và truyền cảm hứng.</p>
+		<!-- Dòng chữ nhỏ thêm vào -->
+	</div>
+	<!-- Khung đăng nhập bên phải -->
+	<div class="login-box">
+		<h2>Đổi mật khẩu</h2>
+		<div class="account-form-container">
+			<form action="#" class="account-form" method="post" th:action="@{/reset-password}">
+				<input name="email" th:value="${email}" type="hidden"/>
+				<div class="input-group">
+					<input class="form-control" name="password" placeholder="Nhập mật khẩu mới" required type="password"/>
+				</div>
+				<div class="input-group">
+					<input class="form-control" name="confirmPassword" placeholder="xác nhận mật khẩu" required
+					       type="password"/>
+				</div>
+				
+				<div class="w-100 text-center">
+					<button class="btn btn-continue" type="submit">Tiếp tục</button>
+				</div>
+			</form>
+			
+			<p th:if="${error}" th:text="${error}"></p>
+		</div>
+		
+	</div>
+</div>
+</body>
+</html>

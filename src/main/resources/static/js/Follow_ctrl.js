@@ -3,8 +3,10 @@ mainApp.controller("UserController", function ($scope, $http) {
     $scope.isFollowing = false;
     $scope.isBlock = false;
     $scope.userProfile={};
+    $scope.followers={};
+    $scope.following={};
     const url = window.location.href;
-    const userId = url.split("/").pop(); // Lấy phần cuối URL , người dùng cần follow
+    const userFollowerId = url.split("/").pop(); // Lấy phần cuối URL , người dùng cần follow
     const userFollowId = currentUser;// Ngươi dùng đăng nhập
     let socket = new WebSocket("ws://localhost:8080/ws/follow-status");
     const blockUserId = currentUser;// Ngươi dùng đăng nhập
@@ -19,15 +21,14 @@ mainApp.controller("UserController", function ($scope, $http) {
     // Kiểm tra nếu là trang cá nhân
     $scope.isOwnProfile = currentUser === userFollowId;
 
-
     // Lấy trạng thái follow ban đầu
     const checkFollowStatus = function() {
         if (!userId) {
-            console.error("Không hợp lệ:", userId);
+            console.error("Không hợp lệ:", userFollowerId);
             return;
         }
 
-        var checkUrl = `${host_Follow}/${userId}/checkFollowStatus?userFollowId=${userFollowId}`;
+        var checkUrl = `${host_Follow}/${userFollowerId}/checkFollowStatus?userFollowId=${userFollowId}`;
 
         $http.get(checkUrl)
             .then((resp) => {
@@ -41,10 +42,10 @@ mainApp.controller("UserController", function ($scope, $http) {
 
     const checkBlockStatus = function () {
         if (!userId) {
-            console.log("Không hợp lệ", userId);
+            console.log("Không hợp lệ", userFollowerId);
             return;
         }
-        var checkUrl = `${host_Follow}/${userId}/checkBlockStatus?blockUserId=${blockUserId}`;
+        var checkUrl = `${host_Follow}/${userFollowerId}/checkBlockStatus?blockUserId=${blockUserId}`;
         $http.get(checkUrl)
         .then((resp) => {
             $scope.isBlocking = resp.data.isBlocking;
@@ -59,12 +60,12 @@ mainApp.controller("UserController", function ($scope, $http) {
     checkBlockStatus();
     // Logic toggle follow
     $scope.toggleFollow = function() {
-        if (!userId) {
-            console.error("Không hợp lệ:", userId);
+        if (!userFollowerId) {
+            console.error("Không hợp lệ:", userFollowerId);
             return;
         }
 
-        var url = `${host_Follow}/${userId}/toggleFollow?userFollowId=${userFollowId}`;
+        var url = `${host_Follow}/${userFollowerId}/toggleFollow?userFollowId=${userFollowId}`;
 
         $http.post(url)
             .then((resp) => {
@@ -80,10 +81,10 @@ mainApp.controller("UserController", function ($scope, $http) {
 
     $scope.toggleBlock = function() {
         if (!userId) {
-            console.error("Không hợp lệ:", userId);
+            console.error("Không hợp lệ:", userFollowerId);
             return;
         }
-        var url = `${host_Follow}/${userId}/toggleBlock?blockUserId=${blockUserId}`;
+        var url = `${host_Follow}/${userFollowerId}/toggleBlock?blockUserId=${blockUserId}`;
         $http.post(url)
         .then((resp) => {
             $scope.isBlock = !$scope.isBlock;
@@ -103,4 +104,28 @@ mainApp.controller("UserController", function ($scope, $http) {
         }
     }
 
-})
+    $scope.layDanhSachNguoiTheoDoi = function (){
+        const url = `${host_Follow}/${currentUser}/followers`;
+        $http.get(url)
+        .then((resp) => {
+            $scope.followers = resp.data;
+            console.log("Followers:", $scope.followers);
+        })
+        .catch((error) => {
+            console.log("Error:", error);
+        });
+    };
+
+    $scope.layDanhSachNguoiDangTheoDoi = function (){
+        const url = `${host_Follow}/${currentUser}/following`;
+
+        $http.get(url)
+        .then((resp) => {
+            $scope.following = resp.data;
+            console.log("Following:", $scope.following);
+        })
+            .catch((error) => {
+                console.log("Error:", error);
+            });
+    };
+});

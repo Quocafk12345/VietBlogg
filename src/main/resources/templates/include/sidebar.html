@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -139,8 +139,8 @@
                 </a>
                 <ul class="collapse" id="followingMenu">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <img src="https://via.placeholder.com/20" alt="Avatar 1" class="rounded-circle"> Người theo dõi 1
+                        <a class="nav-link" href="#" ng-repeat="item in follows">
+                            <img src="https://via.placeholder.com/20" alt="Avatar 1" class="rounded-circle"> {{item.tenNguoiDung}}
                         </a>
                     </li>
                     <li class="nav-item">
