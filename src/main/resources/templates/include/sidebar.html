@@ -112,7 +112,7 @@
     <div class="position-sticky pt-3">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link" href="/index">
+                <a class="nav-link" href="#">
                     <i class="bi bi-house-door"></i> Trang chủ
                 </a>
             </li>
@@ -127,7 +127,7 @@
 		        </a>
 	        </li>
             <li class="nav-item">
-                <a class="nav-link" href="/nhom">
+                <a class="nav-link" href="#">
                     <i class="bi bi-compass"></i> Khám phá
                 </a>
             </li>
@@ -144,9 +144,8 @@
                 </a>
                 <ul class="collapse" id="followingMenu">
                     <li class="nav-item">
-	                    <a class="nav-link" href="#" ng-repeat="item in follows">
-		                    <img alt="Avatar 1" class="rounded-circle" src="https://via.placeholder.com/20">
-		                    {{item.tenNguoiDung}}
+                        <a class="nav-link" href="#">
+                            <img src="https://via.placeholder.com/20" alt="Avatar 1" class="rounded-circle"> Người theo dõi 1
                         </a>
                     </li>
                     <li class="nav-item">
@@ -171,7 +170,7 @@
                     </li>
 
                     <div>
-                        <li class="nav-item" ng-repeat="nhom in DSnhom_daThamGia">
+                        <li class="nav-item" ng-repeat="nhom in DSnhom">
                             <a class="nav-link" th:href="@{/nhom/chi-tiet/}" ng-click="chuyenTrang($event, nhom.id)">
                                 <img ng-src="{{ nhom.hinhDaiDien }}" alt="Avatar Group 1" class="rounded-circle"> {{ nhom.ten }}
                             </a>
@@ -183,5 +182,7 @@
         </ul>
     </div>
 </nav>
+
+<script th:src="@{/js/Nhom_ctrl.js}"></script>
 </body>
 </html>
