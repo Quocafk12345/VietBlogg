@@ -28,6 +28,6 @@ public interface NhomRepository extends JpaRepository<Nhom, Long> {
 	int countThanhVienByNhomId(@Param("nhomId") Long nhomId);
 
 	// Lấy danh sách bài viết của một nhóm
-	@Query("SELECT n FROM Nhom n JOIN FETCH n.baiViet bv WHERE n.id = :nhomId")
+	@Query("SELECT bv FROM BaiViet bv JOIN FETCH bv.nhom n WHERE n.id = :nhomId")
 	List<BaiViet> findBaiVietByNhomId(@Param("nhomId") Long nhomId);
 }

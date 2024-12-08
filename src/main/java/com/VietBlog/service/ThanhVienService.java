@@ -1,7 +1,6 @@
 package com.VietBlog.service;
 
 import com.VietBlog.constraints.ThanhVien.VaiTro_ThanhVien;
-import com.VietBlog.entity.Nhom;
 import com.VietBlog.entity.ThanhVien;
 import com.VietBlog.entity.ThanhVienId;
 import com.VietBlog.repository.NhomRepository;
@@ -66,5 +65,11 @@ public class ThanhVienService {
 	public List<ThanhVien> layDanhSachThanhVien(Long nhomId) {
 		return thanhVienRepository.findByNhom_Id(nhomId);
 	}
+
+//	public VaiTro_ThanhVien layVaiTroThanhVien(Long nhomId, Long userId) {
+//		ThanhVienId thanhVienId = new ThanhVienId(nhomId, userId);
+//		Optional<ThanhVien> thanhVien = thanhVienRepository.findById(thanhVienId);
+//		return thanhVien.get().getVaiTro();
+//	}
 
 }

@@ -153,7 +153,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
         window.location.href = $event.target.href;
     };
 
-    $scope.loadBaiVietDuocChon = function (baiVietId) {
+    $scope.taiBaiVietDuocChon = function (baiVietId) {
         var url = `${host_BaiViet}/${baiVietId}`;
         $http
             .get(url)
@@ -209,6 +209,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             .then(function (response) {
                 // Xử lý khi thêm bài viết thành công
                 console.log('Thêm bài viết thành công:', response.data);
+                alert('Thêm bài viết thành công')
 
                 // Cập nhật danh sách bài viết
                 $scope.bangTin.unshift(response.data);
@@ -225,17 +226,11 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
-    // $scope.layBaiVietCuaUser($scope.userId);
-    //
-    // Kiểm tra xem có baiVietId được truyền từ Thymeleaf không
-    if (typeof baiVietId !== 'undefined') {
-        $scope.loadBaiVietDuocChon(baiVietId);
-    }
 
-    //Bài Vit nhóm trong CHITIETNHOm
+    //Bài Viết nhóm trong CHITIETNHOm
     $scope.loadBaiVietNhom = function () {
         // Lấy danh sách bài viết của nhóm từ API
-        $http.get(`${host_Nhom}/${$rootScope.idNhom}/baiviet`)
+        $http.get(`${host_Nhom}/${idNhom}/bai-viet`)
             .then(resp => {
                 $scope.baiVietNhom = resp.data;
 
@@ -265,6 +260,11 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     $scope.$on('loadBaiVietNhom', function () {
         $scope.loadBaiVietNhom();
     });
+
+    // Kiểm tra xem có baiVietId được truyền từ Thymeleaf không
+    if (typeof baiVietId !== 'undefined') {
+        $scope.taiBaiVietDuocChon(baiVietId);
+    }
 
 });
 

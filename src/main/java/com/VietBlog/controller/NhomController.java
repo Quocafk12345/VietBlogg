@@ -1,26 +1,16 @@
 package com.VietBlog.controller;
 
-import com.VietBlog.entity.*;
-import com.VietBlog.repository.BaiVietRepository;
-import com.VietBlog.repository.ThanhVienRepository;
-import com.VietBlog.service.BaiVietService;
+import com.VietBlog.entity.BaiViet;
+import com.VietBlog.entity.Nhom;
 import com.VietBlog.service.NhomService;
-import com.VietBlog.service.ThanhVienService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin("*")
@@ -31,7 +21,6 @@ public class NhomController {
 
     @Autowired
     public NhomController(NhomService nhomService){
-
 	    this.nhomService = nhomService;
     }
 
@@ -103,8 +92,13 @@ public class NhomController {
     // API lấy danh sách bài viết của một nhóm
     @GetMapping("/{nhomId}/bai-viet")
     public ResponseEntity<List<BaiViet>> layDanhSachBaiVietCuaNhom(@PathVariable Long nhomId) {
-        List<BaiViet> DSBaiViet = nhomService.layDSBaiVietCuaNhom(nhomId);
-        return ResponseEntity.ok(DSBaiViet);
+	    try {
+		    List<BaiViet> DSBaiViet = nhomService.layDSBaiVietCuaNhom(nhomId);
+		    return ResponseEntity.ok(DSBaiViet);
+	    } catch (Exception e) {
+		    e.printStackTrace();
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
     }
 
 }

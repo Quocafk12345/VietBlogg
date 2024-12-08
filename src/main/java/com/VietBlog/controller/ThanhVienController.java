@@ -66,7 +66,7 @@ public class ThanhVienController {
 	}
 
 	// API đếm số lượng thành viên của một nhóm
-	@GetMapping("/{nhomId}/thanh-vien/so-luong")
+	@GetMapping("/{nhomId}/so-luong")
 	public ResponseEntity<Integer> demSoLuongThanhVien(@PathVariable Long nhomId) {
 		int soLuong = nhomService.demSoLuongThanhVien(nhomId);
 		return ResponseEntity.ok(soLuong);

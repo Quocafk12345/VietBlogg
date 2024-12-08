@@ -1,15 +1,18 @@
 package com.VietBlog.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "Da_Phuong_Tien")
 public class DaPhuongTien {
 	@Id
@@ -27,5 +30,4 @@ public class DaPhuongTien {
 	@Lob
 	@Column(name = "Duong_Dan", nullable = false)
 	private String duongDan;
-
 }

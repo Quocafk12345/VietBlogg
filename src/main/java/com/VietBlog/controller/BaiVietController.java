@@ -74,7 +74,6 @@ public class BaiVietController {
         }
     }
 
-
     /**
      * Phương thức đếm số lượt like của một bài viết
      * @param id: Id của bài viết
