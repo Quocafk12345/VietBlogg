@@ -1,9 +1,11 @@
 let host_BaiViet = "http://localhost:8080/api/bai-viet";
-mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService, $sce) {  // Inject $q
+
+mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService, $sce, $timeout) {  // Inject $q
     $scope.bangTin = [];
     $scope.dangTheoDoi = [];
     $scope.chiTietBaiViet = {};
 
+    $scope.DSdaPhuongTien = []; // Khai báo danh sách DSdaPhuongTien
     $scope.loaiBaiDang = "caNhan";
 
     $scope.mucDuocChon = {ten: 'Chọn nhóm'};
@@ -21,7 +23,6 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     };
 
     $scope.tinhThoiGianDang = timeService.tinhThoiGianDang; // Gán hàm từ service
-
     $scope.baiVietNguoiDung = []; // Dữ liệu bài viết của người dùng
 
     $scope.layBaiVietCuaUser = function (userId) {
@@ -201,24 +202,60 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
 
         // Nếu có nhóm được chọn, thêm thông tin nhóm vào bài viết
         if ($scope.loaiBaiDang === "nhom") {
-            baiViet.nhom = $scope.mucDuocChon;
+            baiViet.nhom = {id: $scope.mucDuocChon.id}; // Chỉ gửi ID của nhóm
         } else baiViet.nhom = null;
 
         // Gọi API để thêm bài viết mới
         $http.post(url, baiViet)
             .then(function (response) {
-                // Xử lý khi thêm bài viết thành công
-                console.log('Thêm bài viết thành công:', response.data);
-                alert('Thêm bài viết thành công')
+                var idBaiVietMoi = response.data.id; // Lấy ID của bài viết vừa tạo
 
-                // Cập nhật danh sách bài viết
-                $scope.bangTin.unshift(response.data);
+                // Xử lý upload hình ảnh/video sau khi đăng bài thành công
+                var uploadPromises = [];
+                $scope.DSdaPhuongTien.forEach(function (media) {
+                    var formData = new FormData();
+                    formData.append('DSfile', media.file);
+                    formData.append('DSMoTa', media.moTa);
 
-                // Reset form
-                document.getElementById('tieuDe').value = '';
-                CKEDITOR.instances.editor1 = '';
-                $scope.nhomDuocChon = {ten: 'Chọn nhóm'};
+                    console.log(formData);
 
+                    // Gọi API upload đa phương tiện
+                    uploadPromises.push($http.post(`${host_BaiViet}/da-phuong-tien/dang-tai/${idBaiVietMoi}`, formData, {
+                        transformRequest: angular.identity,
+                        headers: {'Content-Type': undefined}
+                    }));
+                });
+
+                // Chờ tất cả các upload hoàn thành
+                $q.all(uploadPromises)
+                    .then(function () {
+                        console.log('Upload tất cả đa phương tiện thành công');
+
+                        // Xử lý khi thêm bài viết thành công
+                        console.log('Thêm bài viết thành công:', response.data);
+                        alert('Thêm bài viết thành công');
+
+                        // Cập nhật danh sách bài viết
+                        $scope.bangTin.unshift(response.data);
+
+                        // Reset form
+                        document.getElementById('tieuDe').value = '';
+                        CKEDITOR.instances.editor1.setData('');
+                        document.getElementById('imageUpload').value = '';
+                        $scope.nhomDuocChon = {ten: 'Chọn nhóm'};
+
+                        // Giải phóng objectURL sau khi upload
+                        $scope.DSdaPhuongTien.forEach(function (media) {
+                            URL.revokeObjectURL(media.preview);
+                        });
+                        $scope.DSdaPhuongTien = []; // Xóa mảng sau khi upload
+
+                    })
+                    .catch(function (error) {
+                        console.error('Lỗi khi upload đa phương tiện:', error);
+
+                        // Xử lý lỗi upload, ví dụ: hiển thị thông báo lỗi, xóa bài viết vừa tạo
+                    });
             })
             .catch(function (error) {
                 // Xử lý khi thêm bài viết thất bại
@@ -226,6 +263,19 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
+    // Hàm upload đa phương tiện
+    $scope.uploadDaPhuongTien = function (baiVietId, file, moTa) {
+        var url = `${host_BaiViet}/da-phuong-tien/dang-tai/${baiVietId}`; // API trong DaPhuongTienController
+
+        var formData = new FormData();
+        formData.append('file', file);
+        formData.append('moTa', moTa); // Thêm moTa vào FormData
+
+        return $http.post(url, formData, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
+        });
+    }
 
     //Bài Viết nhóm trong CHITIETNHOm
     $scope.loadBaiVietNhom = function () {
@@ -253,6 +303,30 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             .catch(error => {
                 console.error("Lỗi khi lấy bài viết của nhóm:", error);
             });
+    };
+
+    $scope.previewFiles = function (input) {
+        if (input.files && input.files.length > 0) {
+            // Giới hạn số lượng file tối đa là 100
+            const fileHienCo = $scope.DSdaPhuongTien.length; // Số lượng file hiện có
+            const fileMoi = input.files.length; // Số lượng file mới
+            const gioiHanFile = 100 - fileHienCo; // Số lượng file tối đa được phép thêm
+            const fileDangXuLy = Array.from(input.files).slice(0, gioiHanFile); // Lấy số lượng file cho phép
+
+            // Sử dụng $q.all để xử lý bất đồng bộ (có thể bỏ nếu không cần thiết)
+            fileDangXuLy.forEach(function (file) {
+                // Tạo objectURL và thêm vào DSdaPhuongTien
+                var objectUrl = URL.createObjectURL(file);
+                $scope.DSdaPhuongTien.push({
+                    file: file,
+                    moTa: '',
+                    preview: objectUrl
+                });
+                $timeout(function () {
+                }); // Thêm dòng này để buộc cập nhật giao diện
+            });
+        }
+        console.log($scope.DSdaPhuongTien);
     };
 
     $scope.taiBaiViet();

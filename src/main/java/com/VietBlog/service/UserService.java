@@ -1,23 +1,23 @@
 package com.VietBlog.service;
 
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.Map;
-import java.util.Optional;
-
 import com.VietBlog.constraints.User.Font_User;
 import com.VietBlog.constraints.User.Theme_User;
 import com.VietBlog.constraints.User.VaiTro_User;
+import com.VietBlog.entity.User;
 import com.VietBlog.repository.LuotFollowRepository;
 import com.VietBlog.repository.LuotLike_BaiViet_Repository;
+import com.VietBlog.repository.UserRepository;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.VietBlog.entity.User;
-import com.VietBlog.repository.UserRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -50,13 +50,13 @@ public class UserService {
 			optionalUser = userRepository.findByTenDangNhap(identifier);
 		}
 
-		User user = optionalUser.orElse(null);
+		User user = optionalUser.orElseThrow(() -> new RuntimeException("Tên đăng nhập không đúng"));
 
 		// Kiểm tra user và mật khẩu
 		if (user != null && user.getMatKhau().equals(matKhau)) {
 			return user; // Trả về user nếu đăng nhập thành công
 		} else {
-			return null; // Trả về null nếu đăng nhập thất bại
+			throw new RuntimeException("Mật khẩu không đúng"); // Trả về null nếu đăng nhập thất bại
 		}
 	}
 

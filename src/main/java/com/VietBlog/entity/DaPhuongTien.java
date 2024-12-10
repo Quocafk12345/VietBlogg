@@ -30,4 +30,10 @@ public class DaPhuongTien {
 	@Lob
 	@Column(name = "Duong_Dan", nullable = false)
 	private String duongDan;
+
+	@Nationalized
+	@Lob
+	@Column(name = "Mo_Ta")
+	private String moTa;
+
 }

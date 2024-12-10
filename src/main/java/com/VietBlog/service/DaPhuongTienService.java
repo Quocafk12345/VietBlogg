@@ -41,11 +41,12 @@ public class DaPhuongTienService {
 	}
 
 	@Transactional
-	public DaPhuongTien themDaPhuongTienChoBaiViet(Long baiVietId, MultipartFile filePhuongTien) throws IOException {
+	public DaPhuongTien themDaPhuongTienChoBaiViet(Long baiVietId, MultipartFile filePhuongTien, String moTa) throws IOException {
 		Map uploadResult = cloudinary.uploader().upload(filePhuongTien.getBytes(), ObjectUtils.emptyMap());
 		String duongDan = (String) uploadResult.get("secure_url");
 		DaPhuongTien daPhuongTien = new DaPhuongTien();
 		daPhuongTien.setDuongDan(duongDan);
+		daPhuongTien.setMoTa(moTa);
 		Optional<BaiViet> baiViet = baiVietRepository.findById(baiVietId);
 		daPhuongTien.setBaiViet(baiViet.orElseThrow(() -> new EntityNotFoundException("Không tìm thấy bài viết có ID: " + baiVietId)));
 		daPhuongTienRepository.save(daPhuongTien);

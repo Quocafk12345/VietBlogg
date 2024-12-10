@@ -46,7 +46,7 @@ public class BaiVietService {
 			BaiViet existingBaiViet = optionalBaiViet.get();
 			existingBaiViet.setTieuDe(baiViet.getTieuDe());
 			existingBaiViet.setNoiDung(baiViet.getNoiDung());
-			return baiVietRepository.save(existingBaiViet);
+			return baiVietRepository.saveAndFlush(existingBaiViet);
 		} else {
 			throw new RuntimeException("Bài viết không tồn tại");
 		}

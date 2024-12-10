@@ -436,3 +436,6 @@ UPDATE Thanh_Vien
 SET Vai_Tro = N'Quản trị viên'
 WHERE Vai_Tro = N'Chủ nhóm'
 GO
+
+ALTER TABLE Da_Phuong_Tien
+    ADD Mo_Ta NVARCHAR(MAX)

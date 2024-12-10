@@ -90,7 +90,19 @@
 							<button class="btn btn-secondary">Lưu nháp</button>
 						</div>
 						<div class="tab-pane fade" id="images">
-							<input class="form-control" id="imageUpload" type="file">
+							<div class="mb-3">
+								<input class="form-control" id="imageUpload" multiple onchange="angular.element(this).scope().previewFiles(this)"
+								       type="file"></div>
+							<div class="preview-area">
+								<div class="preview-item" ng-repeat="media in DSdaPhuongTien track by $index">
+									<img alt="{{media.file.name}}" class="img-fluid"
+									     ng-if="media.file.type.startsWith('image/')" ng-src="{{media.preview}}">
+									<video class="img-fluid" controls
+									       ng-attr-src="{{media.preview}}" ng-if="media.file.type.startsWith('video/')"></video>
+									<input class="form-control mt-2" ng-model="media.moTa" placeholder="Mô tả"
+									       type="text">
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
