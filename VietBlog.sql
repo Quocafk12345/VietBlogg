@@ -399,6 +399,7 @@ GO
 -- Thêm ON DELETE CASCADE vào khóa ngoại trong bảng DS_Luat_Nhom
 ALTER TABLE DS_Luat_Nhom
 DROP CONSTRAINT FK__DS_Luat_N__Id_Nh__3B75D760;
+GO
 
 ALTER TABLE DS_Luat_Nhom
 ADD CONSTRAINT FK_DS_Luat_Nhom_Nhom 

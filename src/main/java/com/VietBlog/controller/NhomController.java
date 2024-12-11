@@ -20,8 +20,8 @@ public class NhomController {
     private final NhomService nhomService;
 
     @Autowired
-    public NhomController(NhomService nhomService){
-	    this.nhomService = nhomService;
+    public NhomController(NhomService nhomService) {
+        this.nhomService = nhomService;
     }
 
     // lấy DS nhóm của User

@@ -22,6 +22,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @CrossOrigin("*")
@@ -141,5 +142,17 @@ public class UserController {
 	public ResponseEntity<Integer> demLuotFollow(@PathVariable Long id) {
 		Integer luotFollow = luotFollowRepository.countFollowersByUserId(id);
 		return ResponseEntity.ok(luotFollow);
+	}
+
+	@GetMapping("/following/{userId}")
+	public ResponseEntity<List<User>> getFollowing(@PathVariable Long userId) {
+		List<User> following = luotFollowService.layDanhSachFollowing(userId);
+		return ResponseEntity.ok(following);
+	}
+
+	@GetMapping("/follower/{userId}")
+	public ResponseEntity<List<User>> getFollower(@PathVariable Long userId) {
+		List<User> followere = luotFollowService.layDanhSachFollowers(userId);
+		return ResponseEntity.ok(followere);
 	}
 }

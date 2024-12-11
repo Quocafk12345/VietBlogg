@@ -1,6 +1,5 @@
 package com.VietBlog.controller;
 
-import com.VietBlog.entity.BaiViet;
 import com.VietBlog.entity.User;
 import com.VietBlog.service.BaiVietService;
 import com.VietBlog.service.UserService;
@@ -44,12 +43,6 @@ public class GiaoDienController {
         return "page/chi-tiet-nhom";
     }
 
-    // trang đăng nhập
-    @GetMapping("/danh-sach-luu")
-    public String DSluu() {
-        return "page/danh-sach-luu";
-    }
-
     @GetMapping("/nhom")
     public String trangNhom() {
         return "page/kham-pha-nhom";
@@ -61,10 +54,10 @@ public class GiaoDienController {
         return "page/tao-nhom";
     }
 
-    @GetMapping("/cong-dong") // Thêm value attribute
-    public String congDongPage() {
-        return "include/cong-dong";
-    }
+//    @GetMapping("/cong-dong") // Thêm value attribute
+//    public String congDongPage() {
+//        return "cong-dong";
+//    }
 
     @GetMapping("/tim-kiem")
     public String KetQuaTimKiem() {

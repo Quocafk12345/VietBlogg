@@ -45,26 +45,26 @@
 			<div class="container mt-4">
 				<h2 class="mb-4">Cộng đồng</h2>
 				<div class="row" ng-controller="nhomController">
-					<div class="col-md-4" ng-repeat="nhom in DSnhom_tong">
+					<div class="col-md-4" ng-repeat="nhomData in danhSachNhom">
 						<div class="nhom-item">
 							<div class="d-flex align-items-center">
-								<img ng-src="{{nhom.hinhDaiDien}}" alt="Hình đại diện nhóm">
+								<img alt="Hình đại diện nhóm" ng-src="{{nhomData.nhom.hinhDaiDien}}">
 								<div>
 									<h5>
-										<a th:href="@{/nhom/chi-tiet/}" ng-click="chuyenTrang($event, nhom.id)"
-										   class="text-decoration-none text-dark">
-											{{nhom.ten}}
+										<a href="/nhom/chi-tiet/{{nhomData.nhom.id}}"
+										   ng-click="chuyenTrang($event, nhomData.nhom.id)">
+											{{nhomData.nhom.ten}}
 										</a>
 									</h5>
-									<p class="text-muted">{{nhom.gioiThieu | limitTo: 100}}...</p>
+									<p class="text-muted">{{nhomData.nhom.gioiThieu | limitTo: 100}}...</p>
 								</div>
 							</div>
 							<div>
-								<button class="btn btn-danger" ng-click="roiKhoiNhom(nhom.id)"
-								        ng-show="nhom.daThamGia">Đã tham gia
+								<button class="btn btn-danger" ng-click="roiKhoiNhom(nhomData.nhom.id)"
+								        ng-show="nhomData.vaiTro !== 'KHÔNG_THAM_GIA'">Đã tham gia
 								</button>
-								<button class="btn btn-success" ng-click="thamGiaNhom(nhom.id)"
-								        ng-show="!nhom.daThamGia">Tham gia
+								<button class="btn btn-success" ng-click="thamGiaNhom(nhomData.nhom.id)"
+								        ng-show="nhomData.vaiTro === 'KHÔNG_THAM_GIA'">Tham gia
 								</button>
 							</div>
 						</div>
