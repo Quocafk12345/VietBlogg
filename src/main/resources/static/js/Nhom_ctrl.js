@@ -51,7 +51,6 @@ mainApp.controller("nhomController", function ($scope, $http, $window) {
             });
     };
 
-
     $scope.chuyenTrang = function ($event, idNhom) {
         $event.preventDefault();
         $event.target.href = '/nhom/chi-tiet/' + idNhom;

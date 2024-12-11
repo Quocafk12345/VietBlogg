@@ -30,7 +30,7 @@
 							<h5 class="mb-1">{{ baiViet.tieuDe }}</h5>
 							<small>{{ baiViet.thoiGianTao | date:'dd/MM/yyyy' }}</small>
 						</div>
-						<p class="mb-1">{{ baiViet.noiDung | limitTo: 100 }}...</p>
+						<p class="mb-1" ng-bind-html="baiViet.noiDung | truncate: 100"></p>
 						<small>Đăng bởi {{ baiViet.user.tenNguoiDung }}</small>
 					</a>
 				</div>

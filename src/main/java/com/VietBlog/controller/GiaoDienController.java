@@ -48,16 +48,25 @@ public class GiaoDienController {
         return "page/kham-pha-nhom";
     }
 
+    @GetMapping("/danh-sach-luu")
+    public String danhSachLuu() {
+        return "page/danh-sach-luu";
+    }
 
     @GetMapping("/tao-nhom")
     public String hienThiTrangTaoNhom() {
         return "page/tao-nhom";
     }
 
-//    @GetMapping("/cong-dong") // Thêm value attribute
-//    public String congDongPage() {
-//        return "cong-dong";
-//    }
+    @GetMapping("/cong-dong") // Thêm value attribute
+    public String congDongPage() {
+        return "include/cong-dong";
+    }
+
+    @GetMapping("/nhap")
+    public String baiDaNhap() {
+        return "page/bai-nhap";
+    }
 
     @GetMapping("/tim-kiem")
     public String KetQuaTimKiem() {

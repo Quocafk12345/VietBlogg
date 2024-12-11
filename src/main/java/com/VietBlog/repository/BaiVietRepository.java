@@ -1,12 +1,12 @@
 package com.VietBlog.repository;
 
 import com.VietBlog.entity.BaiViet;
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface BaiVietRepository extends JpaRepository<BaiViet, Long> {
@@ -22,6 +22,9 @@ public interface BaiVietRepository extends JpaRepository<BaiViet, Long> {
             + "(bv.tieuDe LIKE %:keyword% OR bv.noiDung LIKE %:keyword%)"
             + " AND (bv.user.tenNguoiDung LIKE %:keyword%)")
     List<BaiViet> findByKeyword(@Param("keyword") String keyword);
+
+	@Query("SELECT b FROM BaiViet b WHERE b.trangThai = 'NHÁP' AND b.user.id = :userId")
+	List<BaiViet> findBaiVietNhapCuaUser(@Param("userId") Long userId);
 
     void deleteAllByNhom_Id(Long nhomId);
 
