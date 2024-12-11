@@ -1,10 +1,10 @@
 package com.VietBlog.service;
 
 import com.VietBlog.constraints.ThanhVien.VaiTro_ThanhVien;
-import com.VietBlog.entity.BaiViet;
-import com.VietBlog.entity.Nhom;
-import com.VietBlog.entity.ThanhVien;
-import com.VietBlog.entity.ThanhVienId;
+import com.VietBlog.entity.*;
+import com.VietBlog.exception.BlockedUserException;
+import com.VietBlog.exception.NhomNotFoundException;
+import com.VietBlog.exception.UserNotFoundException;
 import com.VietBlog.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,19 +22,22 @@ public class NhomService {
 	private final NhomRepository nhomRepository;
 	private final ThanhVienRepository thanhVienRepository;
 	private final UserRepository userRepository;
+	private final DS_LuatNhom_Repository dsLuatNhomRepository;
+	private final BaiVietRepository baiVietRepository;
+	private final BlockUserNhomRepository blockUserNhomRepository;
 
 	@Autowired
-	public NhomService(NhomRepository nhomRepository, ThanhVienRepository thanhVienRepository, UserRepository userRepository) {
+	public NhomService(NhomRepository nhomRepository, ThanhVienRepository thanhVienRepository, UserRepository userRepository,
+					   BlockUserRepository blockUserRepository, DS_LuatNhom_Repository dsLuatNhomRepository,
+					   BaiVietRepository baiVietRepository, BlockUserNhomRepository blockUserNhomRepository) {
 		this.nhomRepository = nhomRepository;
 		this.thanhVienRepository = thanhVienRepository;
 		this.userRepository = userRepository;
+		this.dsLuatNhomRepository = dsLuatNhomRepository;
+		this.baiVietRepository = baiVietRepository;
+		this.blockUserNhomRepository = blockUserNhomRepository;
 	}
 
-	@Autowired
-	private BaiVietRepository baiVietRepository; // Khai báo BaiVietRepository
-
-	@Autowired
-	private DS_LuatNhom_Repository dsLuatNhomRepository;
 	// Tạo nhóm mới
 //	@Transactional
 //	public Nhom taoNhom(Nhom nhom, Long chuNhomId) {
@@ -57,11 +60,11 @@ public class NhomService {
 		// Xử lý lưu hình ảnh (nếu có)
 		Nhom nhomMoi = nhomRepository.save(nhom);
 
-		// Thêm người tạo vào nhóm với vai trò "CHỦ NHÓM"
+		// Thêm người tạo vào nhóm với vai trò "QUAN_TRI_VIEN"
 		ThanhVienId thanhVienId = new ThanhVienId(nhomMoi.getId(), chuNhomId);
 		ThanhVien thanhVien = new ThanhVien(thanhVienId, nhomMoi,
 				userRepository.findById(chuNhomId).orElseThrow(),
-				VaiTro_ThanhVien.CHU_NHOM, LocalDate.now());
+				VaiTro_ThanhVien.QUAN_TRI_VIEN, LocalDate.now(), "Đang hoạt động"); // Thêm trạng thái
 		thanhVienRepository.save(thanhVien);
 
 		return nhomMoi;
@@ -74,10 +77,14 @@ public class NhomService {
 		if (thanhVienRepository.existsById(thanhVienId)) {
 			throw new RuntimeException("Người dùng đã tham gia nhóm này rồi");
 		}
+		//Kiểm tra xem người dùng có bị chặn khỏi nhóm hay kưhông
+		if (blockUserNhomRepository.existsByNhom_IdAndBlockedUser_Id(nhomId, userId)) {
+			throw new BlockedUserException("Người dùng đã bị chặn khỏi nhóm này.");
+		}
 		ThanhVien thanhVien = new ThanhVien(thanhVienId,
 				nhomRepository.findById(nhomId).orElseThrow(() -> new RuntimeException("Không tìm thấy nhóm")),
 				userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng")),
-				VaiTro_ThanhVien.THANH_VIEN, LocalDate.now());
+				VaiTro_ThanhVien.THANH_VIEN, LocalDate.now(), "Đang hoạt động"); // Thêm trạng thái
 		return thanhVienRepository.save(thanhVien);
 	}
 
@@ -91,23 +98,26 @@ public class NhomService {
 		thanhVienRepository.deleteById(thanhVienId);
 	}
 
-	public Optional<Nhom> layNhomTheoId(Long nhomId){
+	public Optional<Nhom> layNhomTheoId(Long nhomId) {
 		return nhomRepository.findById(nhomId);
 	}
 
 	// Xóa nhóm
 	@Transactional
 	public void xoaNhom(Long nhomId) {
-		// 1. Xóa tất cả bài viết thuộc nhóm
+		// 1. Xóa tất cả các bản ghi trong bảng Block_User_Nhom liên quan đến nhóm
+		blockUserNhomRepository.deleteAllByNhom_Id(nhomId);
+
+		// 2. Xóa tất cả bài viết thuộc nhóm
 		baiVietRepository.deleteAllByNhom_Id(nhomId);
 
-		// 2. Xóa tất cả luật nhóm
-		dsLuatNhomRepository.deleteAllByNhom_Id(nhomId); // Thêm dòng này
+		// 3. Xóa tất cả luật nhóm
+		dsLuatNhomRepository.deleteAllByNhom_Id(nhomId);
 
-		// 3. Xóa tất cả thành viên trong nhóm
+		// 4. Xóa tất cả thành viên trong nhóm
 		thanhVienRepository.deleteAllByNhom_Id(nhomId);
 
-		// 4. Xóa nhóm
+		// 5. Xóa nhóm
 		nhomRepository.deleteById(nhomId);
 	}
 
@@ -153,7 +163,7 @@ public class NhomService {
 		return nhomRepository.findBaiVietByNhomId(nhomId);
 	}
 
-	public List<Nhom> layToanBoNhom(){
+	public List<Nhom> layToanBoNhom() {
 		return nhomRepository.findAll();
 	}
 
@@ -171,4 +181,34 @@ public class NhomService {
 		return nhomRepository.findNhomByUserId(userId);
 	}
 
+	//Xóa thành viên trong nhóm
+	public void xoaThanhVienKhoiNhom(Long nhomId, Long userId) {
+		ThanhVienId thanhVienId = new ThanhVienId(nhomId, userId);
+		ThanhVien thanhVien = thanhVienRepository.findById(thanhVienId)
+				.orElseThrow(() -> new RuntimeException("Không tìm thấy thành viên"));
+
+		// Kiểm tra vai trò
+		if (thanhVien.getVaiTro() == VaiTro_ThanhVien.THANH_VIEN) {
+			thanhVienRepository.deleteById(thanhVienId);
+		} else {
+			throw new RuntimeException("Không thể xóa quản trị viên hoặc chủ nhóm."); // Hoặc xử lý theo logic của bạn
+		}
+	}
+
+	public boolean laQuanTriVien(Long nhomId, Long userId) {
+		System.out.println("Kiểm tra vai trò quản trị cho người dùng " + userId + " trong nhóm " + nhomId); // In log
+
+		ThanhVienId thanhVienId = new ThanhVienId(nhomId, userId);
+		Optional<ThanhVien> thanhVienOptional = thanhVienRepository.findById(thanhVienId);
+
+		if (thanhVienOptional.isEmpty()) {
+			System.out.println("Người dùng không phải là thành viên của nhóm"); // In log
+			return false; // Người dùng không phải là thành viên của nhóm
+		}
+
+		VaiTro_ThanhVien vaiTro = thanhVienOptional.get().getVaiTro();
+		System.out.println("Vai trò của người dùng: " + vaiTro); // In log
+
+		return vaiTro == VaiTro_ThanhVien.QUAN_TRI_VIEN || vaiTro == VaiTro_ThanhVien.CHU_NHOM;
+	}
 }

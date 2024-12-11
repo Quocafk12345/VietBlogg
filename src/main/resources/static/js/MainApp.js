@@ -1,6 +1,8 @@
 // MainApp.js
 var mainApp = angular.module('mainApp', ['ngSanitize']);
 
+
+
 mainApp.service('timeService', function () {
     this.tinhThoiGianDang = function (ngayTao) {
         ngayTao = new Date(ngayTao); // Chuyển đổi chuỗi ngày tạo thành đối tượng Date
@@ -33,3 +35,4 @@ mainApp.service('timeService', function () {
         }
     };
 });
+

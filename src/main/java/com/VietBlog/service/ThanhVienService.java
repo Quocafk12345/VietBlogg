@@ -38,7 +38,7 @@ public class ThanhVienService {
 		ThanhVien thanhVien = new ThanhVien(thanhVienId,
 				nhomRepository.findById(nhomId).orElseThrow(() -> new RuntimeException("Không tìm thấy nhóm")),
 				userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng")),
-				VaiTro_ThanhVien.THANH_VIEN, LocalDate.now());
+				VaiTro_ThanhVien.THANH_VIEN, LocalDate.now(), "Đang hoạt động"); // Thêm trạng thái "Đang hoạt động"
 		return thanhVienRepository.save(thanhVien);
 	}
 

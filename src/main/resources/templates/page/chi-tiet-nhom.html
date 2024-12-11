@@ -24,6 +24,12 @@
 			<div class="row">
 				<div class="col-md-8" ng-controller="BaiVietController">
 
+					<div ng-if="thongTinNhom.biChan">
+						<p class="text-danger">Bạn đã bị chặn khỏi nhóm này.</p>
+					</div>
+					<div ng-if="!thongTinNhom.biChan">
+					</div>
+
 					<div class="d-flex align-items-center mb-3">
 						<img src="{{thongTinNhom.hinhDaiDien}}" alt="Hình đại diện nhóm" class="rounded-circle" width="50"
 							 height="50">
@@ -41,6 +47,9 @@
 							<a class="nav-link" href="#thanhvien" data-bs-toggle="tab">
 								{{thongTinNhom.soLuongThanhVien}} Thành viên
 							</a>
+						</li>
+						<li class="nav-item" ng-if="vaiTroTrongNhom === 'QUAN_TRI_VIEN' || vaiTroTrongNhom === 'CHU_NHOM'">
+							<a class="nav-link" href="#quanlythanhvien" data-bs-toggle="tab">Quản lý thành viên</a>
 						</li>
 					</ul>
 
@@ -82,6 +91,7 @@
 							</div>
 						</div>
 
+						<!--Tab bài viết cá nhân-->
 						<div class="tab-pane" id="baivietcanhan">
 							<div class="col-10">
 								<div class="w-50 m-auto">
@@ -122,14 +132,48 @@
 							</div>
 						</div>
 
+						<!--Tab thành viên nhóm-->
 						<div class="tab-pane" id="thanhvien">
 							<ul>
 								<li ng-repeat="thanhVien in danhSachThanhVien_TabThanhVien">
 									<img ng-src="{{ thanhVien.hinhDaiDien }}" alt="" width="30" height="30" class="rounded-circle">
-									{{ thanhVien.tenNguoiDung }} - {{ thanhVien.vaiTro }}
+									{{ thanhVien.tenNguoiDung }} - {{ (thanhVien.vaiTro === 'CHU_NHOM') ? 'Chủ nhóm' : (thanhVien.vaiTro === 'QUAN_TRI_VIEN') ? 'Quản trị viên' : 'Thành viên' }}
 								</li>
 							</ul>
 						</div>
+
+						<!--Tab quản lý thành viên nhóm-->
+<!--						<div class="tab-pane" id="quanlythanhvien" ng-if="vaiTroTrongNhom === 'QUAN_TRI_VIEN' || vaiTroTrongNhom === 'CHU_NHOM'">-->
+<!--							<ul>-->
+<!--								<li ng-repeat="thanhVien in danhSachThanhVien_TabThanhVien">-->
+<!--									<img ng-src="{{ thanhVien.hinhDaiDien }}" alt="" width="30" height="30" class="rounded-circle">-->
+<!--									{{ thanhVien.tenNguoiDung }} - {{ (thanhVien.vaiTro === 'CHU_NHOM') ? 'Chủ nhóm' : (thanhVien.vaiTro === 'QUAN_TRI_VIEN') ? 'Quản trị viên' : 'Thành viên' }}-->
+<!--									<button ng-click="xoaThanhVien(thanhVien.userId)"-->
+<!--											ng-if="thanhVien.userId !== currentUser.id && thanhVien.vaiTro === 'THANH_VIEN'"> Xóa khỏi nhóm-->
+<!--									</button>-->
+<!--								</li>-->
+<!--							</ul>-->
+<!--						</div>-->
+						<div class="tab-pane" id="quanlythanhvien" ng-if="vaiTroTrongNhom === 'QUAN_TRI_VIEN' || vaiTroTrongNhom === 'CHU_NHOM'">
+							<ul>
+								<li ng-repeat="thanhVien in danhSachThanhVien_TabThanhVien" class="d-flex align-items-center">
+									<img ng-src="{{ thanhVien.hinhDaiDien }}" alt="" width="30" height="30" class="rounded-circle">
+									{{ thanhVien.tenNguoiDung }} - {{ (thanhVien.vaiTro === 'CHU_NHOM') ? 'Chủ nhóm' : (thanhVien.vaiTro === 'QUAN_TRI_VIEN') ? 'Quản trị viên' : 'Thành viên' }}
+
+									<div class="dropdown ms-auto" ng-if="thanhVien.vaiTro === 'THANH_VIEN'">
+										<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+											<i class="bi bi-three-dots-vertical"></i>
+										</button>
+										<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+											<li><a class="dropdown-item" href="#" ng-click="xoaThanhVien(thanhVien.userId)">Xóa khỏi nhóm</a></li>
+											<li><a class="dropdown-item" href="#" ng-click="chanKhoiNhom(thanhVien.userId)">Chặn khỏi nhóm</a></li>
+											<li><a class="dropdown-item" href="#" ng-click="gioiHanHoatDong(thanhVien.userId)">Giới hạn hoạt động</a></li>
+										</ul>
+									</div>
+								</li>
+							</ul>
+						</div>
+
 					</div>
 				</div>
 
@@ -142,7 +186,7 @@
 							<p>Ngày tạo: <span>{{thongTinNhom.ngayTao | date:'dd/MM/yyyy'}}</span></p>
 							<p>Số lượng thành viên: <span>{{thongTinNhom.soLuongThanhVien}}</span></p>
 							<p>Giới thiệu: <span>{{thongTinNhom.gioiThieu}}</span></p>
-							<p>Vai trò: <span>{{vaiTroTrongNhom}}</span></p> <div class="card-header">
+							<p>Vai trò: <span>{{ (vaiTroTrongNhom === 'CHU_NHOM') ? 'Chủ nhóm' : (vaiTroTrongNhom === 'QUAN_TRI_VIEN') ? 'Quản trị viên' : 'Thành viên' }}</span></p>  <div class="card-header">
 						</div>
 							<div class="btn-group" role="group">
 								<button type="button" class="btn btn-success"
@@ -167,7 +211,7 @@
 											</div>
 											<div class="modal-body">
 												<select ng-model="$parent.nguoiNhanId"
-														ng-options="thanhVien.userId as thanhVien.tenNguoiDung + ' - ' + thanhVien.vaiTro for thanhVien in danhSachThanhVien_TabThanhVien">
+														ng-options="thanhVien.userId as ((thanhVien.vaiTro === 'CHU_NHOM') ? 'Chủ nhóm' : (thanhVien.vaiTro === 'QUAN_TRI_VIEN') ? 'Quản trị viên' : 'Thành viên') + ' - ' + thanhVien.tenNguoiDung for thanhVien in danhSachThanhVien_TabThanhVien">
 												</select>
 											</div>
 											<div class="modal-footer">

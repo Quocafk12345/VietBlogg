@@ -56,6 +56,7 @@ public class UserController {
 		try {
 			return userService.dangNhap(identifier, password); // Sau đó mới trả về response
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -117,7 +118,7 @@ public class UserController {
 
 	@GetMapping("/{userId}/checkBlockStatus")
 	public ResponseEntity<?> checkBlockStatus(@PathVariable("userId") Long userId, @RequestParam Long blockUserId){
-		BlockUserID blockUserID = new BlockUserID(userId,blockUserId);
+		BlockUserID blockUserID = new BlockUserID(userId, blockUserId); // Thêm tham số nhomId
 		boolean isBlocking = blockUserRepository.existsById(blockUserID);
 
 		Map<String, Boolean> response = new HashMap<>();

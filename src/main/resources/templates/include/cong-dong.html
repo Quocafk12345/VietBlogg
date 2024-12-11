@@ -47,6 +47,9 @@
 				<div class="row" ng-controller="nhomController">
 					<div class="col-md-4" ng-repeat="nhomData in danhSachNhom">
 						<div class="nhom-item">
+							<div ng-if="nhomData.biChan">
+								<p class="text-danger">Bạn đã bị chặn khỏi nhóm này.</p>
+							</div>
 							<div class="d-flex align-items-center">
 								<img ng-src="{{nhomData.nhom.hinhDaiDien}}" alt="Hình đại diện nhóm">
 								<div>

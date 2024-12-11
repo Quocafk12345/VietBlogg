@@ -17,7 +17,7 @@ mainApp.controller('loginController', function ($scope, $http, $window) {
             $http.post(`${host_DangNhap}/dang-nhap-thanh-cong`, user)
                 .then(function () {
                     $window.location.href = `${host_DangNhap}/index`; // Chuyển hướng đến /index
-            });
+                });
         }).catch((error) => {
             console.log("Error", error);
         });

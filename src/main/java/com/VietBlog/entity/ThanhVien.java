@@ -42,4 +42,7 @@ public class ThanhVien {
     @Column(name = "Ngay_Tham_Gia")
     private LocalDate ngayThamGia;
 
+    @Column(name = "Trang_Thai")
+    private String trangThai;
+
 }

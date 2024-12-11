@@ -2,6 +2,7 @@ package com.VietBlog.controller;
 
 import com.VietBlog.entity.*;
 import com.VietBlog.repository.BaiVietRepository;
+import com.VietBlog.repository.BlockUserNhomRepository;
 import com.VietBlog.repository.ThanhVienRepository;
 import com.VietBlog.service.NhomService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +15,8 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 
 import java.io.IOException;
+import com.VietBlog.exception.NhomNotFoundException;
+import com.VietBlog.exception.UserNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +41,9 @@ public class NhomController {
 
     @Autowired
     private BaiVietRepository baiVietRepository;
+
+    @Autowired
+    private BlockUserNhomRepository blockUserNhomRepository;
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Nhom>> layDanhSachNhomCuaUser(@PathVariable Long userId) {
@@ -89,12 +95,41 @@ public class NhomController {
     //lấy danh sách nhóm trả về thêm thông tin về vai trò của người dùng hiện tại trong mỗi nhóm lên cong-dong.html
     //Thay vì chỉ trả về danh sách Nhom, bạn sẽ trả về một danh sách các object, mỗi object chứa thông tin về
     // nhóm (Nhom) và vai trò của người dùng trong nhóm đó (vaiTro)
+//    @GetMapping("/danh-sach")
+//    public ResponseEntity<List<Map<String, Object>>> layDanhSachNhom(HttpServletRequest request) {
+//        List<Nhom> nhomList = nhomService.layToanBoNhom();
+//        User currentUser = (User) request.getSession().getAttribute("currentUser");
+//
+//        List<Map<String, Object>> responseList = nhomList.stream()
+//                .map(nhom -> {
+//                    Map<String, Object> response = new HashMap<>();
+//                    response.put("nhom", nhom);
+//
+//                    if (currentUser != null) {
+//                        Optional<ThanhVien> thanhVienOptional = thanhVienRepository.findById(new ThanhVienId(nhom.getId(), currentUser.getId()));
+//                        String vaiTro = thanhVienOptional.map(thanhVien -> thanhVien.getVaiTro().toString()).orElse("KHÔNG_THAM_GIA");
+//                        response.put("vaiTro", vaiTro);
+//                        // Kiểm tra xem người dùng có bị chặn khỏi nhóm hay không
+//                        boolean biChan = blockUserNhomRepository.existsById(new BlockUserNhomId(currentUser.getId(), currentUser.getId(), nhom.getId()));
+//                        response.put("biChan", biChan); // Thêm thông tin biChan vào response
+//                    } else {
+//                        response.put("vaiTro", "KHÔNG_THAM_GIA");
+//                    }
+//
+//                    return response;
+//                })
+//                .collect(Collectors.toList());
+//
+//        return ResponseEntity.ok(responseList);
+//    }
     @GetMapping("/danh-sach")
     public ResponseEntity<List<Map<String, Object>>> layDanhSachNhom(HttpServletRequest request) {
         List<Nhom> nhomList = nhomService.layToanBoNhom();
         User currentUser = (User) request.getSession().getAttribute("currentUser");
 
         List<Map<String, Object>> responseList = nhomList.stream()
+                .filter(nhom -> currentUser == null ||
+                        !blockUserNhomRepository.existsByNhom_IdAndBlockedUser_Id(nhom.getId(), currentUser.getId())) // Lọc nhóm bị chặn
                 .map(nhom -> {
                     Map<String, Object> response = new HashMap<>();
                     response.put("nhom", nhom);
@@ -148,6 +183,11 @@ public class NhomController {
             Map<String, Object> response = new HashMap<>();
             response.put("nhom", nhom);
             response.put("vaiTro", vaiTro);
+
+            // Kiểm tra xem người dùng có bị chặn khỏi nhóm hay không
+            boolean biChan = currentUser != null &&
+                    blockUserNhomRepository.existsByNhom_IdAndBlockedUser_Id(nhomId, currentUser.getId());
+            response.put("biChan", biChan); // Thêm thông tin biChan vào response
 
             return ResponseEntity.ok(response);
         } else {
@@ -244,4 +284,18 @@ public class NhomController {
         int soLuong = nhomService.demSoLuongThanhVien(nhomId);
         return ResponseEntity.ok(soLuong);
     }
+
+    // API xóa thành viên khỏi nhóm
+    @DeleteMapping("/{nhomId}/thanh-vien/{userId}")
+    public ResponseEntity<Void> xoaThanhVienKhoiNhom(
+            @PathVariable Long nhomId,
+            @PathVariable Long userId) {
+
+        nhomService.xoaThanhVienKhoiNhom(nhomId, userId);
+        return ResponseEntity.ok().build();
+    }
+
+
+
+
 }

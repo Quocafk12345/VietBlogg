@@ -184,21 +184,7 @@ ALTER TABLE Users ADD Font_Chu NVARCHAR(255);
 ALTER TABLE Users ADD Co_Chu FLOAT;
 GO
 
-UPDATE Users
-Set Ngay_Sinh = '2002-10-10'
-GO
 
-UPDATE Users
-Set Co_Chu = 16
-GO
-
-UPDATE Users
-Set Font_Chu = 'Helvetica Neue'
-GO
-
-UPDATE Users
-Set Mau_Nen = N'TRẮNG'
-GO
 
 -- Xóa cột cũ
 ALTER TABLE Users DROP COLUMN Mau_Nen, Font_Chu, Co_Chu;
@@ -209,37 +195,27 @@ ALTER TABLE Users ADD Theme NVARCHAR(255);
 ALTER TABLE Users ADD Font NVARCHAR(255);
 GO
 
-UPDATE Users
-Set Ngay_Sinh = '2002-10-10'
-GO
 
-UPDATE Users
-Set Font = 'Helvetica Neue'
-GO
-
-UPDATE Users
-Set Theme = N'SANG'
-GO
 
 ALTER TABLE Thanh_Vien ADD Ngay_Tham_Gia DATE;
 GO
 
 -- Giới hạn chia sẻ bài viết thành 1 cấp (không thể chia sẻ bài chia sẻ của người khác)
 CREATE TRIGGER TR_BaiViet_ChiaSe
-ON Bai_Viet
-FOR INSERT, UPDATE
-AS
+    ON Bai_Viet
+    FOR INSERT, UPDATE
+    AS
 BEGIN
     IF EXISTS (
         SELECT 1
         FROM inserted i
-        JOIN Bai_Viet bv ON i.Id_Bai_Viet_Chia_Se = bv.Id_Bai_Viet
+                 JOIN Bai_Viet bv ON i.Id_Bai_Viet_Chia_Se = bv.Id_Bai_Viet
         WHERE bv.Id_Bai_Viet_Chia_Se IS NOT NULL
     )
-    BEGIN
-        RAISERROR('Bài viết đã được chia sẻ, không thể chia sẻ chuyển tiếp.', 16, 1)
-        ROLLBACK TRANSACTION
-    END
+        BEGIN
+            RAISERROR('Bài viết đã được chia sẻ, không thể chia sẻ chuyển tiếp.', 16, 1)
+            ROLLBACK TRANSACTION
+        END
 END
 GO
 
@@ -272,19 +248,19 @@ GO
 
 -- Thêm dữ liệu mẫu cho bảng Bai_Viet
 INSERT INTO Bai_Viet (Id_Nhom ,Tieu_De, Noi_Dung, Ngay_Tao, Trang_Thai, User_Id, Id_Bai_Viet_Chia_Se) VALUES
-(NULL,'Is it just me or...', 'This scene right here is so fucking cold bro is laughing on an island full of enemy and enemy captains
+                                                                                                          (NULL,'Is it just me or...', 'This scene right here is so fucking cold bro is laughing on an island full of enemy and enemy captains
 are standing right there.....if this mf came to hachinosu in his prime he would have saved coby plus captured/killed black beard pirate
 ''s captains....this mf was laughing his whole fight, scared the captains, injured everyone, destroyed town and said "not enough" and he
 is fking 70+ of age ....bro is the definition of "HIM"Is it just me or anyone else also want luffy to get angry when he hear about garp
 captured by BB and in war with BB saves garp', '2024-10-18 10:00:00', N'ĐÃ ĐĂNG', 1, NULL),
-(NULL, N'Telegram: Mối đe dọa đến quyền riêng tư', N'Ê biết app nào nhắn tin bảo mật, an toàn không mậy? Xài telegram đi, tin tao, đảm bảo không bốc phét.
+                                                                                                          (NULL, N'Telegram: Mối đe dọa đến quyền riêng tư', N'Ê biết app nào nhắn tin bảo mật, an toàn không mậy? Xài telegram đi, tin tao, đảm bảo không bốc phét.
 Thiệt không vậy cha? TLDR (Dài quá không đọc): Điều khiến Telegram trở nên khác biệt (và là lý do chính khiến nó trở nên phổ biến)
 là các Channel (kênh) và những kênh này (và các cuộc trò chuyện nhóm) không an toàn để sử dụng. Nếu không có mã hóa đầu cuối, Telegram
 (hoặc bất kỳ ai có thể gây sức ép với Telegram hoặc truy cập vào hệ thống của Telegram) đều có thể toàn bộ nội dung được ĐÃ ĐĂNG trong các
 cuộc trò chuyện như vậy. Và vì tất cả người dùng Telegram đều được xác định bằng số điện thoại thực của họ (có thể ẩn khỏi những người
 dùng khác trên các kênh nhưng lại hiển thị với Telegram), nên họ có thể dễ dàng bị xác định danh tính.
 Tham khảo**:** https://protonvpn.com/blog/is-telegram-safe', '2023-02-01 10:00:00', N'NHÁP', 2, NULL),
-(NULL, N'Muốn có tình yêu... đẹp giống như hồi đi học', N'Mình đi làm khá lâu rồi mặc dù mới ra trường 1 năm,
+                                                                                                          (NULL, N'Muốn có tình yêu... đẹp giống như hồi đi học', N'Mình đi làm khá lâu rồi mặc dù mới ra trường 1 năm,
 nhưng dạo này lại hay buồn tủi nên cũng muốn có bồ quá ạ. Nhiều lúc thấy vã lắm rồi nhưng không chấp nhận việc yêu vội hay yêu bừa được.
 Mình nhận không ít thiệp cưới của mấy cặp yêu đương từ thời áo trắng quần tây đến khi lên lễ đường. Có case bên trai dev lương nghìn đô
 còn bên gái bán bánh mỳ, vẫn ok tốt đẹp. Cũng có case bên gái làm CEO bên trai chạy Grab mà case nào cũng thấy họ hạnh phúc ghê.
@@ -303,8 +279,8 @@ GO
 
 -- Thêm dữ liệu mẫu cho bảng Da_Phuong_Tien
 INSERT INTO Da_Phuong_Tien (Id_Bai_Viet, Duong_Dan) VALUES
-(1, '/path/to/image1.png'),
-(1, '/path/to/image2.png');
+                                                        (1, '/path/to/image1.png'),
+                                                        (1, '/path/to/image2.png');
 
 -- Thêm dữ liệu mẫu cho bảng Thong_Bao
 INSERT INTO Thong_Bao (Noi_Dung, Duong_Dan, Da_Doc, Ngay_Tao, User_Id) VALUES
@@ -319,13 +295,13 @@ GO
 
 -- Sau đó mới chèn phản hồi
 INSERT INTO Binh_Luan (Noi_Dung, Id_BL_Cha, Ngay_Tao, Id_Bai_Viet, User_Id, Level_Binh_Luan) VALUES
-(N'Phản hồi cho bình luận 1', 1, '2024-10-03 11:30:00', 1, 3, 2);
+    (N'Phản hồi cho bình luận 1', 1, '2024-10-03 11:30:00', 1, 3, 2);
 GO
 
 -- Thêm dữ liệu mẫu cho bảng DS_Luat_Nhom
 INSERT INTO DS_Luat_Nhom (Noi_Dung, Ten, Id_Nhom) VALUES
-(N'Tất cả mọi người đều muốn một cuộc tranh luận văn minh, vì thế hãy kiềm chế ngôn từ', N'Hãy tranh luận văn minh!', 1),
-(N'Hãy đưa ra dẫn chứng cho quan điểm của mình trong khi đối thoại và tranh luận, đừng nói suông, nói phét', N'Nói có sách, mách có chứng', 2);
+                                                      (N'Tất cả mọi người đều muốn một cuộc tranh luận văn minh, vì thế hãy kiềm chế ngôn từ', N'Hãy tranh luận văn minh!', 1),
+                                                      (N'Hãy đưa ra dẫn chứng cho quan điểm của mình trong khi đối thoại và tranh luận, đừng nói suông, nói phét', N'Nói có sách, mách có chứng', 2);
 
 -- Thêm dữ liệu mẫu cho bảng Thanh_Vien
 INSERT INTO Thanh_Vien (Vai_Tro, Id_Nhom, User_Id) VALUES
@@ -336,8 +312,8 @@ GO
 
 -- Thêm dữ liệu mẫu cho bảng Luu_Bai_Viet
 INSERT INTO Luu_Bai_Viet (User_Id, Id_Bai_Viet) VALUES
-(1, 1),
-(2, 2);
+                                                    (1, 1),
+                                                    (2, 2);
 
 -- Thêm dữ liệu mẫu cho bảng Luot_Follow
 INSERT INTO Luot_Follow (User_Id, User_Follow_Id) VALUES
@@ -347,8 +323,8 @@ GO
 
 -- Thêm dữ liệu mẫu cho bảng Luot_Like_Bai_Viet
 INSERT INTO Luot_Like_Bai_Viet (User_Id, Id_Bai_Viet) VALUES
-(1, 1),
-(2, 2);
+                                                          (1, 1),
+                                                          (2, 2);
 
 -- Thêm dữ liệu mẫu cho bảng Luot_Like_Binh_Luan
 INSERT INTO Luot_Like_Binh_Luan (User_Id, Id_Binh_Luan) VALUES
@@ -359,6 +335,7 @@ GO
 -- DƯỚI ĐÂY LÀ CÁC CÂU LỆNH CẬP NHẬT DATABASE CẦN BẮT BUỘC PHẢI CHẠY CHO DỰ ÁN VIETBLOG
 USE VietBlog
 GO
+
 UPDATE Users
 Set Ngay_Sinh = '2002-10-10'
 GO
@@ -368,15 +345,26 @@ SET Trang_Thai = N'ĐÃ ĐĂNG'
 WHERE Trang_Thai = N'ĐĂNG'
 GO
 
+UPDATE Users
+Set Co_Chu = 16
+GO
+
+UPDATE Users
+Set Font = 'Helvetica Neue'
+GO
+
+UPDATE Users
+Set Theme = N'SANG'
+GO
+
 -- Thêm mới để sẵn các nhóm
--- Thêm nhóm Âm nhạc
 INSERT INTO Nhom (Ten, Gioi_Thieu, Hinh_Dai_Dien, Ngay_Tao) VALUES
-(N'Nhóm Âm nhạc', N'Nhóm dành cho những người yêu âm nhạc', 'hinhmau_nhomnhac.jpg', GETDATE()),
-(N'Nhóm Thể thao', N'Nhóm thảo luận về các môn thể thao', 'hinhmau_nhomthethao.jpg', GETDATE()),
-(N'Nhóm Đọc sách', N'Nhóm chia sẻ về sách và đam mê đọc sách', 'hinhmau_nhomsach.jpg', GETDATE()),
-(N'Nhóm Phim ảnh', N'Nhóm dành cho những người yêu thích phim ảnh', 'hinhmau_nhomphim.jpg', GETDATE()),
-(N'Nhóm Game', N'Nhóm thảo luận về các trò chơi', 'hinhmau_nhomgame.jpg', GETDATE()),
-(N'Nhóm Học tập', N'Nhóm hỗ trợ học tập và chia sẻ kiến thức', 'hinhmau_nhomhoctap.jpg', GETDATE());
+                                                                (N'Nhóm Âm nhạc', N'Nhóm dành cho những người yêu âm nhạc', 'hinhmau_nhomnhac.jpg', GETDATE()),
+                                                                (N'Nhóm Thể thao', N'Nhóm thảo luận về các môn thể thao', 'hinhmau_nhomthethao.jpg', GETDATE()),
+                                                                (N'Nhóm Đọc sách', N'Nhóm chia sẻ về sách và đam mê đọc sách', 'hinhmau_nhomsach.jpg', GETDATE()),
+                                                                (N'Nhóm Phim ảnh', N'Nhóm dành cho những người yêu thích phim ảnh', 'hinhmau_nhomphim.jpg', GETDATE()),
+                                                                (N'Nhóm Game', N'Nhóm thảo luận về các trò chơi', 'hinhmau_nhomgame.jpg', GETDATE()),
+                                                                (N'Nhóm Học tập', N'Nhóm hỗ trợ học tập và chia sẻ kiến thức', 'hinhmau_nhomhoctap.jpg', GETDATE());
 GO
 
 -- Khai báo tất cả các biến ở đây
@@ -397,12 +385,12 @@ SET @NhomHocTapId = (SELECT Id_Nhom FROM Nhom WHERE Ten = N'Nhóm Học tập');
 
 -- Thêm User_Id = 1 vào các nhóm với vai trò "Quản trị viên"
 INSERT INTO Thanh_Vien (Vai_Tro, Id_Nhom, User_Id, Ngay_Tham_Gia) VALUES
-(N'Quản trị viên', 3, 1, GETDATE()),
-(N'Quản trị viên', 4, 1, GETDATE()),
-(N'Quản trị viên', 5, 1, GETDATE()),
-(N'Quản trị viên', 6, 1, GETDATE()),
-(N'Quản trị viên', 7, 1, GETDATE()),
-(N'Quản trị viên', 8, 1, GETDATE());
+                                                                      (N'Quản trị viên', 3, 1, GETDATE()),
+                                                                      (N'Quản trị viên', 4, 1, GETDATE()),
+                                                                      (N'Quản trị viên', 5, 1, GETDATE()),
+                                                                      (N'Quản trị viên', 6, 1, GETDATE()),
+                                                                      (N'Quản trị viên', 7, 1, GETDATE()),
+                                                                      (N'Quản trị viên', 8, 1, GETDATE());
 GO
 
 --Dùng để xóa nhóm
@@ -412,8 +400,8 @@ DROP CONSTRAINT FK__DS_Luat_N__Id_Nh__3B75D760;
 GO
 
 ALTER TABLE DS_Luat_Nhom
-ADD CONSTRAINT FK_DS_Luat_Nhom_Nhom 
-FOREIGN KEY (Id_Nhom) REFERENCES Nhom(Id_Nhom) ON DELETE CASCADE; 
+ADD CONSTRAINT FK_DS_Luat_Nhom_Nhom
+FOREIGN KEY (Id_Nhom) REFERENCES Nhom(Id_Nhom) ON DELETE CASCADE;
 
 
 -- Thêm ON DELETE CASCADE vào khóa ngoại trong bảng Bai_Viet
@@ -430,7 +418,47 @@ ALTER TABLE Thanh_Vien
 DROP CONSTRAINT FK__Thanh_Vie__Id_Nh__4D94879B;
 
 ALTER TABLE Thanh_Vien
-ADD CONSTRAINT FK_Thanh_Vien_Nhom 
+ADD CONSTRAINT FK_Thanh_Vien_Nhom
 FOREIGN KEY (Id_Nhom) REFERENCES Nhom(Id_Nhom) ON DELETE CASCADE;
 
+-- Xóa các nhóm 1 và 2 do dữ liệu cũ để cho nhóm du lịch không có quản trị viên
+DELETE FROM Thanh_Vien;
+DELETE FROM Nhom;
+-- Sau khi xoa bảng nhóm và bảng thành viên thì resert cho đếm lại userid nhóm từ đầu
+DBCC CHECKIDENT ('Nhom', RESEED, 0);
 
+-- Thêm dữ liệu mẫu cho bảng Nhom
+INSERT INTO Nhom (Ten, Gioi_Thieu, Hinh_Dai_Dien, Ngay_Tao) VALUES
+    (N'Nhóm Công nghệ', N'Nhóm thảo luận về công nghệ', 'hinhmau_nhomcongnghe.jpg', '2023-02-01 10:00:00'),
+    (N'Nhóm Du lịch', N'Nhóm chia sẻ kinh nghiệm du lịch', 'hinhmau_nhomdulich.jpg', '2023-02-01 10:00:00');
+GO
+
+-- Thêm dữ liệu mẫu cho bảng Thanh_Vien
+INSERT INTO Thanh_Vien (Vai_Tro, Id_Nhom, User_Id, Ngay_Tham_Gia) VALUES
+    (N'Quản trị viên', 1, 1, GETDATE()), -- User 1 là quản trị viên nhóm 1
+    (N'Thành viên', 1, 2, GETDATE()),
+    (N'Quản trị viên', 2, 1, GETDATE()), -- User 1 là quản trị viên nhóm 2
+    (N'Thành viên', 2, 3, GETDATE());
+GO
+--Sau khi chạy xong phần delete bảng Thanh_Vien và Nhom trở xuống thì quay lại chạy lại phần Thêm mới để sẵn các nhóm và Thêm User_Id = 1 vào các nhóm với vai trò "Quản trị viên"
+
+-- Thêm cột Trạng_Thái vào bảng Thanh_Vien
+ALTER TABLE Thanh_Vien ADD Trang_Thai NVARCHAR(255);
+GO
+
+-- Cập nhật giá trị mặc định cho cột Trạng_Thái là 'Đang hoạt động'
+UPDATE Thanh_Vien SET Trang_Thai = N'Đang hoạt động';
+GO
+
+--Tạo bảng Block_User_Nhom để chứa dữ liệu chặn userid trong nhóm
+CREATE TABLE Block_User_Nhom (
+    User_Id BIGINT NOT NULL,
+    Blocked_User_Id BIGINT NOT NULL, -- Thêm cột Blocked_User_Id
+    Id_Nhom BIGINT NOT NULL,
+    PRIMARY KEY (User_Id, Blocked_User_Id, Id_Nhom), -- Khóa chính gồm 3 cột
+    FOREIGN KEY (User_Id) REFERENCES Users(User_Id),
+    FOREIGN KEY (Blocked_User_Id) REFERENCES Users(User_Id), -- Khóa ngoại cho Blocked_User_Id
+    FOREIGN KEY (Id_Nhom) REFERENCES Nhom(Id_Nhom)
+);
+DELETE FROM Block_User_Nhom WHERE Id_Nhom = 13; 
+DELETE FROM Nhom WHERE Id_Nhom = 13;
