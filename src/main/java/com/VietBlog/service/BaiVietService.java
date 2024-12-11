@@ -26,6 +26,10 @@ public class BaiVietService {
 		return baiVietRepository.findAll();
 	}
 
+	public List<BaiViet> getBaiVietNhapCuaUser(Long userId) {
+		return baiVietRepository.findBaiVietNhapCuaUser(userId);
+	}
+
 	// Lấy bài viết theo User_Id
 	public List<BaiViet> getBaiVietByUserId(Long userId) {
 		return baiVietRepository.findByUserId(userId);

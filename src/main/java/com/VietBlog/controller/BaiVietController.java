@@ -1,8 +1,8 @@
 package com.VietBlog.controller;
 
-import com.VietBlog.constraints.BaiViet.TrangThai_BaiViet;
 import com.VietBlog.entity.BaiViet;
 import com.VietBlog.entity.User;
+import com.VietBlog.repository.BaiVietRepository;
 import com.VietBlog.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -26,14 +26,16 @@ public class BaiVietController {
     private final LuotLike_BaiViet_Service luotLike_BaiViet_Service;
     private final BinhLuanService binhLuanService;
     private final NhomService nhomService;
+    private final BaiVietRepository baiVietRepository;
 
     @Autowired
-    public BaiVietController(BaiVietService baiVietService, LuotLike_BaiViet_Service luotLike_BaiViet_Service, LuuBaiVietService luuBaiVietService, BinhLuanService binhLuanService, NhomService nhomService) {
+    public BaiVietController(BaiVietService baiVietService, LuotLike_BaiViet_Service luotLike_BaiViet_Service, LuuBaiVietService luuBaiVietService, BinhLuanService binhLuanService, NhomService nhomService, BaiVietRepository baiVietRepository) {
         this.baiVietService = baiVietService;
         this.luotLike_BaiViet_Service = luotLike_BaiViet_Service;
         this.luuBaiVietService = luuBaiVietService;
         this.binhLuanService = binhLuanService;
         this.nhomService = nhomService;
+        this.baiVietRepository = baiVietRepository;
     }
 
     /**
@@ -71,6 +73,15 @@ public class BaiVietController {
             return ResponseEntity.notFound().build();
         } else {
             return ResponseEntity.ok(baiViet);
+        }
+    }
+
+    @GetMapping("/{id}/nhap")
+    public ResponseEntity<List<BaiViet>> layDanhSachBaiVietNhapCuaUser(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(baiVietRepository.findBaiVietNhapCuaUser(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -120,7 +131,6 @@ public class BaiVietController {
     public ResponseEntity<BaiViet> dangBaiViet(@RequestBody BaiViet baiViet) {
         try {
              // Sử dụng BaiVietService
-            baiViet.setTrangThai(TrangThai_BaiViet.DA_DANG);
             baiVietService.themBaiViet(baiViet);
             return ResponseEntity.ok(baiViet);
         } catch (Exception e) {

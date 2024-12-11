@@ -1,10 +1,12 @@
 let host_BaiViet = "http://localhost:8080/api/bai-viet";
 
 mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService, $sce, $timeout) {  // Inject $q
+
     $scope.bangTin = [];
     $scope.dangTheoDoi = [];
     $scope.chiTietBaiViet = {};
     $scope.danhSachLuu = [];
+    $scope.baiVietNhap = [];
 
     $scope.DSdaPhuongTien = []; // Khai báo danh sách DSdaPhuongTien
     $scope.loaiBaiDang = "caNhan";
@@ -41,12 +43,14 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
-    // tải tất cả bài viết
+// tải tất cả bài viết đã đăng
     $scope.taiBaiViet = function () {
         var url = `${host_BaiViet}`;
         $http.get(url)
             .then((resp) => {
-                $scope.xuLyThongTinBaiViet(resp.data)
+                // Lọc ra các bài viết có trạng thái là "DA_DANG"
+                var baiVietDaDang = resp.data.filter(baiViet => baiViet.trangThai === "DA_DANG");
+                $scope.xuLyThongTinBaiViet(baiVietDaDang)
                     .then(baiViet => {
                         $scope.bangTin = baiViet;
                     });
@@ -56,6 +60,22 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
+// tải tất cả bài viết nháp
+    $scope.taiBaiVietNhap = function () {
+        var url = `${host_BaiViet}/${currentUser.id}/nhap`;
+        $http.get(url)
+            .then((resp) => {
+                // Lọc ra các bài viết có trạng thái là "NHAP"
+                var baiVietNhap = resp.data.filter(baiViet => baiViet.trangThai === "NHAP");
+                $scope.xuLyThongTinBaiViet(baiVietNhap)
+                    .then(baiViet => {
+                        $scope.baiVietNhap = baiViet;
+                    });
+            })
+            .catch((error) => {
+                console.log("Error", error);
+            });
+    };
     // code xử lý bài viết
     $scope.xuLyThongTinBaiViet = function (baiViet) {
         var promises = [];
@@ -72,6 +92,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
                 baiViet[i].luotLike = results[i * 3];
                 baiViet[i].luotBinhLuan = results[i * 3 + 1];
                 baiViet[i].thoiGianDang = $scope.tinhThoiGianDang(baiViet[i].ngayTao);
+                baiViet[i].noiDung = $sce.trustAsHtml(baiViet[i].noiDung);
             }
             return baiViet; // Trả về mảng bài viết đã xử lý
         });
@@ -142,7 +163,6 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             .get(`${host_BaiViet}/luu/${currentUser.id}`)
             .then((resp) => {
                 $scope.danhSachLuu = resp.data;
-                console.log($scope.danhSachLuu);
             })
             .catch((error) => {
                 console.log("Có lỗi xảy ra", error);
@@ -219,7 +239,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     };
 
     // đăng bài kèm hình ảnh
-    $scope.dangBai = function () {
+    $scope.xuLyDangBai = function (trangThai) {
         var url = `${host_BaiViet}/dang-bai`;
         // Tạo object bài viết mới
 
@@ -227,7 +247,8 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             tieuDe: document.getElementById('tieuDe').value, // Lấy tiêu đề từ input
             noiDung: CKEDITOR.instances.editor1.getData(), // Lấy nội dung từ textarea
             user: {id: currentUser.id}, // Lấy thông tin user từ biến currentUser
-            nhom: null
+            nhom: null,
+            trangThai: trangThai
         };
 
         // Nếu có nhóm được chọn, thêm thông tin nhóm vào bài viết
@@ -261,7 +282,6 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
 
                         // Xử lý khi thêm bài viết thành công
                         console.log('Thêm bài viết thành công:', response.data);
-                        alert('Thêm bài viết thành công');
 
                         // Cập nhật danh sách bài viết
                         $scope.bangTin.unshift(response.data);
@@ -289,6 +309,17 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
                 // Xử lý khi thêm bài viết thất bại
                 console.error('Lỗi khi thêm bài viết:', error);
             });
+    };
+
+    $scope.dangBai = function () {
+        $scope.xuLyDangBai("DA_DANG"); // Gọi hàm chung với trangThai = "DA_DANG"
+        alert("Đăng bài thành công");
+    }
+
+    // đăng bài kèm hình ảnh
+    $scope.luuNhap = function () {
+        $scope.xuLyDangBai("NHAP"); // Gọi hàm chung với trangThai = "DA_DANG"
+        alert("Lưu nháp thành công");
     };
 
     // Hàm upload đa phương tiện
@@ -347,7 +378,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
                 var objectUrl = URL.createObjectURL(file);
                 $scope.DSdaPhuongTien.push({
                     file: file,
-                    moTa: '',
+                    moTa: null,
                     preview: objectUrl
                 });
                 $timeout(function () {
@@ -359,6 +390,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
 
     $scope.taiBaiViet();
     $scope.taiDSLuu();
+    $scope.taiBaiVietNhap();
 
     $scope.$on('loadBaiVietNhom', function () {
         $scope.loadBaiVietNhom();
