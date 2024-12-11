@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -42,7 +43,16 @@ public class DaPhuongTienService {
 
 	@Transactional
 	public DaPhuongTien themDaPhuongTienChoBaiViet(Long baiVietId, MultipartFile filePhuongTien, String moTa) throws IOException {
-		Map uploadResult = cloudinary.uploader().upload(filePhuongTien.getBytes(), ObjectUtils.emptyMap());
+		Map<?, ?> uploadResult;
+
+		// Kiểm tra kiểu file để sử dụng phương thức upload phù hợp
+		if (Objects.requireNonNull(filePhuongTien.getContentType()).startsWith("image/")) {
+			uploadResult = cloudinary.uploader().upload(filePhuongTien.getBytes(), ObjectUtils.emptyMap());
+		} else if (filePhuongTien.getContentType().startsWith("video/")) {
+			uploadResult = cloudinary.uploader().uploadLarge(filePhuongTien.getBytes(), ObjectUtils.asMap("resource_type", "video"));
+		} else {
+			throw new IllegalArgumentException("Invalid file type");
+		}
 		String duongDan = (String) uploadResult.get("secure_url");
 		DaPhuongTien daPhuongTien = new DaPhuongTien();
 		daPhuongTien.setDuongDan(duongDan);
