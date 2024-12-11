@@ -399,11 +399,11 @@ GO
 -- Thêm ON DELETE CASCADE vào khóa ngoại trong bảng DS_Luat_Nhom
 ALTER TABLE DS_Luat_Nhom
 DROP CONSTRAINT FK__DS_Luat_N__Id_Nh__3B75D760;
-GO
 
 ALTER TABLE DS_Luat_Nhom
 ADD CONSTRAINT FK_DS_Luat_Nhom_Nhom 
-FOREIGN KEY (Id_Nhom) REFERENCES Nhom(Id_Nhom) ON DELETE CASCADE; 
+FOREIGN KEY (Id_Nhom) REFERENCES Nhom(Id_Nhom) ON DELETE CASCADE;
+GO
 
 
 -- Thêm ON DELETE CASCADE vào khóa ngoại trong bảng Bai_Viet
@@ -413,7 +413,7 @@ DROP CONSTRAINT FK__Bai_Viet__Id_Nho__3F466844;
 ALTER TABLE Bai_Viet
 ADD CONSTRAINT FK_Bai_Viet_Nhom
 FOREIGN KEY (Id_Nhom) REFERENCES Nhom(Id_Nhom) ON DELETE CASCADE;
-
+GO
 
 -- Thêm ON DELETE CASCADE vào khóa ngoại trong bảng Thanh_Vien
 ALTER TABLE Thanh_Vien
@@ -422,6 +422,17 @@ DROP CONSTRAINT FK__Thanh_Vie__Id_Nh__4D94879B;
 ALTER TABLE Thanh_Vien
 ADD CONSTRAINT FK_Thanh_Vien_Nhom 
 FOREIGN KEY (Id_Nhom) REFERENCES Nhom(Id_Nhom) ON DELETE CASCADE;
+GO
+
+-- Dùng để xóa bài viết
+-- Thêm ON DELETE CASCADE vào khóa ngoại trong bảng Da_Phuong_Tien
+ALTER TABLE Da_Phuong_Tien
+DROP CONSTRAINT FK__Da_Phuong__Id_Ba__4316F928;
+
+ALTER TABLE Da_Phuong_Tien
+ADD CONSTRAINT FK_Da_Phuong_Tien_Bai_Viet
+FOREIGN KEY (Id_Bai_Viet) REFERENCES Bai_Viet(Id_Nhom) ON DELETE CASCADE;
+GO
 
 CREATE TABLE Block_User
 (

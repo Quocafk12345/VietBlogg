@@ -4,6 +4,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     $scope.bangTin = [];
     $scope.dangTheoDoi = [];
     $scope.chiTietBaiViet = {};
+    $scope.danhSachLuu = [];
 
     $scope.DSdaPhuongTien = []; // Khai báo danh sách DSdaPhuongTien
     $scope.loaiBaiDang = "caNhan";
@@ -25,59 +26,58 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     $scope.tinhThoiGianDang = timeService.tinhThoiGianDang; // Gán hàm từ service
     $scope.baiVietNguoiDung = []; // Dữ liệu bài viết của người dùng
 
+    // lấy bài viết của người dùng, load vào trang cá nhân
     $scope.layBaiVietCuaUser = function (userId) {
         var url = `${host_BaiViet}/user/${userId}`;
         $http.get(url)
             .then(resp => {
-                $scope.baiVietCaNhan = resp.data;
-                var promises = [];
-                angular.forEach($scope.baiVietCaNhan, function (baiViet) {
-                    // Sử dụng baiViet.id thay cho baiVietId
-                    promises.push($scope.demLuotLike(baiViet.id));
-                    promises.push($scope.demLuotBinhLuan(baiViet.id));
-                });
-                $q.all(promises).then(function (result) {
-                    for (var i = 0; i < $scope.baiVietCaNhan.length; i++) {
-                        $scope.baiVietCaNhan[i].luotLike = result[i * 2];
-                        $scope.baiVietCaNhan[i].luotBinhLuan = result[i * 2 + 1];
-                        $scope.baiVietCaNhan[i].thoiGianDang = $scope.tinhThoiGianDang($scope.baiVietCaNhan[i].ngayTao);
-                        $scope.baiVietCaNhan[i].daLike = $scope.kiemTraLike($scope.baiVietCaNhan[i]);
-                    }
-                });
+                $scope.xuLyThongTinBaiViet(resp.data)
+                    .then(baiViet => {
+                        $scope.baiVietCaNhan = baiViet;
+                    });
             })
             .catch((error) => {
                 console.error("Error", error);
             });
     };
 
+    // tải tất cả bài viết
     $scope.taiBaiViet = function () {
         var url = `${host_BaiViet}`;
-        $http
-            .get(url)
+        $http.get(url)
             .then((resp) => {
-                $scope.bangTin = resp.data;
-                var promises = [];
-                angular.forEach($scope.bangTin, function (baiViet) {
-                    promises.push($scope.demLuotLike(baiViet.id));
-                    promises.push($scope.demLuotBinhLuan(baiViet.id)); // Thêm promise cho lượt bình luận
-                    promises.push($scope.kiemTraLike(baiViet)
-                        .then(function (daLike) {
-                            baiViet.daLike = daLike;
-                        }));
-                });
-                $q.all(promises).then(function (results) {
-                    for (var i = 0; i < $scope.bangTin.length; i++) {
-                        $scope.bangTin[i].luotLike = results[i * 3]; // Kết quả lượt like ở vị trí i * 2
-                        $scope.bangTin[i].luotBinhLuan = results[i * 3 + 1]; // Kết quả lượt bình luận ở vị trí i * 2 + 1
-                        $scope.bangTin[i].thoiGianDang = $scope.tinhThoiGianDang($scope.bangTin[i].ngayTao);
-                    }
-                });
+                $scope.xuLyThongTinBaiViet(resp.data)
+                    .then(baiViet => {
+                        $scope.bangTin = baiViet;
+                    });
             })
             .catch((error) => {
                 console.log("Error", error);
             });
     };
 
+    // code xử lý bài viết
+    $scope.xuLyThongTinBaiViet = function (baiViet) {
+        var promises = [];
+        angular.forEach(baiViet, function (baiVietObject) {
+            promises.push($scope.demLuotLike(baiVietObject.id));
+            promises.push($scope.demLuotBinhLuan(baiVietObject.id));
+            promises.push($scope.kiemTraLike(baiVietObject)
+                .then(function (daLike) {
+                    baiVietObject.daLike = daLike; // Sửa baiViet thành baiVietObject
+                }));
+        });
+        return $q.all(promises).then(function (results) {
+            for (var i = 0; i < baiViet.length; i++) {
+                baiViet[i].luotLike = results[i * 3];
+                baiViet[i].luotBinhLuan = results[i * 3 + 1];
+                baiViet[i].thoiGianDang = $scope.tinhThoiGianDang(baiViet[i].ngayTao);
+            }
+            return baiViet; // Trả về mảng bài viết đã xử lý
+        });
+    };
+
+    // kiểm tra bài có được like
     $scope.kiemTraLike = function (baiViet) {
         if (!baiViet || !baiViet.id) {
             console.error("Bài viết không hợp lệ:", baiViet);
@@ -92,6 +92,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     }
 
+    // chuyển đổi like và hủy like
     $scope.toggleLike = function (baiViet) {
         if (!baiViet || !baiViet.id) {
             console.error("Bài viết không hợp lệ:", baiViet);
@@ -113,7 +114,6 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
                 baiViet.luotLike += daLike ? 1 : -1;
                 if (baiViet.daLike) {
                     console.log("Like thành công");
-                    console.log(baiViet);
                 } else {
                     console.log("Hủy like thành công");
                 }
@@ -123,6 +123,33 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
+    $scope.xoaBaiViet = function (baiVietId) {
+        $http
+            .delete(`${host_BaiViet}/${baiVietId}`)
+            .then((resp) => {
+                $scope.bangTin = $scope.bangTin.filter(baiViet => baiViet.id !== baiVietId);
+                alert("Xóa bài viết thành công!");
+                console.log("Xóa thành công", resp.data);
+            })
+            .catch((error) => {
+                alert("Xóa bài viết thất bại!");
+                console.log("Xóa thất bại, có lỗi xảy ra", error);
+            });
+    };
+
+    $scope.taiDSLuu = function () {
+        $http
+            .get(`${host_BaiViet}/luu/${currentUser.id}`)
+            .then((resp) => {
+                $scope.danhSachLuu = resp.data;
+                console.log($scope.danhSachLuu);
+            })
+            .catch((error) => {
+                console.log("Có lỗi xảy ra", error);
+            });
+    };
+
+    // đếm số lượt like
     $scope.demLuotLike = function (idBaiViet) {
         var url = `${host_BaiViet}/${idBaiViet}/luot-like`;
         return $http
@@ -147,6 +174,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
+    // chuyển sang trang Chi tiết bài viết
     $scope.chuyenTrang = function ($event, baiVietId) {
         console.log(baiVietId);
         $event.preventDefault();
@@ -154,6 +182,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
         window.location.href = $event.target.href;
     };
 
+    // tải bài viết trong Chi tiết bài viết
     $scope.taiBaiVietDuocChon = function (baiVietId) {
         var url = `${host_BaiViet}/${baiVietId}`;
         $http
@@ -189,6 +218,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
+    // đăng bài kèm hình ảnh
     $scope.dangBai = function () {
         var url = `${host_BaiViet}/dang-bai`;
         // Tạo object bài viết mới
@@ -216,8 +246,6 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
                     var formData = new FormData();
                     formData.append('DSfile', media.file);
                     formData.append('DSMoTa', media.moTa);
-
-                    console.log(formData);
 
                     // Gọi API upload đa phương tiện
                     uploadPromises.push($http.post(`${host_BaiViet}/da-phuong-tien/dang-tai/${idBaiVietMoi}`, formData, {
@@ -305,7 +333,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
-    $scope.previewFiles = function (input) {
+    $scope.xemTruocHinhAnh = function (input) {
         if (input.files && input.files.length > 0) {
             // Giới hạn số lượng file tối đa là 100
             const fileHienCo = $scope.DSdaPhuongTien.length; // Số lượng file hiện có
@@ -330,6 +358,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     };
 
     $scope.taiBaiViet();
+    $scope.taiDSLuu();
 
     $scope.$on('loadBaiVietNhom', function () {
         $scope.loadBaiVietNhom();

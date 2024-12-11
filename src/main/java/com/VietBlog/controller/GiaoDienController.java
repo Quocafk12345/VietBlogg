@@ -44,6 +44,12 @@ public class GiaoDienController {
         return "page/chi-tiet-nhom";
     }
 
+    // trang đăng nhập
+    @GetMapping("/danh-sach-luu")
+    public String DSluu() {
+        return "page/danh-sach-luu";
+    }
+
     @GetMapping("/nhom")
     public String trangNhom() {
         return "page/kham-pha-nhom";
