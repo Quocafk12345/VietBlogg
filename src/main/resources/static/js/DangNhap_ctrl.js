@@ -1,5 +1,5 @@
 let host_DangNhap = "http://localhost:8080";
-mainApp.controller('loginController', function ($scope, $http, $window) {
+mainApp.controller('DangNhapController', function ($scope, $http, $window) {
 
     $scope.login = function() {
 

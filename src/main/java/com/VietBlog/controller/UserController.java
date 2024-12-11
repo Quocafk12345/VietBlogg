@@ -1,6 +1,6 @@
 package com.VietBlog.controller;
 
-import com.VietBlog.entity.BlockUserID;
+import com.VietBlog.entity.BlockUser_ID;
 import com.VietBlog.entity.LuotFollow;
 import com.VietBlog.entity.LuotFollowId;
 import com.VietBlog.entity.User;
@@ -52,12 +52,12 @@ public class UserController {
 	@ApiResponse(responseCode = "200", description = "Thành công", content = @Content(schema = @Schema(implementation = User.class)))
 	@ApiResponse(responseCode = "404", description = "Không tìm thấy tài khoản", content = @Content(schema = @Schema(implementation = User.class)))
 	@PostMapping("/dang-nhap")
-	public User login(@RequestParam("identifiers") String identifier,
-					  @RequestParam("password") String password) {
+	public ResponseEntity<?> login(@RequestParam("identifiers") String identifier,
+	                               @RequestParam("password") String password) {
 		try {
-			return userService.dangNhap(identifier, password); // Sau đó mới trả về response
+			return ResponseEntity.ok(userService.dangNhap(identifier, password)); // Sau đó mới trả về response
 		} catch (Exception e) {
-			return null;
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
 
@@ -118,7 +118,7 @@ public class UserController {
 
 	@GetMapping("/{userId}/checkBlockStatus")
 	public ResponseEntity<?> checkBlockStatus(@PathVariable("userId") Long userId, @RequestParam Long blockUserId){
-		BlockUserID blockUserID = new BlockUserID(userId,blockUserId);
+		BlockUser_ID blockUserID = new BlockUser_ID(userId,blockUserId);
 		boolean isBlocking = blockUserRepository.existsById(blockUserID);
 
 		Map<String, Boolean> response = new HashMap<>();

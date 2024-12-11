@@ -1,13 +1,13 @@
 package com.VietBlog.controller;
 
 import com.VietBlog.constraints.User.VaiTro_User;
+import com.VietBlog.entity.User;
+import com.VietBlog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import com.VietBlog.entity.User;
-import com.VietBlog.service.UserService;
 
 @Controller
 public class DangKyController {
@@ -18,7 +18,7 @@ public class DangKyController {
     @PostMapping("/dang-ky")
     public String registerUser(@ModelAttribute("user") User user, Model model) {
         user.setVaiTro(VaiTro_User.USER);
-        if (userService.isEmailExists(user.getEmail())) {
+        if (userService.timTheoEmail(user.getEmail()) != null) {
             model.addAttribute("error", "Email đã tồn tại");
             return "dang-ky";
         }

@@ -1,6 +1,5 @@
 package com.VietBlog.controller;
 
-import com.VietBlog.entity.BaiViet;
 import com.VietBlog.entity.User;
 import com.VietBlog.service.BaiVietService;
 import com.VietBlog.service.UserService;
@@ -134,7 +133,7 @@ public class GiaoDienController {
             model.addAttribute("daysSinceRegistration", daysSinceRegistration);
 
             // Get total number of posts by user
-            int totalBaiViet = baiVietService.countBaiVietByUserId(userId);
+            int totalBaiViet = baiVietService.demSoLuongBaiVietChoUser(userId);
             model.addAttribute("totalBaiViet", totalBaiViet);
 
             int totalLike = userService.countLikesByUserId(userId);

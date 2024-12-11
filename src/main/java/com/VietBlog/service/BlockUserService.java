@@ -24,7 +24,7 @@ public class BlockUserService {
                 .orElseThrow(() -> new RuntimeException("Chưa login."));
 
         // Tạo ID cho bảng trung gian
-        BlockUserID blockUserId = new BlockUserID(userId, userBlockId);
+        BlockUser_ID blockUserId = new BlockUser_ID(userId, userBlockId);
 
         if (blockUserRepository.existsById(blockUserId)) {
             blockUserRepository.deleteById(blockUserId);
@@ -32,8 +32,8 @@ public class BlockUserService {
         } else {
             BlockUser blockUser = new BlockUser();
             blockUser.setId(blockUserId);
-            blockUser.setBlocker(user);
-            blockUser.setBlocked(currentUser);
+            blockUser.setUser(user);
+            blockUser.setUserBiChan(currentUser);
             blockUserRepository.save(blockUser);
             return true;
         }

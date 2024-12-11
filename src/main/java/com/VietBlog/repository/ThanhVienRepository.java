@@ -11,13 +11,12 @@ import java.util.List;
 
 @Repository
 public interface ThanhVienRepository extends JpaRepository<ThanhVien, ThanhVienId> {
-    List<ThanhVien> findByUser_Id(Long UserId);
+    List<ThanhVien> findByUser_Id(Long userId);
     // Tìm theo idNhom
-    List<ThanhVien> findByNhom_Id(Long NhomId);
-    void deleteAllByNhom_Id(Long NhanId);
+    List<ThanhVien> findByNhom_Id(Long mhomId);
+    void deleteAllByNhom_Id(Long mhomId);
 
-    //tối ưu câu truy vấn để chỉ lấy những thông tin tên và vai trò user , tránh việc fetch toàn bộ object ThanhVien
-    @Query("SELECT u.tenNguoiDung, tv.vaiTro FROM ThanhVien tv JOIN tv.user u WHERE tv.nhom.id = :nhomId")
-    List<Object[]> layTenNguoiDungVaVaiTro(@Param("nhomId") Long nhomId);
+    @Query("SELECT tv FROM ThanhVien tv JOIN tv.user u WHERE tv.nhom.id = :nhomId")
+    List<ThanhVien> findThanhVienByNhomId(@Param("nhomId") Long nhomId);
 
 }

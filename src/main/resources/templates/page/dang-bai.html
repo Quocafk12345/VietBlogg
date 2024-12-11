@@ -32,50 +32,79 @@
 			<div class="col-8 p-3 m-auto">
 				<div class="container mt-4" ng-controller="nhomController">
 					<h2>Tạo bài viết</h2>
-					<div class="mb-3">
-						<div class="dropdown">
-							<button aria-expanded="false" class="btn btn-secondary dropdown-toggle"
-							        data-bs-toggle="dropdown"
-							        id="dropdownMenuButton" type="button">
+					<button aria-expanded="false" class="btn btn-secondary dropdown-toggle"
+					        data-bs-toggle="dropdown"
+					        id="dropdownMenuButton" type="button">
 									<span class="selected-item">
 										<img alt="Icon" class="rounded-circle" ng-if="mucDuocChon.hinhAnh">
 										{{mucDuocChon.ten}}
 									</span>
-							</button>
-							<ul aria-labelledby="dropdownMenuButton" class="dropdown-menu">
-								<li><h6 class="dropdown-header">Trang cá nhân</h6></li>
-								<li class="dropdown-item" ng-repeat="profile in thongTinUser">
-									<a class="dropdown-item" href="#" ng-click="chonNoiDangBai(profile)">
-										<img alt="Icon" class="rounded-circle" ng-src="{{profile.hinhDaiDien}}">
-										{{profile.ten}}
-									</a>
-								</li>
-								<li>
-									<hr class="dropdown-divider">
-								</li>
-								<li><h6 class="dropdown-header">Nhóm của bạn</h6></li>
-								<li class="dropdown-item" ng-repeat="group in DSnhom">
-									<a class="dropdown-item" href="#" ng-click="chonNoiDangBai(group)">
-										<img alt="Icon" class="rounded-circle" ng-src="{{group.hinhDaiDien}}">
-										{{group.ten}}
-										<span class="text-muted ms-2">{{group.soLuongThanhVien}} thành viên</span>
-									</a>
-								</li>
-							</ul>
+					</button>
+					<ul class="nav nav-tabs mb-3 mt-3">
+						<li class="nav-item">
+							<a class="nav-link active" data-bs-toggle="tab" href="#text">Nội dung</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" data-bs-toggle="tab" href="#images">Hình ảnh</a>
+						</li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="text">
+							<div class="mb-3">
+								<div class="dropdown">
+									<ul aria-labelledby="dropdownMenuButton" class="dropdown-menu">
+										<li><h6 class="dropdown-header">Trang cá nhân</h6></li>
+										<li class="dropdown-item" ng-repeat="profile in thongTinUser">
+											<a class="dropdown-item" href="#" ng-click="chonNoiDangBai(profile)">
+												<img alt="Icon" class="rounded-circle" ng-src="{{profile.hinhDaiDien}}">
+												{{profile.ten}}
+											</a>
+										</li>
+										<li>
+											<hr class="dropdown-divider">
+										</li>
+										<li><h6 class="dropdown-header">Nhóm của bạn</h6></li>
+										<li class="dropdown-item" ng-repeat="group in DSnhom_daThamGia">
+											<a class="dropdown-item" href="#" ng-click="chonNoiDangBai(group)">
+												<img alt="Icon" class="rounded-circle" ng-src="{{group.hinhDaiDien}}">
+												{{group.ten}}
+												<span class="text-muted ms-2">{{group.soLuongThanhVien}} thành viên</span>
+											</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="mb-3">
+								<label class="form-label" for="tieuDe">Tiêu đề <span
+										class="text-danger">*</span></label>
+								<input class="form-control border border-1 rounded" id="tieuDe" name="tieuDe"
+								       placeholder="Nhập tiêu đề bài viết" type="text">
+							</div>
+							<div class="mb-3">
+								<label class="form-label" for="editor1">Nội dung <span
+										class="text-danger">*</span></label>
+								<textarea class="form-control border border-1 rounded" id="editor1"
+								          name="noiDung" placeholder="Nhập nội dung bài viết" rows="10"></textarea>
+							</div>
+							<button class="btn btn-primary" ng-click="dangBai()">Đăng bài</button>
+							<button class="btn btn-secondary">Lưu nháp</button>
+						</div>
+						<div class="tab-pane fade" id="images">
+							<div class="mb-3">
+								<input class="form-control" id="imageUpload" multiple onchange="angular.element(this).scope().xemTruocHinhAnh(this)"
+								       type="file"></div>
+							<div class="preview-area">
+								<div class="preview-item" ng-repeat="media in DSdaPhuongTien track by $index">
+									<img alt="{{media.file.name}}" class="img-fluid"
+									     ng-if="media.file.type.startsWith('image/')" ng-src="{{media.preview}}">
+									<video class="img-fluid" controls
+									       ng-attr-src="{{media.preview}}" ng-if="media.file.type.startsWith('video/')"></video>
+									<input class="form-control mt-2" ng-model="media.moTa" placeholder="Mô tả"
+									       type="text">
+								</div>
+							</div>
 						</div>
 					</div>
-					<div class="mb-3">
-						<label class="form-label" for="tieuDe">Tiêu đề <span class="text-danger">*</span></label>
-						<input class="form-control border border-1 rounded" id="tieuDe" name="tieuDe"
-						       placeholder="Nhập tiêu đề bài viết" type="text">
-					</div>
-					<div class="mb-3">
-						<label class="form-label" for="editor1">Nội dung <span class="text-danger">*</span></label>
-						<textarea class="form-control border border-1 rounded" id="editor1"
-						          name="noiDung" placeholder="Nhập nội dung bài viết" rows="10"></textarea>
-					</div>
-					<button class="btn btn-primary" ng-click="dangBai()">Đăng bài</button>
-					<button class="btn btn-secondary">Lưu nháp</button>
 				</div>
 			</div>
 		</div>
@@ -88,7 +117,7 @@
 </script>
 <script th:src="@{/js/CKEditor/ckeditor.js}"></script>
 <script>
-	CKEDITOR.replace( 'editor1', {
+	CKEDITOR.replace('editor1', {
 		// Đường dẫn đến file config.js
 		customConfig: '/js/CKEditor/config.js'
 	});

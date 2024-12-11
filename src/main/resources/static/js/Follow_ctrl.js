@@ -3,8 +3,8 @@ mainApp.controller("UserController", function ($scope, $http) {
     $scope.isFollowing = false;
     $scope.isBlock = false;
     $scope.userProfile={};
-    $scope.followers={};
-    $scope.following={};
+    $scope.followers = {};
+    $scope.following = {};
     const url = window.location.href;
     const userFollowerId = url.split("/").pop(); // Lấy phần cuối URL , người dùng cần follow
     const userFollowId = currentUser;// Ngươi dùng đăng nhập
@@ -104,26 +104,26 @@ mainApp.controller("UserController", function ($scope, $http) {
         }
     }
 
-    $scope.layDanhSachNguoiTheoDoi = function (){
+    $scope.layDanhSachNguoiTheoDoi = function () {
         const url = `${host_Follow}/${currentUser}/followers`;
         $http.get(url)
-        .then((resp) => {
-            $scope.followers = resp.data;
-            console.log("Followers:", $scope.followers);
-        })
-        .catch((error) => {
-            console.log("Error:", error);
-        });
+            .then((resp) => {
+                $scope.followers = resp.data;
+                console.log("Followers:", $scope.followers);
+            })
+            .catch((error) => {
+                console.log("Error:", error);
+            });
     };
 
-    $scope.layDanhSachNguoiDangTheoDoi = function (){
+    $scope.layDanhSachNguoiDangTheoDoi = function () {
         const url = `${host_Follow}/${currentUser}/following`;
 
         $http.get(url)
-        .then((resp) => {
-            $scope.following = resp.data;
-            console.log("Following:", $scope.following);
-        })
+            .then((resp) => {
+                $scope.following = resp.data;
+                console.log("Following:", $scope.following);
+            })
             .catch((error) => {
                 console.log("Error:", error);
             });

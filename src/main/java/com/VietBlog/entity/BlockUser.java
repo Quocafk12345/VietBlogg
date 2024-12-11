@@ -11,15 +11,15 @@ import lombok.NoArgsConstructor;
 @Table(name="Block_User")
 public class BlockUser {
     @EmbeddedId
-    private BlockUserID id;
+    private BlockUser_ID id;
 
     @MapsId("user_Id")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="User_Id", nullable = false)
-    private User blocker;
+    private User user;
 
     @MapsId("blockUser_Id")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "Block_User_Id", nullable = false)
-    private User blocked;
+    private User userBiChan;
 }

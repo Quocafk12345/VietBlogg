@@ -15,7 +15,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Embeddable
-public class BlockUserID implements Serializable {
+public class BlockUser_ID implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     @NotNull
@@ -29,7 +29,7 @@ public class BlockUserID implements Serializable {
     public boolean equals(Object o) {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
-        BlockUserID entity = (BlockUserID) o;
+        BlockUser_ID entity = (BlockUser_ID) o;
         return Objects.equals(this.blockUser_Id, entity.user_Id) && Objects.equals(this.user_Id, entity.user_Id);
     }
 
