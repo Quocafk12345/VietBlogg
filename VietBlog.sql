@@ -147,7 +147,6 @@ CREATE TABLE Luot_Like_Bai_Viet
 );
 GO
 
-GO
 CREATE TABLE Luot_Like_Binh_Luan
 (
     User_Id BIGINT NOT NULL,
@@ -158,7 +157,7 @@ CREATE TABLE Luot_Like_Binh_Luan
 );
 GO
 
--- Đặt Unique chống trùng lặp cho tên ĐÃ ĐĂNG nhập của User
+-- Đặt Unique chống trùng lặp cho tên đăng nhập của User
 ALTER TABLE Users
     ADD CONSTRAINT UQ_Ten_Dang_Nhap UNIQUE (Ten_Dang_Nhap);
 GO
@@ -172,43 +171,6 @@ GO
 ALTER TABLE Users ADD Mau_Nen NVARCHAR(255);
 ALTER TABLE Users ADD Font_Chu NVARCHAR(255);
 ALTER TABLE Users ADD Co_Chu FLOAT;
-GO
-
-UPDATE Users
-Set Ngay_Sinh = '2002-10-10'
-GO
-
-UPDATE Users
-Set Co_Chu = 16
-GO
-
-UPDATE Users
-Set Font_Chu = 'Helvetica Neue'
-GO
-
-UPDATE Users
-Set Mau_Nen = N'TRẮNG'
-GO
-
--- Xóa cột cũ
-ALTER TABLE Users DROP COLUMN Mau_Nen, Font_Chu, Co_Chu;
-GO
-
--- Cập nhật các thuộc tính Mau_Nen, Font_Chu, Co_Chu cho bảng Users
-ALTER TABLE Users ADD Theme NVARCHAR(255);
-ALTER TABLE Users ADD Font NVARCHAR(255);
-GO
-
-UPDATE Users
-Set Ngay_Sinh = '2002-10-10'
-GO
-
-UPDATE Users
-Set Font = 'Helvetica Neue'
-GO
-
-UPDATE Users
-Set Theme = N'SANG'
 GO
 
 ALTER TABLE Thanh_Vien ADD Ngay_Tham_Gia DATE;
@@ -402,7 +364,7 @@ DROP CONSTRAINT FK__DS_Luat_N__Id_Nh__3B75D760;
 GO
 
 ALTER TABLE DS_Luat_Nhom
-ADD CONSTRAINT FK_DS_Luat_Nhom_Nhom 
+ADD CONSTRAINT FK_DS_Luat_Nhom_Nhom
 FOREIGN KEY (Id_Nhom) REFERENCES Nhom(Id_Nhom) ON DELETE CASCADE;
 GO
 
@@ -421,7 +383,7 @@ ALTER TABLE Thanh_Vien
 DROP CONSTRAINT FK__Thanh_Vie__Id_Nh__4D94879B;
 
 ALTER TABLE Thanh_Vien
-ADD CONSTRAINT FK_Thanh_Vien_Nhom 
+ADD CONSTRAINT FK_Thanh_Vien_Nhom
 FOREIGN KEY (Id_Nhom) REFERENCES Nhom(Id_Nhom) ON DELETE CASCADE;
 GO
 
@@ -443,6 +405,7 @@ CREATE TABLE Block_User
     FOREIGN KEY (User_Id) REFERENCES Users(User_Id),
     FOREIGN KEY (Block_User_Id) REFERENCES Users(User_Id)
 );
+GO
 
 UPDATE Thanh_Vien
 SET Vai_Tro = N'Quản trị viên'
