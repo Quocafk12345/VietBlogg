@@ -50,12 +50,12 @@
                 </select>
             </div>
         </div>
-        <div ng-if="!isBlock || !isOwnProfile">
-            <button ng-click="toggleBlock()" class="btn btn-primary">Chặn</button>
-        </div>
-        <div ng-if="isBlock || !isOwnProfile">
-            <button ng-click="toggleBlock()" class="btn btn-danger">Bỏ chặn</button>
-        </div>
+	    <div ng-if="!isBlock || !isOwnProfile">
+		    <button class="btn btn-primary" ng-click="toggleBlock()">Chặn</button>
+	    </div>
+	    <div ng-if="isBlock || !isOwnProfile">
+		    <button class="btn btn-danger" ng-click="toggleBlock()">Bỏ chặn</button>
+	    </div>
     </div>
     <!-- Tab Navigation -->
     <div class="tabs">
@@ -75,11 +75,8 @@
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="video-tab" data-bs-toggle="tab" href="#video" role="tab" aria-controls="video" aria-selected="false">Video</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link dropdown-toggle" id="dropdownMenuTab" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Xem thêm</a>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuTab">
-                    <li><a class="dropdown-item" id="follower-tab" data-bs-toggle="tab" href="#follower" role="tab" aria-controls="follower" aria-selected="false">Người theo dõi</a></li>
-                </ul>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="more-tab" data-bs-toggle="tab" href="#more" role="tab" aria-controls="more" aria-selected="false">Xem thêm</a>
             </li>
         </ul>
     </div>
@@ -116,65 +113,9 @@
             <h3>Video</h3>
             <p>Video của người dùng...</p>
         </div>
-        <div class="tab-pane fade" id="follower" role="tabpanel">
-            <ul class="nav nav-tabs mt-3" id="followerSubTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link active" id="followers-tab" data-bs-toggle="tab" href="#followers" role="tab" aria-controls="followers" aria-selected="true">Người theo dõi</a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="following-tab" data-bs-toggle="tab" href="#following" role="tab" aria-controls="following" aria-selected="false">Người đang theo dõi</a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="mutual-tab" data-bs-toggle="tab" href="#mutual" role="tab" aria-controls="mutual" aria-selected="false">Người theo dõi chung</a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="likes-tab" data-bs-toggle="tab" href="#likes" role="tab" aria-controls="likes" aria-selected="false">Lượt thích</a>
-                </li>
-            </ul>
-
-            <!-- Nội dung của các tab con -->
-            <div class="tab-content" id="followerSubTabContent">
-                <div class="tab-pane fade show active" id="followers" role="tabpanel" aria-labelledby="followers-tab">
-                    <b class="mt-2 mb-2">Người theo dõi</b>
-                    <div class="search-bar-facebook">
-                        <input type="text" class="search-input-facebook" placeholder="Tìm kiếm...">
-                        <i class="fa fa-search search-icon"></i>
-                    </div>
-                    <div class="user-list">
-                        <div class="user-item">
-                            <img src="https://via.placeholder.com/50" alt="Avatar" class="user-avatar">
-                            <div class="user-info">
-                                <h5 class="user-name">Theanh28 FC</h5>
-                            </div>
-                            <button class="follow-btn">Theo dõi</button>
-                        </div>
-                        <div class="user-item">
-                            <img src="https://via.placeholder.com/50" alt="Avatar" class="user-avatar">
-                            <div class="user-info">
-                                <h5 class="user-name">Nguyễn Thảo Hương</h5>
-                            </div>
-                            <button class="follow-btn">Theo dõi</button>
-                        </div>
-                        <div class="user-item">
-                            <img src="https://via.placeholder.com/50" alt="Avatar" class="user-avatar">
-                            <div class="user-info">
-                                <h5 class="user-name">Hải Phòng News</h5>
-                                <p class="user-desc">Tin tức mới nhất tại Hải Phòng</p>
-                            </div>
-                            <button class="follow-btn">Theo dõi</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="following" role="tabpanel" aria-labelledby="following-tab">
-                    <p>Danh sách những người bạn đang theo dõi</p>
-                </div>
-                <div class="tab-pane fade" id="mutual" role="tabpanel" aria-labelledby="mutual-tab">
-                    <p>Danh sách những người theo dõi chung</p>
-                </div>
-                <div class="tab-pane fade" id="likes" role="tabpanel" aria-labelledby="likes-tab">
-                    <p>Danh sách những người đã thích bài viết của bạn</p>
-                </div>
-            </div>
+        <div class="tab-pane fade" id="more" role="tabpanel" aria-labelledby="more-tab">
+            <h3>Xem thêm</h3>
+            <p>Thông tin thêm về người dùng...</p>
         </div>
     </div>
 </div>

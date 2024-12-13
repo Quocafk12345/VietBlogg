@@ -1,29 +1,28 @@
 package com.VietBlog.service;
 
+import com.VietBlog.constraints.User.Font_User;
+import com.VietBlog.constraints.User.Theme_User;
+import com.VietBlog.constraints.User.VaiTro_User;
+import com.VietBlog.entity.User;
+import com.VietBlog.repository.LuotFollowRepository;
+import com.VietBlog.repository.LuotLike_BaiViet_Repository;
+import com.VietBlog.repository.UserRepository;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
 
-import com.VietBlog.constraints.User.Font_User;
-import com.VietBlog.constraints.User.Theme_User;
-import com.VietBlog.constraints.User.VaiTro_User;
-import com.VietBlog.repository.LuotFollowRepository;
-import com.VietBlog.repository.LuotLike_BaiViet_Repository;
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.VietBlog.entity.User;
-import com.VietBlog.repository.UserRepository;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 @Service
 public class UserService {
 
 	private final Cloudinary cloudinary;
-
 	private final UserRepository userRepository;
 	private final LuotLike_BaiViet_Repository luotLike_BaiViet_Repository;
 	private final LuotFollowRepository luotFollowRepository;
@@ -37,7 +36,7 @@ public class UserService {
 	}
 
 	// tìm theo email
-	public User findByEmail(String email) {
+	public User timTheoEmail(String email) {
 		return userRepository.findByEmail(email).orElse(null);
 	}
 
@@ -51,13 +50,13 @@ public class UserService {
 			optionalUser = userRepository.findByTenDangNhap(identifier);
 		}
 
-		User user = optionalUser.orElse(null);
+		User user = optionalUser.orElseThrow(() -> new RuntimeException("Tên đăng nhập không đúng"));
 
 		// Kiểm tra user và mật khẩu
 		if (user != null && user.getMatKhau().equals(matKhau)) {
 			return user; // Trả về user nếu đăng nhập thành công
 		} else {
-			return null; // Trả về null nếu đăng nhập thất bại
+			throw new RuntimeException("Mật khẩu không đúng"); // Trả về null nếu đăng nhập thất bại
 		}
 	}
 
@@ -68,23 +67,19 @@ public class UserService {
 		user.setTheme(Theme_User.LIGHT);
 		user.setFont(Font_User.HELVETICA_NEUE);
 
-		if (isEmailExists(user.getEmail())) {
+		if (userRepository.existsByEmail(user.getEmail())) {
 			return;
 		}
-		if (isDienThoaiExists(user.getDienThoai())) {
+		if (userRepository.existsByDienThoai(user.getDienThoai())) {
 			return;
 		}
-		if (isTenDangNhapExists(user.getTenDangNhap())) {
+		if (userRepository.existsByTenDangNhap(user.getTenDangNhap())) {
 			return;
 		}
 
 		userRepository.save(user);
 	}
 
-	// kiểm tra email đã tồn tại hay chưa
-	public boolean isEmailExists(String email) {
-		return userRepository.existsByEmail(email);
-	}
 
 	// tìm theo SDT
 	public User findByDienThoai(String dienThoai) {
@@ -125,16 +120,6 @@ public class UserService {
 	// tìm User theo id
 	public User findById(Long userId) {
 		return userRepository.findById(userId).orElse(null);
-	}
-
-	// Kiểm tra xem số điện thoại đã tồn tại chưa
-	public boolean isDienThoaiExists(String dienThoai) {
-		return userRepository.existsByDienThoai(dienThoai);
-	}
-
-	// Kiểm tra xem tên đăng nhập đã tồn tại chưa
-	public boolean isTenDangNhapExists(String tenDangNhap) {
-		return userRepository.existsByTenDangNhap(tenDangNhap);
 	}
 
 	// Tìm kiếm người dùng theo tên người dùng

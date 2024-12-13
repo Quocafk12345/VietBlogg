@@ -142,21 +142,22 @@
 							<p>Ngày tạo: <span>{{thongTinNhom.ngayTao | date:'dd/MM/yyyy'}}</span></p>
 							<p>Số lượng thành viên: <span>{{thongTinNhom.soLuongThanhVien}}</span></p>
 							<p>Giới thiệu: <span>{{thongTinNhom.gioiThieu}}</span></p>
-							<p>Vai trò: <span>{{vaiTroTrongNhom}}</span></p> <div class="card-header">
+							<p>Vai trò: <span>{{thongTinNhom.vaiTroTrongNhom}}</span></p>
+							<div class="card-header">
 						</div>
 							<div class="btn-group" role="group">
-								<button type="button" class="btn btn-success"
-										ng-if="!thongTinNhom.daThamGia"
+								<button class="btn btn-success mx-1" ng-if="thongTinNhom.vaiTroTrongNhom === null"
+								        type="button"
 										ng-click="thamGiaNhom(thongTinNhom.id)">Tham gia nhóm</button>
-								<button type="button" class="btn btn-danger"
-										ng-if="vaiTroTrongNhom === 'CHU_NHOM' || vaiTroTrongNhom === 'QUAN_TRI_VIEN'"
+								<button class="btn btn-danger mx-1" ng-if="thongTinNhom.vaiTroTrongNhom === 'QUAN_TRI_VIEN'"
+								        type="button"
 										ng-click="giaiTanNhom(thongTinNhom.id)">Giải tán nhóm</button>
-								<button type="button" class="btn btn-warning"
-										ng-if="vaiTroTrongNhom === 'THANH_VIEN'"
+								<button class="btn btn-warning mx-1" ng-if="thongTinNhom.vaiTroTrongNhom === 'THANH_VIEN'"
+								        type="button"
 										ng-click="roiNhom(thongTinNhom.id)">Rời nhóm</button>
-
-								<button type="button" class="btn btn-danger"
-										ng-if="vaiTroTrongNhom === 'CHU_NHOM' || vaiTroTrongNhom === 'QUAN_TRI_VIEN'"
+								
+								<button class="btn btn-danger mx-1" ng-if="thongTinNhom.vaiTroTrongNhom === 'QUAN_TRI_VIEN'"
+								        type="button"
 										data-bs-toggle="modal" data-bs-target="#nhuongQuyenModal">Rời nhóm</button>
 								<div class="modal fade" id="nhuongQuyenModal" tabindex="-1" aria-labelledby="nhuongQuyenModalLabel" aria-hidden="true">
 									<div class="modal-dialog">
@@ -167,7 +168,6 @@
 											</div>
 											<div class="modal-body">
 												<select ng-model="$parent.nguoiNhanId"
-														ng-options="thanhVien.userId as thanhVien.tenNguoiDung + ' - ' + thanhVien.vaiTro for thanhVien in danhSachThanhVien_TabThanhVien">
 												</select>
 											</div>
 											<div class="modal-footer">

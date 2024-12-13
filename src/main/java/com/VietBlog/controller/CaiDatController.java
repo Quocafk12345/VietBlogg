@@ -56,7 +56,7 @@ public class CaiDatController {
 								 Model model) {
 		try {
 			// Lấy thông tin người dùng từ session (hoặc từ database)
-			User existingUser = userService.findByEmail("user1@example.com"); // Thay bằng cách lấy từ session
+			User existingUser = userService.timTheoEmail("user1@example.com"); // Thay bằng cách lấy từ session
 
 			if (existingUser == null) {
 				model.addAttribute("errorMessage", "Không tìm thấy thông tin người dùng.");

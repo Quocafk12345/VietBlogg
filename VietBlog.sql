@@ -133,9 +133,9 @@ CREATE TABLE Luot_Follow
     User_Follow_Id BIGINT NOT NULL,
     PRIMARY KEY (User_Id, User_Follow_Id),
     FOREIGN KEY (User_Id) REFERENCES Users(User_Id),
-    FOREIGN KEY (User_Follow_Id) REFERENCES Users(User_Id),
-    constraint user_cannot_follow_self check (user_id != user_follow_id)
+    FOREIGN KEY (User_Follow_Id) REFERENCES Users(User_Id)
 );
+GO
 
 CREATE TABLE Luot_Like_Bai_Viet
 (
@@ -153,11 +153,11 @@ CREATE TABLE Block_User
     Block_User_Id BIGINT NOT NULL,
     PRIMARY KEY (User_Id, Block_User_Id),
     FOREIGN KEY (User_Id) REFERENCES Users(User_Id),
-    FOREIGN KEY (Block_User_Id) REFERENCES Users(User_Id),
-    constraint user_cannot_block_self check (User_Id != Block_User.Block_User_Id)
+    FOREIGN KEY (Block_User_Id) REFERENCES Users(User_Id)
 );
-GO
 
+
+GO
 CREATE TABLE Luot_Like_Binh_Luan
 (
     User_Id BIGINT NOT NULL,
@@ -178,7 +178,7 @@ ALTER TABLE Users
     ADD CONSTRAINT UQ_Email UNIQUE (Email);
 GO
 
---Cập nhật các thuộc tính Mau_Nen, Font_Chu, Co_Chu cho bảng Users
+- Cập nhật các thuộc tính Mau_Nen, Font_Chu, Co_Chu cho bảng Users
 ALTER TABLE Users ADD Mau_Nen NVARCHAR(255);
 ALTER TABLE Users ADD Font_Chu NVARCHAR(255);
 ALTER TABLE Users ADD Co_Chu FLOAT;

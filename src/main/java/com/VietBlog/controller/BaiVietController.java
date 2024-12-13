@@ -1,13 +1,9 @@
 package com.VietBlog.controller;
 
-import com.VietBlog.constraints.BaiViet.TrangThai_BaiViet;
 import com.VietBlog.entity.BaiViet;
-import com.VietBlog.entity.LuuBaiViet;
-import com.VietBlog.entity.LuuBaiViet_ID;
 import com.VietBlog.entity.User;
-import com.VietBlog.repository.*;
-import com.VietBlog.service.BaiVietService;
-import com.VietBlog.service.LuotLike_BaiViet_Service;
+import com.VietBlog.repository.BaiVietRepository;
+import com.VietBlog.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @CrossOrigin("*")
@@ -27,19 +22,20 @@ import java.util.Map;
 public class BaiVietController {
 
     private final BaiVietService baiVietService;
-    private final BinhLuanRepository binhLuanRepository;
-    private final LuotLike_BaiViet_Repository luotLikeRepository;
-    private final LuuBaiVietRepository luuBaiVietRepository;
+    private final LuuBaiVietService luuBaiVietService;
     private final LuotLike_BaiViet_Service luotLike_BaiViet_Service;
+    private final BinhLuanService binhLuanService;
+    private final NhomService nhomService;
+    private final BaiVietRepository baiVietRepository;
 
     @Autowired
-    public BaiVietController(BaiVietService baiVietService, BinhLuanRepository binhLuanRepository,
-                             LuotLike_BaiViet_Repository luotLikeRepository, LuuBaiVietRepository luuBaiVietRepository, LuotLike_BaiViet_Service luotLike_BaiViet_Service) {
+    public BaiVietController(BaiVietService baiVietService, LuotLike_BaiViet_Service luotLike_BaiViet_Service, LuuBaiVietService luuBaiVietService, BinhLuanService binhLuanService, NhomService nhomService, BaiVietRepository baiVietRepository) {
         this.baiVietService = baiVietService;
-        this.binhLuanRepository = binhLuanRepository;
-        this.luotLikeRepository = luotLikeRepository;
-        this.luuBaiVietRepository = luuBaiVietRepository;
         this.luotLike_BaiViet_Service = luotLike_BaiViet_Service;
+        this.luuBaiVietService = luuBaiVietService;
+        this.binhLuanService = binhLuanService;
+        this.nhomService = nhomService;
+        this.baiVietRepository = baiVietRepository;
     }
 
     /**
@@ -64,7 +60,7 @@ public class BaiVietController {
             @PathVariable Long nhomId,
             @PathVariable Long userId) {
 
-        List<BaiViet> baiVietList = baiVietService.getBaiVietByNhomIdAndUserId(nhomId, userId);
+        List<BaiViet> baiVietList = nhomService.layBaiVietCuaUser(nhomId, userId);
         return ResponseEntity.ok(baiVietList);
     }
     @Operation(summary = "Lấy tất cả bài viết của người dùng", description = "Lấy thông tin chi tiết của tất cả bài viết của người dùng theo userId.")
@@ -80,6 +76,14 @@ public class BaiVietController {
         }
     }
 
+    @GetMapping("/{id}/nhap")
+    public ResponseEntity<List<BaiViet>> layDanhSachBaiVietNhapCuaUser(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(baiVietRepository.findBaiVietNhapCuaUser(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
     /**
      * Phương thức đếm số lượt like của một bài viết
@@ -91,7 +95,7 @@ public class BaiVietController {
     @ApiResponse(responseCode = "404", description = "Không tìm thấy bài viết")
     @GetMapping("/{id}/luot-like")
     public ResponseEntity<Integer> demLuotThich(@PathVariable Long id) {
-        Integer luotLike = luotLikeRepository.countLuotLike_BaiVietByBaiVietId(id);
+        Integer luotLike = luotLike_BaiViet_Service.demLuotLikeTheoBaiViet(id);
         return ResponseEntity.ok(luotLike);
     }
 
@@ -102,7 +106,7 @@ public class BaiVietController {
      */
     @GetMapping("/{id}/luot-binh-luan")
     public ResponseEntity<Integer> demBinhLuan(@PathVariable Long id) {
-        Integer luotBL = binhLuanRepository.countBinhLuanByBaiVietId(id);
+        Integer luotBL = binhLuanService.demLuotBinhLuan(id);
         return ResponseEntity.ok(luotBL);
     }
 
@@ -127,7 +131,6 @@ public class BaiVietController {
     public ResponseEntity<BaiViet> dangBaiViet(@RequestBody BaiViet baiViet) {
         try {
              // Sử dụng BaiVietService
-            baiViet.setTrangThai(TrangThai_BaiViet.DA_DANG);
             baiVietService.themBaiViet(baiViet);
             return ResponseEntity.ok(baiViet);
         } catch (Exception e) {
@@ -143,11 +146,9 @@ public class BaiVietController {
      */
     @Transactional
     @PostMapping("/luu-bai")
-    public ResponseEntity<LuuBaiViet> luuBaiVietVaoDSLuu(@RequestBody BaiViet baiViet, @RequestBody User user) {
-        LuuBaiViet_ID id = new LuuBaiViet_ID(baiViet.getId(), user.getId());
-        LuuBaiViet luuBaiViet = new LuuBaiViet(id, user, baiViet);
-        luuBaiVietRepository.save(luuBaiViet);
-        return ResponseEntity.ok(luuBaiViet);
+    public ResponseEntity<?> luuBaiVietVaoDSLuu(@RequestBody BaiViet baiViet, @RequestBody User user) {
+        luuBaiVietService.luuBaiViet(user.getId(), baiViet.getId());
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -185,13 +186,22 @@ public class BaiVietController {
             return ResponseEntity.badRequest().build();
         }
     }
-    @PostMapping("/{id}/like")
-    public ResponseEntity<?> toggleLike(@PathVariable("id") Long idBaiViet, @RequestParam("userId")Long userId) {
+
+    @PostMapping("/thich")
+    public boolean toggleLike(@RequestParam("idBaiViet") Long idBaiViet, @RequestParam("userId") Long userId) {
         try {
-            boolean isLiked = luotLike_BaiViet_Service.toggleLike(idBaiViet, userId);
-            return ResponseEntity.ok(isLiked);
-        }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return luotLike_BaiViet_Service.toggleLike(idBaiViet, userId);
+        } catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage()).hasBody();
+        }
+    }
+
+    @GetMapping("/thich/kiem-tra")
+    public boolean kiemTraLike(@RequestParam("idBaiViet") Long idBaiViet, @RequestParam("userId") Long userId) {
+        try {
+            return luotLike_BaiViet_Service.kiemTraLikeBaiViet(userId, idBaiViet);
+        } catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage()).hasBody();
         }
     }
 }

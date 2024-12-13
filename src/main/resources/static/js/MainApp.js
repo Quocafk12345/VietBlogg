@@ -33,3 +33,15 @@ mainApp.service('timeService', function () {
         }
     };
 });
+
+mainApp.filter('truncateHtml', function () {
+    return function (input, length) {
+        if (typeof input !== 'string') {
+            return input;
+        }
+        return truncate(input, length, {
+            stripTags: true,
+            ellipsis: '...'
+        });
+    };
+});

@@ -26,6 +26,10 @@ public class BaiVietService {
 		return baiVietRepository.findAll();
 	}
 
+	public List<BaiViet> getBaiVietNhapCuaUser(Long userId) {
+		return baiVietRepository.findBaiVietNhapCuaUser(userId);
+	}
+
 	// Lấy bài viết theo User_Id
 	public List<BaiViet> getBaiVietByUserId(Long userId) {
 		return baiVietRepository.findByUserId(userId);
@@ -46,7 +50,7 @@ public class BaiVietService {
 			BaiViet existingBaiViet = optionalBaiViet.get();
 			existingBaiViet.setTieuDe(baiViet.getTieuDe());
 			existingBaiViet.setNoiDung(baiViet.getNoiDung());
-			return baiVietRepository.save(existingBaiViet);
+			return baiVietRepository.saveAndFlush(existingBaiViet);
 		} else {
 			throw new RuntimeException("Bài viết không tồn tại");
 		}
@@ -74,16 +78,13 @@ public class BaiVietService {
 	}
 
 	// Đếm tổng số lượng bài viết
-	public Integer countTotalBaiViet() {
+	public Integer demSoLuongBaiViet() {
 		return baiVietRepository.countTotalBaiViet();
 	}
 
 	// Đếm số lượng bài viết theo User_Id
-	public Integer countBaiVietByUserId(Long userId) {
+	public Integer demSoLuongBaiVietChoUser(Long userId) {
 		return baiVietRepository.countBaiVietByUserId(userId);
 	}
 
-	public List<BaiViet> getBaiVietByNhomIdAndUserId(Long nhomId, Long userId) {
-		return baiVietRepository.findByNhomIdAndUserId(nhomId, userId);
-	}
 }

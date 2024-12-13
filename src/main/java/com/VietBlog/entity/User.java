@@ -80,5 +80,4 @@ public class User implements Serializable {
     @Convert(converter = Font_Converter.class)
     @Column(name = "Font")
     private Font_User font;
-
 }

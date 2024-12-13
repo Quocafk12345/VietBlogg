@@ -88,7 +88,7 @@ mainApp.controller('BinhLuanController', function($scope, $http, timeService) {
         $http.post(`${host_BinhLuan}/${baiVietId}`, binhLuanMoi)
             .then(resp => {
                 console.log("Bình luận đã được thêm:", resp.data);
-                $scope.layBinhLuanGoc(baiVietId);
+                $scope.layBinhLuan(baiVietId);
                 document.getElementById('binhLuanInput').value = "";
             })
             .catch(error => {

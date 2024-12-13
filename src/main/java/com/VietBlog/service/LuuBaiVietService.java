@@ -64,6 +64,4 @@ public class LuuBaiVietService {
 	public List<BaiViet> layDanhSachBaiVietDaLuu(Long userId) {
 		return luuBaiVietRepository.findBaiVietByUserId(userId);
 	}
-
-	// ... các phương thức khác
 }

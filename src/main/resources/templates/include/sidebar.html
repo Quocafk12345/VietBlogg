@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org" >
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -117,10 +117,20 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/CongDong}">
+                <a class="nav-link" th:href="@{/cong-dong}">
                     <i class="bi bi-fire"></i> Cộng đồng
                 </a>
             </li>
+	        <li class="nav-item">
+		        <a class="nav-link" th:href="@{/danh-sach-luu}">
+			        <i class="bi bi-app"></i> Danh sách lưu
+		        </a>
+	        </li>
+	        <li class="nav-item">
+		        <a class="nav-link" th:href="@{/nhap}">
+			        <i class="bi bi-app"></i> Nháp
+		        </a>
+	        </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">
                     <i class="bi bi-compass"></i> Khám phá
@@ -139,8 +149,8 @@
                 </a>
                 <ul class="collapse" id="followingMenu">
                     <li class="nav-item">
-                        <a class="nav-link" href="#" ng-repeat="item in follows">
-                            <img src="https://via.placeholder.com/20" alt="Avatar 1" class="rounded-circle"> {{item.tenNguoiDung}}
+                        <a class="nav-link" href="#">
+                            <img src="https://via.placeholder.com/20" alt="Avatar 1" class="rounded-circle"> Người theo dõi 1
                         </a>
                     </li>
                     <li class="nav-item">
