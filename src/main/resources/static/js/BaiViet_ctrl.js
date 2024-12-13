@@ -11,7 +11,6 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     $scope.thongTinUser = [
         {ten: currentUser.tenNguoiDung, hinhDaiDien: 'https://via.placeholder.com/20x20'}
     ];
-
     $scope.chonNoiDangBai = function (mucDuocChon) {
         $scope.mucDuocChon = mucDuocChon;
         if (mucDuocChon.ten === currentUser.tenNguoiDung) { // Kiểm tra nếu chọn "Trang cá nhân"
