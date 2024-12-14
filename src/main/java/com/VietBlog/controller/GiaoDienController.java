@@ -135,6 +135,15 @@ public class GiaoDienController {
 
 	}
 
+	@GetMapping("/bai-viet/chinh-sua/{id}")
+	public String postPage(@PathVariable Long id, Model model) {
+		if (model.getAttribute("currentUser") != null) {
+			model.addAttribute("idBaiViet", id);
+			return "page/dang-bai";
+		} else return "redirect:/dang-nhap";
+
+	}
+
 	@GetMapping("/index")
 	public String index(Model model) {
 		if (model.getAttribute("currentUser") != null) {

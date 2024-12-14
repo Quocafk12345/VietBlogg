@@ -45,3 +45,16 @@ mainApp.filter('truncate', function () {
         return input.substring(0, limit) + '...';
     };
 });
+
+// Tạo service
+mainApp.service('BaiVietService', function () {
+    this.baiViet = null;
+
+    this.setBaiViet = function (baiViet) {
+        this.baiViet = baiViet;
+    };
+
+    this.getBaiViet = function () {
+        return this.baiViet;
+    };
+});

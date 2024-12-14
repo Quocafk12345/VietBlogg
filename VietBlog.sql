@@ -451,3 +451,6 @@ GO
 
 ALTER TABLE Da_Phuong_Tien
     ADD Mo_Ta NVARCHAR(MAX)
+
+ALTER TABLE Da_Phuong_Tien
+    ADD Loai NVARCHAR(50)

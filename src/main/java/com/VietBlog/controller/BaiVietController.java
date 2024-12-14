@@ -158,7 +158,6 @@ public class BaiVietController {
      * @param baiViet: nội dung mới, sẽ được cập nhật của bài viết đó
      */
 
-    @Transactional
     @PutMapping("{id}")
     public ResponseEntity<BaiViet> update(@PathVariable Long id, @RequestBody BaiViet baiViet) {
         try {
