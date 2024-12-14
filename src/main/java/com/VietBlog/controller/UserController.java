@@ -28,7 +28,6 @@ import java.util.Map;
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/user")
-@SessionAttributes("currentUser")
 public class UserController {
 
 	private final UserService userService;

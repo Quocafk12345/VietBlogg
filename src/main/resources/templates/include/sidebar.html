@@ -112,7 +112,7 @@
     <div class="position-sticky pt-3">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link" href="#">
+	            <a class="nav-link" th:href="@{/index}">
                     <i class="bi bi-house-door"></i> Trang chủ
                 </a>
             </li>
@@ -175,7 +175,7 @@
                     </li>
 
                     <div>
-                        <li class="nav-item" ng-repeat="nhom in DSnhom">
+	                    <li class="nav-item" ng-repeat="nhom in DSnhom_daThamGia">
                             <a class="nav-link" th:href="@{/nhom/chi-tiet/}" ng-click="chuyenTrang($event, nhom.id)">
                                 <img ng-src="{{ nhom.hinhDaiDien }}" alt="Avatar Group 1" class="rounded-circle"> {{ nhom.ten }}
                             </a>

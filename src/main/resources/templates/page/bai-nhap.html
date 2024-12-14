@@ -22,9 +22,12 @@
 		<div class="col-3" th:replace="~{include/sidebar :: sidebar}"></div>
 		<div class="col-10">
 			<div class="container mt-4" ng-controller="BaiVietController">
-				<h2>Danh sách đã lưu</h2>
+				<h2>Bài nháp</h2>
 				
-				<div class="list-group" ng-repeat="baiViet in baiVietNhap">
+				<div class="text-center" ng-if="baiVietNhap.length === 0">Chưa có bài viết nào, ở đây trống vắng quá
+				</div>
+				
+				<div class="list-group" ng-if="baiVietNhap.length > 0" ng-repeat="baiViet in baiVietNhap">
 					<a class="list-group-item list-group-item-action" href="#">
 						<div class="d-flex w-100 justify-content-between">
 							<h5 class="mb-1">{{ baiViet.tieuDe }}</h5>

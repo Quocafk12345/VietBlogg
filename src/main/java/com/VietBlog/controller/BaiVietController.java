@@ -1,7 +1,6 @@
 package com.VietBlog.controller;
 
 import com.VietBlog.entity.BaiViet;
-import com.VietBlog.entity.User;
 import com.VietBlog.repository.BaiVietRepository;
 import com.VietBlog.service.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -127,7 +126,6 @@ public class BaiVietController {
      * @param baiViet: Các thông tin của một bài viết
      */
     @PostMapping("/dang-bai")
-    @Transactional
     public ResponseEntity<BaiViet> dangBaiViet(@RequestBody BaiViet baiViet) {
         try {
              // Sử dụng BaiVietService
@@ -144,11 +142,14 @@ public class BaiVietController {
      * @param user: User đang đăng nhập
      *
      */
-    @Transactional
     @PostMapping("/luu-bai")
-    public ResponseEntity<?> luuBaiVietVaoDSLuu(@RequestBody BaiViet baiViet, @RequestBody User user) {
-        luuBaiVietService.luuBaiViet(user.getId(), baiViet.getId());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> luuBaiVietVaoDSLuu(@RequestParam("idBaiViet") Long baiVietId, @RequestParam("userId") Long userId) {
+	    return ResponseEntity.ok(luuBaiVietService.luuBaiViet(userId, baiVietId));
+    }
+
+	@GetMapping("/luu-bai/kiem-tra")
+	public boolean kiemTraLuuBaiViet(@RequestParam("idBaiViet") Long baiVietId, @RequestParam("userId") Long userId) {
+		return luuBaiVietService.daLuuBaiViet(userId, baiVietId);
     }
 
     /**
