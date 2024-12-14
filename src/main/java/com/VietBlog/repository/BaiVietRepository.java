@@ -1,5 +1,6 @@
 package com.VietBlog.repository;
 
+import com.VietBlog.constraints.BaiViet.TrangThai_BaiViet;
 import com.VietBlog.entity.BaiViet;
 import java.util.List;
 
@@ -33,4 +34,11 @@ public interface BaiVietRepository extends JpaRepository<BaiViet, Long> {
     //Bài vieest user trong nhóm
     @Query("SELECT bv FROM BaiViet bv WHERE bv.nhom.id = :nhomId AND bv.user.id = :userId")
     List<BaiViet> findByNhomIdAndUserId(@Param("nhomId") Long nhomId, @Param("userId") Long userId);
+
+    @Query("SELECT bv FROM BaiViet bv WHERE bv.nhom = :nhomId AND bv.trangThai = 'CHỜ DUYỆT'")
+    List<BaiViet> findBaiVietChuaDuyetByNhomId(@Param("nhomId") Long nhomId);
+
+    List<BaiViet> findByNhom_IdAndTrangThai(Long nhomId, TrangThai_BaiViet trangThai);
+
+
 }

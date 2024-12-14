@@ -49,7 +49,10 @@
 							</a>
 						</li>
 						<li class="nav-item" ng-if="vaiTroTrongNhom === 'QUAN_TRI_VIEN' || vaiTroTrongNhom === 'CHU_NHOM'">
-							<a class="nav-link" href="#quanlythanhvien" data-bs-toggle="tab">Quản lý thành viên</a>
+							<a class="nav-link" href="#quanlychan" data-bs-toggle="tab">Quản lý chặn </a>
+						</li>
+						<li class="nav-item" ng-if="vaiTroTrongNhom === 'QUAN_TRI_VIEN' || vaiTroTrongNhom === 'CHU_NHOM'">
+							<a class="nav-link" href="#baivietchuaduyet" data-bs-toggle="tab">Bài viết chưa duyệt</a>
 						</li>
 					</ul>
 
@@ -135,43 +138,76 @@
 						<!--Tab thành viên nhóm-->
 						<div class="tab-pane" id="thanhvien">
 							<ul>
-								<li ng-repeat="thanhVien in danhSachThanhVien_TabThanhVien">
-									<img ng-src="{{ thanhVien.hinhDaiDien }}" alt="" width="30" height="30" class="rounded-circle">
-									{{ thanhVien.tenNguoiDung }} - {{ (thanhVien.vaiTro === 'CHU_NHOM') ? 'Chủ nhóm' : (thanhVien.vaiTro === 'QUAN_TRI_VIEN') ? 'Quản trị viên' : 'Thành viên' }}
-								</li>
-							</ul>
-						</div>
-
-						<!--Tab quản lý thành viên nhóm-->
-<!--						<div class="tab-pane" id="quanlythanhvien" ng-if="vaiTroTrongNhom === 'QUAN_TRI_VIEN' || vaiTroTrongNhom === 'CHU_NHOM'">-->
-<!--							<ul>-->
-<!--								<li ng-repeat="thanhVien in danhSachThanhVien_TabThanhVien">-->
-<!--									<img ng-src="{{ thanhVien.hinhDaiDien }}" alt="" width="30" height="30" class="rounded-circle">-->
-<!--									{{ thanhVien.tenNguoiDung }} - {{ (thanhVien.vaiTro === 'CHU_NHOM') ? 'Chủ nhóm' : (thanhVien.vaiTro === 'QUAN_TRI_VIEN') ? 'Quản trị viên' : 'Thành viên' }}-->
-<!--									<button ng-click="xoaThanhVien(thanhVien.userId)"-->
-<!--											ng-if="thanhVien.userId !== currentUser.id && thanhVien.vaiTro === 'THANH_VIEN'"> Xóa khỏi nhóm-->
-<!--									</button>-->
-<!--								</li>-->
-<!--							</ul>-->
-<!--						</div>-->
-						<div class="tab-pane" id="quanlythanhvien" ng-if="vaiTroTrongNhom === 'QUAN_TRI_VIEN' || vaiTroTrongNhom === 'CHU_NHOM'">
-							<ul>
 								<li ng-repeat="thanhVien in danhSachThanhVien_TabThanhVien" class="d-flex align-items-center">
 									<img ng-src="{{ thanhVien.hinhDaiDien }}" alt="" width="30" height="30" class="rounded-circle">
-									{{ thanhVien.tenNguoiDung }} - {{ (thanhVien.vaiTro === 'CHU_NHOM') ? 'Chủ nhóm' : (thanhVien.vaiTro === 'QUAN_TRI_VIEN') ? 'Quản trị viên' : 'Thành viên' }}
+									{{ thanhVien.tenNguoiDung }} -
+									{{ (thanhVien.vaiTro === 'CHU_NHOM') ? 'Chủ nhóm' : (thanhVien.vaiTro === 'QUAN_TRI_VIEN') ? 'Quản trị viên' : 'Thành viên' }}
 
-									<div class="dropdown ms-auto" ng-if="thanhVien.vaiTro === 'THANH_VIEN'">
-										<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+									<div class="dropdown ms-auto" ng-if="(vaiTroTrongNhom === 'QUAN_TRI_VIEN' || vaiTroTrongNhom === 'CHU_NHOM') && thanhVien.vaiTro !== 'QUAN_TRI_VIEN' && thanhVien.vaiTro !== 'CHU_NHOM'">
+										<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+												data-bs-toggle="dropdown" aria-expanded="false">
 											<i class="bi bi-three-dots-vertical"></i>
 										</button>
 										<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-											<li><a class="dropdown-item" href="#" ng-click="xoaThanhVien(thanhVien.userId)">Xóa khỏi nhóm</a></li>
-											<li><a class="dropdown-item" href="#" ng-click="chanKhoiNhom(thanhVien.userId)">Chặn khỏi nhóm</a></li>
-											<li><a class="dropdown-item" href="#" ng-click="gioiHanHoatDong(thanhVien.userId)">Giới hạn hoạt động</a></li>
+											<li><a class="dropdown-item" href="#" ng-click="xoaThanhVien(thanhVien.userId)">Xóa khỏi nhóm</a>
+											</li>
+											<li><a class="dropdown-item" href="#" ng-click="chanKhoiNhom(thanhVien.userId)">Chặn khỏi nhóm</a>
+											</li>
+											<li><a class="dropdown-item" href="#" >Giới hạn hoạt động</a>
+											</li>
 										</ul>
 									</div>
 								</li>
 							</ul>
+						</div>
+
+						<!--Tab quản lý chặn-->
+						<div class="tab-pane" id="quanlychan" ng-if="vaiTroTrongNhom === 'QUAN_TRI_VIEN' || vaiTroTrongNhom === 'CHU_NHOM'">
+							<ul>
+								<li ng-repeat="user in danhSachUserBiChan">
+									<img ng-src="{{ user.hinhDaiDien }}" alt="" width="30" height="30" class="rounded-circle">
+									{{ user.tenNguoiDung }}
+									<button ng-click="boChanKhoiNhom(user.id)" class="btn btn-sm btn-warning">Bỏ chặn</button>								</li>
+							</ul>
+						</div>
+
+						<!--Tab Bài viết chưa duyệt-->
+						<div class="tab-pane" id="baivietchuaduyet"
+							 ng-if="vaiTroTrongNhom === 'QUAN_TRI_VIEN' || vaiTroTrongNhom === 'CHU_NHOM'"
+							 ng-controller="BaiVietController">
+
+							<div class="w-50 m-auto">
+								<div class="tab-content" id="nav-tabContent">
+									<div class="card mb-3" ng-repeat="baiViet in danhSachBaiVietChoDuyet">
+										<div class="card-body">
+											<div class="d-flex">
+												<img alt="User Avatar" class="rounded-circle me-3" src="https://via.placeholder.com/50">
+												<div>
+													<h6 class="mb-0">{{baiViet.user.tenNguoiDung}}</h6>
+													<small class="text-muted">{{baiViet.thoiGianDang}}</small>
+												</div>
+											</div>
+											<p class="mt-3">{{baiViet.tieuDe}}</p>
+											<div ng-if="baiViet.daPhuongTien.length > 0">
+												<img alt="Post Image" class="img-fluid rounded mb-3" src="https://via.placeholder.com/500x300 ">
+											</div>
+											<p ng-bind-html="baiViet.noiDung"></p>
+
+											<div class="d-flex justify-content-between">
+												<div>
+													<button class="btn btn-success me-2" ng-click="duyetBaiViet(baiViet.id)">Duyệt</button>
+													<button class="btn btn-danger" ng-click="tuChoiBaiViet(baiViet.id)">Từ chối</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div ng-if="danhSachBaiVietChoDuyet.length === 0" class="text-center mt-3">
+								<p>Không có bài viết nào chưa duyệt.</p>
+							</div>
+
 						</div>
 
 					</div>

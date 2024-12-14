@@ -122,7 +122,6 @@ public class BaiVietController {
     public ResponseEntity<BaiViet> dangBaiViet(@RequestBody BaiViet baiViet) {
         try {
              // Sử dụng BaiVietService
-            baiViet.setTrangThai(TrangThai_BaiViet.DA_DANG);
             baiVietService.themBaiViet(baiViet);
             return ResponseEntity.ok(baiViet);
         } catch (Exception e) {
@@ -195,5 +194,45 @@ public class BaiVietController {
         } catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage()).hasBody();
         }
+    }
+
+    @GetMapping("/nhom/{nhomId}/bai-viet-chua-duyet")
+    public ResponseEntity<List<BaiViet>> layDanhSachBaiVietChuaDuyet(@PathVariable Long nhomId) {
+        try {
+            List<BaiViet> baiVietList = baiVietService.layDanhSachBaiVietChuaDuyet(nhomId);
+            return ResponseEntity.ok(baiVietList);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PutMapping("/{id}/duyet")
+    public ResponseEntity<BaiViet> duyetBaiViet(@PathVariable Long id) {
+        // 1. Lấy bài viết theo ID
+        BaiViet baiViet = baiVietService.getBaiVietById(id);
+
+        // 2. Cập nhật trạng thái thành "ĐÃ ĐĂNG"
+        baiViet.setTrangThai(TrangThai_BaiViet.DA_DANG);
+
+        // 3. Lưu bài viết
+        baiVietService.themBaiViet(baiViet);
+
+        return ResponseEntity.ok(baiViet);
+    }
+
+    @PutMapping("/{id}/tu-choi")
+    public ResponseEntity<BaiViet> tuChoiBaiViet(@PathVariable Long id) {
+        // 1. Lấy bài viết theo ID
+        BaiViet baiViet = baiVietService.getBaiVietById(id);
+
+        // 2. Cập nhật trạng thái thành "TỪ CHỐI"
+        baiViet.setTrangThai(TrangThai_BaiViet.TU_CHOI);
+
+        // 3. Lưu bài viết
+        baiVietService.themBaiViet(baiViet);
+
+        return ResponseEntity.ok(baiViet);
     }
 }

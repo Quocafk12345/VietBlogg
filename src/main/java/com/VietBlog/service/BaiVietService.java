@@ -1,5 +1,6 @@
 package com.VietBlog.service;
 
+import com.VietBlog.constraints.BaiViet.TrangThai_BaiViet;
 import com.VietBlog.entity.BaiViet;
 import com.VietBlog.repository.BaiVietRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,26 @@ public class BaiVietService {
 	}
 
 	// Thêm bài viết mới
+//	@Transactional
+//	public void themBaiViet(BaiViet baiViet) {
+//		baiViet.setNgayTao(Timestamp.from(Instant.now()));
+//		if (baiViet.getNhom() == null) {
+//			baiViet.setTrangThai(TrangThai_BaiViet.CHO_DUYET);
+//		}
+//		baiVietRepository.save(baiViet);
+//	}
 	@Transactional
 	public void themBaiViet(BaiViet baiViet) {
 		baiViet.setNgayTao(Timestamp.from(Instant.now()));
+
+		// Kiểm tra xem bài viết có thuộc nhóm hay không
+		if (baiViet.getNhom() == null) {
+			baiViet.setTrangThai(TrangThai_BaiViet.DA_DANG);
+		} else {
+			// Nếu không thuộc nhóm, mới set trạng thái là ĐÃ ĐĂNG
+			baiViet.setTrangThai(TrangThai_BaiViet.CHO_DUYET);
+		}
+
 		baiVietRepository.save(baiViet);
 	}
 
@@ -86,4 +104,10 @@ public class BaiVietService {
 	public List<BaiViet> getBaiVietByNhomIdAndUserId(Long nhomId, Long userId) {
 		return baiVietRepository.findByNhomIdAndUserId(nhomId, userId);
 	}
+
+	public List<BaiViet> layDanhSachBaiVietChuaDuyet(Long nhomId) {
+		return baiVietRepository.findBaiVietChuaDuyetByNhomId(nhomId);
+	}
+
+
 }

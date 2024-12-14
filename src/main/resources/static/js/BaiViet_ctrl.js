@@ -14,13 +14,27 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
         {ten: currentUser.tenNguoiDung, hinhDaiDien: 'https://via.placeholder.com/20x20'}
     ];
 
+    // $scope.chonNoiDangBai = function (mucDuocChon) {
+    //     $scope.mucDuocChon = mucDuocChon;
+    //     if (mucDuocChon.ten === currentUser.tenNguoiDung) { // Kiểm tra nếu chọn "Trang cá nhân"
+    //         $scope.loaiBaiDang = "caNhan";
+    //     } else {
+    //         $scope.loaiBaiDang = "nhom";
+    //     }
+    // };
     $scope.chonNoiDangBai = function (mucDuocChon) {
+        console.log("mucDuocChon:", mucDuocChon); // In ra object mucDuocChon
+
         $scope.mucDuocChon = mucDuocChon;
-        if (mucDuocChon.ten === currentUser.tenNguoiDung) { // Kiểm tra nếu chọn "Trang cá nhân"
+
+        if (mucDuocChon.ten === currentUser.tenNguoiDung) {
             $scope.loaiBaiDang = "caNhan";
         } else {
             $scope.loaiBaiDang = "nhom";
         }
+
+        console.log("$scope.mucDuocChon:", $scope.mucDuocChon); // In ra giá trị sau khi cập nhật
+        console.log("$scope.loaiBaiDang:", $scope.loaiBaiDang); // In ra giá trị sau khi cập nhật
     };
 
     $scope.tinhThoiGianDang = timeService.tinhThoiGianDang; // Gán hàm từ service
@@ -193,21 +207,35 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
+    // $scope.dangBai = function () {
+    //     var url = `${host_BaiViet}/dang-bai`;
+    //     // Tạo object bài viết mới
+    //
+    //     var baiViet = {
+    //         tieuDe: document.getElementById('tieuDe').value, // Lấy tiêu đề từ input
+    //         noiDung: CKEDITOR.instances.editor1.getData(), // Lấy nội dung từ textarea
+    //         user: {id: currentUser.id}, // Lấy thông tin user từ biến currentUser
+    //         nhom: null
+    //     };
+    //
+    //     // Nếu có nhóm được chọn, thêm thông tin nhóm vào bài viết
+    //     if ($scope.loaiBaiDang === "nhom") {
+    //         baiViet.nhom = $scope.mucDuocChon;
+    //     } else baiViet.nhom = null;
     $scope.dangBai = function () {
         var url = `${host_BaiViet}/dang-bai`;
-        // Tạo object bài viết mới
 
         var baiViet = {
-            tieuDe: document.getElementById('tieuDe').value, // Lấy tiêu đề từ input
-            noiDung: CKEDITOR.instances.editor1.getData(), // Lấy nội dung từ textarea
-            user: {id: currentUser.id}, // Lấy thông tin user từ biến currentUser
-            nhom: null
+            tieuDe: document.getElementById('tieuDe').value,
+            noiDung: CKEDITOR.instances.editor1.getData(),
+            user: {id: currentUser.id},
+            nhom: null // Khởi tạo nhom là null
         };
 
         // Nếu có nhóm được chọn, thêm thông tin nhóm vào bài viết
         if ($scope.loaiBaiDang === "nhom") {
-            baiViet.nhom = $scope.mucDuocChon;
-        } else baiViet.nhom = null;
+            baiViet.nhom = { id: $scope.mucDuocChon.id }; // Gửi ID của nhóm
+        }
 
         // Gọi API để thêm bài viết mới
         $http.post(url, baiViet)
@@ -259,6 +287,8 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
 
                     }
                 });
+                $scope.baiVietChoDuyet = resp.data.filter(baiViet => baiViet.trangThai === "CHO_DUYET");
+                console.log($scope.baiVietChoDuyet);
             })
             .catch(error => {
                 console.error("Lỗi khi lấy bài viết của nhóm:", error);
@@ -270,6 +300,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     $scope.$on('loadBaiVietNhom', function () {
         $scope.loadBaiVietNhom();
     });
+
 
 });
 

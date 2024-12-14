@@ -27,18 +27,16 @@ public class BlockUserNhomId implements Serializable {
     @Column(name = "Id_Nhom", nullable = false)
     private Long nhomId;
 
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BlockUserNhomId that = (BlockUserNhomId) o;
-        return userId.equals(that.userId) && nhomId.equals(that.nhomId);
+        return userId.equals(that.userId) && blockedUserId.equals(that.blockedUserId) && nhomId.equals(that.nhomId); // Thêm blockedUserId
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, nhomId);
+        return Objects.hash(userId, blockedUserId, nhomId); // Thêm blockedUserId
     }
 }

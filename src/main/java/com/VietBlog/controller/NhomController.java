@@ -1,9 +1,12 @@
 package com.VietBlog.controller;
 
+import com.VietBlog.constraints.BaiViet.TrangThai_BaiViet;
 import com.VietBlog.entity.*;
 import com.VietBlog.repository.BaiVietRepository;
 import com.VietBlog.repository.BlockUserNhomRepository;
 import com.VietBlog.repository.ThanhVienRepository;
+import com.VietBlog.service.BaiVietService;
+import com.VietBlog.service.BlockUserNhomService;
 import com.VietBlog.service.NhomService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +31,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/nhom")
 public class NhomController {
     private final NhomService nhomService;
-    @Autowired
-    private Cloudinary cloudinary; // Khai báo bean Cloudinary
 
+    @Autowired
+    private BlockUserNhomService blockUserNhomService;
+
+    @Autowired
+    private Cloudinary cloudinary;
     @Autowired
     public NhomController(NhomService nhomService) {
         this.nhomService = nhomService;
@@ -41,6 +47,8 @@ public class NhomController {
 
     @Autowired
     private BaiVietRepository baiVietRepository;
+    @Autowired
+    private BaiVietService baiVietService;
 
     @Autowired
     private BlockUserNhomRepository blockUserNhomRepository;
@@ -267,14 +275,14 @@ public class NhomController {
     }
 
     // API lấy danh sách bài viết của một nhóm
-//    @GetMapping("/{nhomId}/baiviet")
+//    @GetMapping("/{nhomId}/bai-viet")
 //    public ResponseEntity<List<BaiViet>> layDanhSachBaiVietCuaNhom(@PathVariable Long nhomId) {
-//        List<BaiViet> DSBaiViet = nhomService.layDanhSachBaiVietCuaNhom(nhomId);
-//        return ResponseEntity.ok(DSBaiViet);
+//        List<BaiViet> baiVietList = baiVietRepository.findByNhom_Id(nhomId); // Sử dụng BaiVietRepository để lấy danh sách bài viết theo nhóm
+//        return ResponseEntity.ok(baiVietList);
 //    }
     @GetMapping("/{nhomId}/bai-viet")
     public ResponseEntity<List<BaiViet>> layDanhSachBaiVietCuaNhom(@PathVariable Long nhomId) {
-        List<BaiViet> baiVietList = baiVietRepository.findByNhom_Id(nhomId); // Sử dụng BaiVietRepository để lấy danh sách bài viết theo nhóm
+        List<BaiViet> baiVietList = baiVietRepository.findByNhom_IdAndTrangThai(nhomId, TrangThai_BaiViet.DA_DANG);
         return ResponseEntity.ok(baiVietList);
     }
 
@@ -295,7 +303,73 @@ public class NhomController {
         return ResponseEntity.ok().build();
     }
 
+    //API chặn thành viên khỏi nhóm
+    @PostMapping("/{nhomId}/chan/{blockedUserId}")
+    public ResponseEntity<?> chanNguoiDungKhoiNhom(
+            @PathVariable Long nhomId,
+            @PathVariable Long blockedUserId,
+            HttpServletRequest request
+    ) {
+        try {
+            User currentUser = (User) request.getSession().getAttribute("currentUser"); // Lấy userId từ session
+            blockUserNhomService.chanNguoiDung(nhomId, currentUser.getId(), blockedUserId); // Truyền userId từ session
+            // Trả về object JSON
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Chặn người dùng thành công");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
+    //API bỏ chặn thành viên khỏi nhóm
+    @PostMapping("/{nhomId}/bo-chan/{blockedUserId}")
+    public ResponseEntity<?> boChanNguoiDungKhoiNhom(
+            @PathVariable Long nhomId,
+            @PathVariable Long blockedUserId,
+            HttpServletRequest request
+    ) {
+        try {
+            User currentUser = (User) request.getSession().getAttribute("currentUser");
+            // Kiểm tra vai trò của người dùng hiện tại
+            if (!nhomService.laQuanTriVien(nhomId, currentUser.getId())) {
+                return ResponseEntity.badRequest().body("Bạn không có quyền thực hiện hành động này.");
+            }
+            // Xóa bản ghi block khỏi database
+            blockUserNhomRepository.deleteById(new BlockUserNhomId(currentUser.getId(), blockedUserId, nhomId));
+            // Trả về object JSON
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Bỏ chặn người dùng thành công");
+            return ResponseEntity.ok(response);
 
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
+    //API lấy danh sách user id bị chặn
+    @GetMapping("/{nhomId}/blocked-users")
+    public List<UserDTO> layDanhSachUserBiChan(@PathVariable Long nhomId) {
+        // Lấy danh sách user bị chặn từ BlockUserNhomRepository
+        List<BlockUserNhom> danhSachBlock = blockUserNhomRepository.findByNhom_Id(nhomId);
+
+        // Chuyển đổi sang danh sách UserDTO
+        return danhSachBlock.stream()
+                .map(block -> {
+                    User blockedUser = block.getBlockedUser();
+                    return new UserDTO(
+                            blockedUser.getId(),
+                            blockedUser.getTenNguoiDung(),
+                            blockedUser.getHinhDaiDien()
+                            // Các thuộc tính khác của UserDTO nếu cần
+                    );
+                })
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/{nhomId}/bai-viet-cho-duyet")
+    public ResponseEntity<List<BaiViet>> layDanhSachBaiVietChoDuyet(@PathVariable Long nhomId) {
+        List<BaiViet> baiVietList = baiVietService.layDanhSachBaiVietChuaDuyet(nhomId);
+        return ResponseEntity.ok(baiVietList);
+    }
 }

@@ -14,21 +14,10 @@ import java.util.List;
 public interface BlockUserNhomRepository extends JpaRepository<BlockUserNhom, BlockUserNhomId> {
 
     boolean existsByNhom_IdAndBlockedUser_Id(Long nhomId, Long blockedUserId);
-    //Kiểm tra xem người dùng có bị chặn trong một khoảng thời gian cụ thể hay không
-    boolean existsByUser_IdAndBlockedUser_IdAndNhom_IdAndNgayBatDauBeforeAndNgayKetThucAfter(Long userId, Long blockedUserId, Long nhomId, LocalDateTime ngayBatDau, LocalDateTime ngayKetThuc);
+
+    List<BlockUserNhom> findByNhom_Id(Long nhomId);
 
     //phuong thuc xoa nhom
     void deleteAllByNhom_Id(Long nhomId);
-
-    //Tìm kiếm các bản ghi chặn theo khoảng thời gian
-    List<BlockUserNhom> findByNgayBatDauBetween(LocalDateTime ngayBatDau, LocalDateTime ngayKetThuc);
-
-    // Tìm kiếm các bản ghi chặn theo người dùng và nhóm, sắp xếp theo ngày bắt đầu
-    List<BlockUserNhom> findByUser_IdAndNhom_IdOrderByNgayBatDauDesc(Long userId, Long nhomId);
-
-//    @Query("SELECT CASE WHEN COUNT(bun) > 0 THEN true ELSE false END FROM BlockUserNhom bun WHERE bun.user.id = :userId AND bun.blockedUser.id = :blockedUserId AND bun.nhom.id = :nhomId AND bun.ngayKetThuc IS NULL")
-//    boolean existsByUserAndBlockedUserAndNhomAndNgayKetThucIsNull(@Param("userId") Long userId, @Param("blockedUserId") Long blockedUserId, @Param("nhomId") Long nhomId);
-@Query("SELECT CASE WHEN COUNT(bun) > 0 THEN true ELSE false END FROM BlockUserNhom bun WHERE bun.user.id = :userId AND bun.blockedUser.id = :blockedUserId AND bun.nhom.id = :nhomId AND bun.ngayKetThuc IS NULL")
-boolean existsByUserAndBlockedUserAndNhomAndNgayKetThucIsNull(@Param("userId") Long userId, @Param("blockedUserId") Long blockedUserId, @Param("nhomId") Long nhomId);
 
 }

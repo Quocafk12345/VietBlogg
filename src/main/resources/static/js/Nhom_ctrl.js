@@ -5,6 +5,7 @@ mainApp.controller("nhomController", function ($scope, $http, $window) {
     $scope.danhSachNhom = [];
     $scope.nhomDuocChon = {};
     $scope.nguoiNhanId = null; // Khai báo biến nguoiNhanId cho hàm nhượng quyền
+    $scope.danhSachBaiVietChoDuyet = [];
 
     $scope.loadNhom = function () {
         //DSNhom trong sidebar
@@ -89,6 +90,27 @@ mainApp.controller("nhomController", function ($scope, $http, $window) {
             .catch(error => {
                 console.log("Error", error);
             });
+
+        // Lấy danh sách user bị chặn
+        $http.get(`${host_Nhom}/${idNhom}`)
+            .then(function(response) {
+                $scope.thongTinNhom = response.data.nhom;
+                $scope.vaiTroTrongNhom = response.data.vaiTro;
+                // Lấy danh sách user bị chặn sau khi thongTinNhom đã được gán giá trị
+                $scope.layDanhSachUserBiChan($scope.thongTinNhom.id);
+            })
+            .catch(error => {
+                console.log("Error", error);
+            });
+
+        // $http.get(`${host_Nhom}/${idNhom}/bai-viet-cho-duyet`)
+        //     .then(function(response) {
+        //         $scope.BaiVietChoDuyet = response.data;
+        //         console.log("Danh sách bài viết chờ duyệt:", $scope.danhSachBaiVietChoDuyet); // Thêm dòng này để kiểm tra dữ liệu
+        //     })
+        //     .catch(error => {
+        //         console.log("Error", error);
+        //     });
 
     }
 
@@ -317,6 +339,65 @@ mainApp.controller("nhomController", function ($scope, $http, $window) {
         }
     };
 
+    //Hàm lấy danh sách User id bị chặn trong bảng User_Block_Nhom
+    $scope.layDanhSachUserBiChan = function (idNhom) {
+        return $http.get(`${host_Nhom}/${idNhom}/blocked-users`)
+            .then(function(response) {
+                $scope.danhSachUserBiChan = response.data;
+            })
+            .catch(function(error) {
+                console.error("Lỗi khi lấy danh sách user bị chặn:", error);
+            });
+    };
+
+    //ham chan khoi nhom
+    $scope.chanKhoiNhom = function(userId) {
+        if (confirm('Bạn có chắc chắn muốn chặn thành viên này khỏi nhóm?')) {
+            $http.post(`${host_Nhom}/${idNhom}/chan/${userId}`)
+                .then(function(response) {
+                    if (response.status === 200) {
+                        alert(response.data.message); // Lấy thông báo từ object JSON
+                        // Cập nhật giao diện người dùng
+                        $timeout(function() {
+                            $scope.danhSachThanhVien_TabThanhVien = $scope.danhSachThanhVien_TabThanhVien.filter(thanhVien => thanhVien.userId !== userId);
+                            $scope.thongTinNhom.soLuongThanhVien--;
+                        }, 0);
+                    } else {
+                        // Xử lý lỗi nếu có (ví dụ: hiển thị thông báo lỗi)
+                        alert('Lỗi khi chặn người dùng: ' + response.status + ' - ' + response.data);
+                    }
+                })
+                // .catch(function(error) {
+                //     console.error('Lỗi:', error);
+                //     alert('Đã có lỗi xảy ra: ' + error.data);
+                // });
+        }
+    };
+
+    //ham bo chan khoi nhom
+    $scope.boChanKhoiNhom = function(userId) {
+        if (confirm('Bạn có chắc chắn muốn bỏ chặn người dùng này khỏi nhóm?')) {
+            $http.post(`${host_Nhom}/${idNhom}/bo-chan/${userId}`)
+                .then(function(response) {
+                    alert(response.data.message); // Hiển thị thông báo từ object JSON
+                    // Cập nhật lại danh sách user bị chặn sau khi bỏ chặn
+                    $scope.layDanhSachUserBiChan(idNhom);
+                })
+                .catch(function(error) {
+                    console.error('Lỗi:', error);
+                    alert('Đã có lỗi xảy ra: ' + error.data);
+                });
+        }
+    };
+
+    $http.get(`${host_Nhom}/${idNhom}/bai-viet-cho-duyet`)
+        .then(function(response) {
+            $scope.danhSachBaiVietChoDuyet = response.data;
+            console.log("Danh sách bài viết chờ duyệt:", $scope.danhSachBaiVietChoDuyet); // Thêm dòng này để kiểm tra dữ liệu
+        })
+        .catch(error => {
+            console.log("Error", error);
+        });
 
 
 });

@@ -20,4 +20,8 @@ public interface ThanhVienRepository extends JpaRepository<ThanhVien, ThanhVienI
     @Query("SELECT u.tenNguoiDung, tv.vaiTro FROM ThanhVien tv JOIN tv.user u WHERE tv.nhom.id = :nhomId")
     List<Object[]> layTenNguoiDungVaVaiTro(@Param("nhomId") Long nhomId);
 
+    // Đếm số lượng thành viên với Id_Nhom và User_Id cụ thể
+    long countById_IdNhomAndId_UserId(Long idNhom, Long userId);
+
+
 }

@@ -460,5 +460,25 @@ CREATE TABLE Block_User_Nhom (
     FOREIGN KEY (Blocked_User_Id) REFERENCES Users(User_Id), -- Khóa ngoại cho Blocked_User_Id
     FOREIGN KEY (Id_Nhom) REFERENCES Nhom(Id_Nhom)
 );
+
+-- cập nhật vai trò cho nhóm du lịch
+SELECT * FROM Thanh_Vien WHERE Id_Nhom = 2 AND User_Id = 3;
+UPDATE Thanh_Vien 
+SET Vai_Tro = N'Quản trị viên' 
+WHERE Id_Nhom = 2 AND User_Id = 3;
+
+-- tạo bảng block nhóm
+ALTER TABLE Block_User_Nhom
+ADD Ngay_Bat_Dau DATETIME NOT NULL DEFAULT GETDATE(),
+    Ngay_Ket_Thuc DATETIME NULL;
+
+-- Câu lệnh để test
 DELETE FROM Block_User_Nhom WHERE Id_Nhom = 13; 
 DELETE FROM Nhom WHERE Id_Nhom = 13;
+delete from Block_User_Nhom;
+DELETE FROM Bai_Viet WHERE Id_Bai_Viet = 5;
+
+UPDATE Bai_Viet
+SET Trang_Thai = 'CHO_DUYET'
+WHERE Trang_Thai = 'CHỜ DUYỆT';
+
