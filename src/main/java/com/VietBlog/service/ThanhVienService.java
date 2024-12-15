@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ThanhVienService {
@@ -42,6 +43,11 @@ public class ThanhVienService {
 		return thanhVienRepository.save(thanhVien);
 	}
 
+	// Tìm kiếm thành viên theo ID
+	//Them Test Nhóm
+	public Optional<ThanhVien> timThanhVienTheoId(ThanhVienId thanhVienId) {
+		return thanhVienRepository.findById(thanhVienId);
+	}
 	// Xóa thành viên khỏi nhóm
 	@Transactional
 	public void xoaThanhVien(Long nhomId, Long userId) {
@@ -74,4 +80,5 @@ public class ThanhVienService {
 					.map(ThanhVien::getNhom) // Lấy đối tượng Nhom từ mỗi ThanhVien
 					.toList(); // Chuyển đổi thành List<Nhom>
 	}
+
 }

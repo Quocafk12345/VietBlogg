@@ -2,7 +2,7 @@ let host_DangNhap = "http://localhost:8080";
 mainApp.controller('loginController', function ($scope, $http, $window) {
 
     $scope.login = function() {
-
+//chưa thay đổis
         // Tạo FormData để gửi dữ liệu dạng form-urlencoded
         var duLieu_dangNhap = new FormData();
         duLieu_dangNhap.append('identifiers', $scope.identifiers);
@@ -17,7 +17,7 @@ mainApp.controller('loginController', function ($scope, $http, $window) {
             $http.post(`${host_DangNhap}/dang-nhap-thanh-cong`, user)
                 .then(function () {
                     $window.location.href = `${host_DangNhap}/index`; // Chuyển hướng đến /index
-            });
+                });
         }).catch((error) => {
             console.log("Error", error);
         });

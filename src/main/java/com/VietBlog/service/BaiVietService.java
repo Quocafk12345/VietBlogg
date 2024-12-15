@@ -31,11 +31,12 @@ public class BaiVietService {
 		return baiVietRepository.findByUserId(userId);
 	}
 
-	// Thêm bài viết mới
+	// Thêm bài viết mới Tests
+	// Thay đổi kiểu trả về từ void thành BaiViet
 	@Transactional
-	public void themBaiViet(BaiViet baiViet) {
+	public BaiViet themBaiViet(BaiViet baiViet) {
 		baiViet.setNgayTao(Timestamp.from(Instant.now()));
-		baiVietRepository.save(baiViet);
+		return baiVietRepository.save(baiViet);
 	}
 
 	// Cập nhật bài viết

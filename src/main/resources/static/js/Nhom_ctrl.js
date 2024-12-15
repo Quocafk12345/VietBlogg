@@ -34,6 +34,8 @@ mainApp.controller("nhomController", function ($scope, $http, $window) {
             });
     }
 
+    $scope.loadNhom();
+
     $scope.layThongTinNhom = function (idNhom) {
         $http.get('/api/nhom/' + idNhom)
             .then(function (response) {
@@ -223,7 +225,7 @@ mainApp.controller("nhomController", function ($scope, $http, $window) {
                         // Cập nhật vai trò trong thông tin nhóm
                         $scope.capNhatVaiTroTrongNhom(nhomId, nguoiNhanId);
 
-                        // Chuyển hướng về trang chủ hoặc trang danh sách nhómw  
+                        // Chuyển hướng về trang chủ hoặc trang danh sách nhómw
                         $window.location.href = '/cong-dong';
                     })
                     .catch(function(error) {
@@ -282,8 +284,72 @@ mainApp.controller("nhomController", function ($scope, $http, $window) {
             })
             .catch(function(error) {
                 console.error('Lỗi:', error);
-                alert('Đã có lỗi xảy ra.');
+                if (error.status === 400 && error.data.message === "Người dùng đã bị chặn khỏi nhóm này.") {
+                    alert("Bạn đã bị chặn khỏi nhóm này.");
+                } else {
+                    alert('Đã có lỗi xảy ra.');
+                }
             });
+    };
+
+    //Xóa thành vien dành cho quản trị viên trong nhóm
+    $scope.xoaThanhVien = function(userId) {
+        if (confirm('Bạn có chắc chắn muốn xóa thành viên này khỏi nhóm?')) {
+            // Gọi API để xóa thành viên
+            $http.delete(`${host_Nhom}/${idNhom}/thanh-vien/${userId}`)
+                .then(function(response) {
+                    // Xử lý kết quả
+                    alert('Xóa thành viên thành công!');
+                    // Cập nhật lại danh sách thành viên
+                    $scope.layDanhSachThanhVien(idNhom)
+                        .then(function(danhSachThanhVien) {
+                            $scope.danhSachThanhVien_TabThanhVien = danhSachThanhVien;
+                        });
+                })
+                .catch(function(error) {
+                    if (error.status === 404) {
+                        alert('Không tìm thấy thành viên.');
+                    } else {
+                        console.error('Lỗi:', error);
+                        alert('Đã có lỗi xảy ra.');
+                    }
+                });
+        }
+    };
+
+    //chặn thành vien dành cho quản trị viên trong nhó
+    $scope.chanKhoiNhom = function(userId) {
+        if (confirm('Bạn có chắc chắn muốn chặn người dùng này khỏi nhóm?')) {
+            var nhomId = $scope.thongTinNhom.id; // Lấy idNhom từ thông tin nhóm hiện tại
+            $http.post(`${host_Nhom}/${nhomId}/chan/${userId}`)
+                .then(function(response) {
+                    alert('Chặn người dùng thành công!');
+                    // Cập nhật lại danh sách thành viên
+                    $scope.layDanhSachThanhVien(idNhom)
+                        .then(function(danhSachThanhVien) {
+                            $scope.danhSachThanhVien_TabThanhVien = danhSachThanhVien;
+                        });
+                })
+                .catch(function(error) {
+                    console.error('Lỗi:', error);
+                    alert('Đã có lỗi xảy ra.');
+                });
+        }
+    };
+
+    //bỏ chan khỏi nhóm
+    $scope.boChanKhoiNhom = function(userId) {
+        if (confirm('Bạn có chắc chắn muốn bỏ chặn người dùng này khỏi nhóm?')) {
+            $http.delete(`${host_Nhom}/${idNhom}/bo-chan/${userId}`)
+                .then(function(response) {
+                    alert('Bỏ chặn người dùng thành công!');
+                    // Cập nhật lại danh sách thành viên (nếu cần)
+                })
+                .catch(function(error) {
+                    console.error('Lỗi:', error);
+                    alert('Đã có lỗi xảy ra.');
+                });
+        }
     };
 
 });

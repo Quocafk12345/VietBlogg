@@ -155,5 +155,20 @@ public class UserService {
 		return luotFollowRepository.countFollowersByUserId(userId);
 	}
 
+	// thêm kiểm tra email, số điện thoại
+	public boolean isValidEmail(String email) {
+		if (email == null) {
+			return false; // Nếu email là null, trả về false
+		}
+		String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+		return email.matches(emailRegex); // Kiểm tra email có khớp với regex không
+	}
+	public boolean isValidPhone(String dienThoai) {
+		if (dienThoai == null) {
+			return false; // Nếu dienThoai là null, trả về false
+		}
+		String dienThoaiRegex = "^[0-9]{10,11}$";
+		return dienThoai.matches(dienThoaiRegex); // Kiểm tra email có khớp với regex không
+	}
 }
 

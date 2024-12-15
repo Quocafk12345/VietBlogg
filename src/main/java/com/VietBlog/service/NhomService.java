@@ -51,8 +51,15 @@ public class NhomService {
 //		return nhomMoi;
 //	}
 
+	//Thêm bắt lỗi bỏ trống để Test Tạo nhóm thiếu thông tin
 	@Transactional
 	public Nhom taoNhom(Nhom nhom, Long chuNhomId) {
+		if (nhom.getTen() == null || nhom.getTen().trim().isEmpty()) {
+			throw new IllegalArgumentException("Vui lòng nhập tên nhóm.");
+		}
+		if (nhom.getGioiThieu() == null || nhom.getGioiThieu().trim().isEmpty()) {
+			throw new IllegalArgumentException("Vui lòng nhập giới thiệu nhóm.");
+		}
 		nhom.setNgayTao(Timestamp.from(Instant.now()));
 		// Xử lý lưu hình ảnh (nếu có)
 		Nhom nhomMoi = nhomRepository.save(nhom);
@@ -150,8 +157,12 @@ public class NhomService {
 
 	// Lấy danh sách bài viết của một nhóm
 	public List<BaiViet> layDanhSachBaiVietCuaNhom(Long nhomId) {
-		return nhomRepository.findBaiVietByNhomId(nhomId);
+		return baiVietRepository.findByNhom_Id(nhomId); // Sử dụng baiVietRepository
 	}
+//	// Lấy danh sách bài viết của một nhóm
+//	public List<BaiViet> layDanhSachBaiVietCuaNhom(Long nhomId) {
+//		return nhomRepository.findBaiVietByNhomId(nhomId);
+//	}
 
 	public List<Nhom> layToanBoNhom(){
 		return nhomRepository.findAll();

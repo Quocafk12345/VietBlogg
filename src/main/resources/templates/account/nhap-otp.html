@@ -17,7 +17,7 @@
 	<div class="login-box">
 		<h2>Xác Thực Mã Đặt Lại Mật Khẩu</h2>
 		<div class="account-form-container">
-			<form th:action="@{/verify-token}" method="post">
+			<form th:action="@{/nhap-otp}" method="post">
 				<div class="input-group">
 					<label for="token">Nhập Mã Xác Thực:</label>
 					<input type="text" name="token" id="token" required />
@@ -28,6 +28,10 @@
 				<div class="w-100 text-center">
 					<button type="submit" class="btn btn-continue">Xác Thực</button>
 				</div>
+			</form>
+			<form th:action="@{/quen-mat-khau}" method="post">
+				<input type="hidden" name="email" th:value="${email}">
+				<button type="submit">Gửi lại mã OTP</button>
 			</form>
 			<p th:if="${message}" th:text="${message}"></p>
 		</div>

@@ -82,5 +82,23 @@ public class BaiViet implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "baiViet", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<DaPhuongTien> daPhuongTien;
+    // thêm để test Bài Viết
+    // Constructor 4 tham số
+    public BaiViet(Long id, String tieuDe, String noiDung, TrangThai_BaiViet trangThai) {
+        this.id = id;
+        this.tieuDe = tieuDe;
+        this.noiDung = noiDung;
+        this.trangThai = trangThai;
+    }
 
+    // thêm để chỉ hiện thị (id, tieuDe, noiDung, trangThai) cho tại run
+    @Override
+    public String toString() {
+        return "BaiViet{" +
+                "id=" + id +
+                ", tieuDe='" + tieuDe + '\'' +
+                ", noiDung='" + noiDung + '\'' +
+                ", trangThai=" + trangThai +
+                '}';
+    }
 }

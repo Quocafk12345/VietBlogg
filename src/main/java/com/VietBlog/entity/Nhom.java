@@ -58,4 +58,20 @@ public class Nhom {
 
     @Transient // Thuộc tính này sẽ không được lưu vào database
     private boolean daThamGia;
+
+    // Thêm Test Nhóm
+    public Nhom(Long id, String ten, String gioiThieu, String hinhDaiDien) {
+        this.id = id;
+        this.ten = ten;
+        this.gioiThieu = gioiThieu;
+        this.hinhDaiDien = hinhDaiDien;
+    }
+    // thêm để chỉ hiện thị (id, ten) cho tại run
+    @Override
+    public String toString() {
+        return "Nhom{" +
+                "id=" + id +
+                ", ten='" + ten + '\'' +
+                '}';
+    }
 }

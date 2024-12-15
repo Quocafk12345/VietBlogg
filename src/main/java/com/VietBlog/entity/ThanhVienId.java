@@ -42,4 +42,13 @@ public class ThanhVienId implements Serializable {
     public int hashCode() {
         return Objects.hash(idNhom, userId);
     }
+
+    // thêm để chỉ hiện thị (idNhom, userId) cho tại run
+    @Override
+    public String toString() {
+        return "ThanhVienId{" +
+                "nhomId=" + idNhom +
+                ", userId=" + userId +
+                '}';
+    }
 }

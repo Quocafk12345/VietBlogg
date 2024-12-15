@@ -80,4 +80,23 @@ public class User implements Serializable {
     @Convert(converter = Font_Converter.class)
     @Column(name = "Font")
     private Font_User font;
+
+    // Thêm Test Bài Viết
+    // Constructor với các tham số id, tenNguoiDung, email, matKhau, hinhDaiDien
+    public User(Long id, String tenNguoiDung, String email, String matKhau, String hinhDaiDien) {
+        this.id = id;
+        this.tenNguoiDung = tenNguoiDung;
+        this.email = email;
+        this.matKhau = matKhau;
+        this.hinhDaiDien = hinhDaiDien;
+    }
+
+    // thêm để hiện thị cho test
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", tenNguoiDung='" + tenNguoiDung + '\'' +
+                '}';
+    }
 }

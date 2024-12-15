@@ -23,7 +23,7 @@ public class QuenMatKhauController {
 	private String resetToken; // Biến lưu trữ mã xác thực
 	private String email;
 
-	@PostMapping("/forgot-password")
+	@PostMapping("/quen-mat-khau")
 	public String processForgotPassword(Model model, @RequestParam String email) {
 		User user = userService.findByEmail(email);
 
@@ -35,31 +35,31 @@ public class QuenMatKhauController {
 			// Gửi mã xác thực qua email
 			emailService.sendResetCode(email, resetToken);
 			model.addAttribute("message", "Mã xác thực đã được gửi qua email.");
-			return "nhap-otp"; // Chuyển đến trang nhập mã xác thực
+			return "account/nhap-otp"; // Chuyển đến trang nhập mã xác thực
 		} else {
 			model.addAttribute("error", "Email không tồn tại!");
-			return "quen-mat-khau"; // Quay lại trang nhập email
+			return "account/quen-mat-khau"; // Quay lại trang nhập email
 		}
 	}
 
-	@PostMapping("/verify-token")
+	@PostMapping("/nhap-otp")
 	public String processVerifyToken(Model model, @RequestParam String token) {
 		if (resetToken != null && resetToken.equals(token)) {
 			// Nếu mã xác thực đúng, cho phép người dùng nhập mật khẩu mới
-			return "nhap-mat-khau-moi"; // Chuyển đến trang nhập mật khẩu mới
+			return "account/nhap-mat-khau-moi"; // Chuyển đến trang nhập mật khẩu mới
 		} else {
 			model.addAttribute("error", "Mã xác thực không hợp lệ! Vui lòng kiểm tra lại.");
-			return "nhap-otp"; // Quay lại trang nhập mã xác thực
+			return "account/nhap-otp"; // Quay lại trang nhập mã xác thực
 		}
 	}
 
-	@PostMapping("/reset-password")
+	@PostMapping("/nhap-mat-khau-moi")
 	public String processResetPassword(@RequestParam String password,
 	                                   @RequestParam String confirmPassword,
 	                                   Model model) {
 		if (!password.equals(confirmPassword)) {
 			model.addAttribute("error", "Mật khẩu xác nhận không khớp!");
-			return "nhap-mat-khau-moi"; // Quay lại trang nhập mật khẩu mới
+			return "account/nhap-mat-khau-moi"; // Quay lại trang nhập mật khẩu mới
 		}
 
 		User user = userService.findByEmail(this.email); // Sử dụng email đã lưu
@@ -67,10 +67,10 @@ public class QuenMatKhauController {
 			user.setMatKhau(password); // Cập nhật mật khẩu mới
 			userService.updateUser(user); // Lưu vào cơ sở dữ liệu
 			model.addAttribute("message", "Mật khẩu đã được cập nhật thành công!");
-			return "dang-nhap"; // Chuyển về trang đăng nhập
+			return "account/dang-nhap"; // Chuyển về trang đăng nhập
 		} else {
 			model.addAttribute("error", "Người dùng không tồn tại!");
-			return "nhap-mat-khau-moi"; // Quay lại trang nhập mật khẩu mới
+			return "account/nhap-mat-khau-moi"; // Quay lại trang nhập mật khẩu mới
 		}
 	}
 
