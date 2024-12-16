@@ -147,16 +147,6 @@ CREATE TABLE Luot_Like_Bai_Viet
 );
 GO
 
-CREATE TABLE Block_User
-(
-    User_Id BIGINT NOT NULL,
-    Block_User_Id BIGINT NOT NULL,
-    PRIMARY KEY (User_Id, Block_User_Id),
-    FOREIGN KEY (User_Id) REFERENCES Users(User_Id),
-    FOREIGN KEY (Block_User_Id) REFERENCES Users(User_Id)
-);
-
-
 GO
 CREATE TABLE Luot_Like_Binh_Luan
 (
@@ -178,7 +168,7 @@ ALTER TABLE Users
     ADD CONSTRAINT UQ_Email UNIQUE (Email);
 GO
 
-- Cập nhật các thuộc tính Mau_Nen, Font_Chu, Co_Chu cho bảng Users
+-- Cập nhật các thuộc tính Mau_Nen, Font_Chu, Co_Chu cho bảng Users
 ALTER TABLE Users ADD Mau_Nen NVARCHAR(255);
 ALTER TABLE Users ADD Font_Chu NVARCHAR(255);
 ALTER TABLE Users ADD Co_Chu FLOAT;
@@ -363,18 +353,6 @@ UPDATE Users
 Set Ngay_Sinh = '2002-10-10'
 GO
 
-UPDATE Users
-Set Co_Chu = 16
-GO
-
-UPDATE Users
-Set Font_Chu = 'Helvetica Neue'
-GO
-
-UPDATE Users
-Set Mau_Nen = N'TRẮNG'
-GO
-
 UPDATE Bai_Viet
 SET Trang_Thai = N'ĐÃ ĐĂNG'
 WHERE Trang_Thai = N'ĐĂNG'
@@ -383,27 +361,13 @@ GO
 -- Thêm mới để sẵn các nhóm
 -- Thêm nhóm Âm nhạc
 INSERT INTO Nhom (Ten, Gioi_Thieu, Hinh_Dai_Dien, Ngay_Tao) VALUES
-(N'Nhóm Âm nhạc', N'Nhóm dành cho những người yêu âm nhạc', 'hinhmau_nhomnhac.jpg', GETDATE());
-
--- Thêm nhóm Thể thao
-INSERT INTO Nhom (Ten, Gioi_Thieu, Hinh_Dai_Dien, Ngay_Tao) VALUES
-(N'Nhóm Thể thao', N'Nhóm thảo luận về các môn thể thao', 'hinhmau_nhomthethao.jpg', GETDATE());
-
--- Thêm nhóm Đọc sách
-INSERT INTO Nhom (Ten, Gioi_Thieu, Hinh_Dai_Dien, Ngay_Tao) VALUES
-(N'Nhóm Đọc sách', N'Nhóm chia sẻ về sách và đam mê đọc sách', 'hinhmau_nhomsach.jpg', GETDATE());
-
--- Thêm nhóm Phim ảnh
-INSERT INTO Nhom (Ten, Gioi_Thieu, Hinh_Dai_Dien, Ngay_Tao) VALUES
-(N'Nhóm Phim ảnh', N'Nhóm dành cho những người yêu thích phim ảnh', 'hinhmau_nhomphim.jpg', GETDATE());
-
--- Thêm nhóm Game
-INSERT INTO Nhom (Ten, Gioi_Thieu, Hinh_Dai_Dien, Ngay_Tao) VALUES
-(N'Nhóm Game', N'Nhóm thảo luận về các trò chơi', 'hinhmau_nhomgame.jpg', GETDATE());
-
--- Thêm nhóm Học tập
-INSERT INTO Nhom (Ten, Gioi_Thieu, Hinh_Dai_Dien, Ngay_Tao) VALUES
+(N'Nhóm Âm nhạc', N'Nhóm dành cho những người yêu âm nhạc', 'hinhmau_nhomnhac.jpg', GETDATE()),
+(N'Nhóm Thể thao', N'Nhóm thảo luận về các môn thể thao', 'hinhmau_nhomthethao.jpg', GETDATE()),
+(N'Nhóm Đọc sách', N'Nhóm chia sẻ về sách và đam mê đọc sách', 'hinhmau_nhomsach.jpg', GETDATE()),
+(N'Nhóm Phim ảnh', N'Nhóm dành cho những người yêu thích phim ảnh', 'hinhmau_nhomphim.jpg', GETDATE()),
+(N'Nhóm Game', N'Nhóm thảo luận về các trò chơi', 'hinhmau_nhomgame.jpg', GETDATE()),
 (N'Nhóm Học tập', N'Nhóm hỗ trợ học tập và chia sẻ kiến thức', 'hinhmau_nhomhoctap.jpg', GETDATE());
+GO
 
 -- Khai báo tất cả các biến ở đây
 DECLARE @NhomAmNhacId BIGINT;
@@ -423,31 +387,24 @@ SET @NhomHocTapId = (SELECT Id_Nhom FROM Nhom WHERE Ten = N'Nhóm Học tập');
 
 -- Thêm User_Id = 1 vào các nhóm với vai trò "Quản trị viên"
 INSERT INTO Thanh_Vien (Vai_Tro, Id_Nhom, User_Id, Ngay_Tham_Gia) VALUES
-(N'Quản trị viên', 3, 1, GETDATE());
-
-INSERT INTO Thanh_Vien (Vai_Tro, Id_Nhom, User_Id, Ngay_Tham_Gia) VALUES
-(N'Quản trị viên', 4, 1, GETDATE());
-
-INSERT INTO Thanh_Vien (Vai_Tro, Id_Nhom, User_Id, Ngay_Tham_Gia) VALUES
-(N'Quản trị viên', 5, 1, GETDATE());
-
-INSERT INTO Thanh_Vien (Vai_Tro, Id_Nhom, User_Id, Ngay_Tham_Gia) VALUES
-(N'Quản trị viên', 6, 1, GETDATE());
-
-INSERT INTO Thanh_Vien (Vai_Tro, Id_Nhom, User_Id, Ngay_Tham_Gia) VALUES
-(N'Quản trị viên', 7, 1, GETDATE());
-
-INSERT INTO Thanh_Vien (Vai_Tro, Id_Nhom, User_Id, Ngay_Tham_Gia) VALUES
+(N'Quản trị viên', 3, 1, GETDATE()),
+(N'Quản trị viên', 4, 1, GETDATE()),
+(N'Quản trị viên', 5, 1, GETDATE()),
+(N'Quản trị viên', 6, 1, GETDATE()),
+(N'Quản trị viên', 7, 1, GETDATE()),
 (N'Quản trị viên', 8, 1, GETDATE());
+GO
 
 --Dùng để xóa nhóm
 -- Thêm ON DELETE CASCADE vào khóa ngoại trong bảng DS_Luat_Nhom
 ALTER TABLE DS_Luat_Nhom
 DROP CONSTRAINT FK__DS_Luat_N__Id_Nh__3B75D760;
+GO
 
 ALTER TABLE DS_Luat_Nhom
 ADD CONSTRAINT FK_DS_Luat_Nhom_Nhom 
-FOREIGN KEY (Id_Nhom) REFERENCES Nhom(Id_Nhom) ON DELETE CASCADE; 
+FOREIGN KEY (Id_Nhom) REFERENCES Nhom(Id_Nhom) ON DELETE CASCADE;
+GO
 
 
 -- Thêm ON DELETE CASCADE vào khóa ngoại trong bảng Bai_Viet
@@ -457,7 +414,7 @@ DROP CONSTRAINT FK__Bai_Viet__Id_Nho__3F466844;
 ALTER TABLE Bai_Viet
 ADD CONSTRAINT FK_Bai_Viet_Nhom
 FOREIGN KEY (Id_Nhom) REFERENCES Nhom(Id_Nhom) ON DELETE CASCADE;
-
+GO
 
 -- Thêm ON DELETE CASCADE vào khóa ngoại trong bảng Thanh_Vien
 ALTER TABLE Thanh_Vien
@@ -466,5 +423,34 @@ DROP CONSTRAINT FK__Thanh_Vie__Id_Nh__4D94879B;
 ALTER TABLE Thanh_Vien
 ADD CONSTRAINT FK_Thanh_Vien_Nhom 
 FOREIGN KEY (Id_Nhom) REFERENCES Nhom(Id_Nhom) ON DELETE CASCADE;
+GO
 
+-- Dùng để xóa bài viết
+-- Thêm ON DELETE CASCADE vào khóa ngoại trong bảng Da_Phuong_Tien
+ALTER TABLE Da_Phuong_Tien
+DROP CONSTRAINT FK__Da_Phuong__Id_Ba__4316F928;
 
+ALTER TABLE Da_Phuong_Tien
+ADD CONSTRAINT FK_Da_Phuong_Tien_Bai_Viet
+FOREIGN KEY (Id_Bai_Viet) REFERENCES Bai_Viet(Id_Nhom) ON DELETE CASCADE;
+GO
+
+CREATE TABLE Block_User
+(
+    User_Id BIGINT NOT NULL,
+    Block_User_Id BIGINT NOT NULL,
+    PRIMARY KEY (User_Id, Block_User_Id),
+    FOREIGN KEY (User_Id) REFERENCES Users(User_Id),
+    FOREIGN KEY (Block_User_Id) REFERENCES Users(User_Id)
+);
+
+UPDATE Thanh_Vien
+SET Vai_Tro = N'Quản trị viên'
+WHERE Vai_Tro = N'Chủ nhóm'
+GO
+
+ALTER TABLE Da_Phuong_Tien
+    ADD Mo_Ta NVARCHAR(MAX)
+
+ALTER TABLE Da_Phuong_Tien
+    ADD Loai NVARCHAR(50)

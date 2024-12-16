@@ -34,14 +34,27 @@ mainApp.service('timeService', function () {
     };
 });
 
-mainApp.filter('truncateHtml', function () {
-    return function (input, length) {
+mainApp.filter('truncate', function () {
+    return function (input, limit) {
         if (typeof input !== 'string') {
+            return input; // Trả về nguyên trạng nếu input không phải là chuỗi
+        }
+        if (input.length <= limit) {
             return input;
         }
-        return truncate(input, length, {
-            stripTags: true,
-            ellipsis: '...'
-        });
+        return input.substring(0, limit) + '...';
+    };
+});
+
+// Tạo service
+mainApp.service('BaiVietService', function () {
+    this.baiViet = null;
+
+    this.setBaiViet = function (baiViet) {
+        this.baiViet = baiViet;
+    };
+
+    this.getBaiViet = function () {
+        return this.baiViet;
     };
 });

@@ -1,14 +1,12 @@
 package com.VietBlog.controller;
 
 import com.VietBlog.entity.BaiViet;
-import com.VietBlog.entity.User;
 import com.VietBlog.repository.BaiVietRepository;
 import com.VietBlog.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -127,7 +125,6 @@ public class BaiVietController {
      * @param baiViet: Các thông tin của một bài viết
      */
     @PostMapping("/dang-bai")
-    @Transactional
     public ResponseEntity<BaiViet> dangBaiViet(@RequestBody BaiViet baiViet) {
         try {
              // Sử dụng BaiVietService
@@ -144,11 +141,14 @@ public class BaiVietController {
      * @param user: User đang đăng nhập
      *
      */
-    @Transactional
     @PostMapping("/luu-bai")
-    public ResponseEntity<?> luuBaiVietVaoDSLuu(@RequestBody BaiViet baiViet, @RequestBody User user) {
-        luuBaiVietService.luuBaiViet(user.getId(), baiViet.getId());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> luuBaiVietVaoDSLuu(@RequestParam("idBaiViet") Long baiVietId, @RequestParam("userId") Long userId) {
+	    return ResponseEntity.ok(luuBaiVietService.luuBaiViet(userId, baiVietId));
+    }
+
+	@GetMapping("/luu-bai/kiem-tra")
+	public boolean kiemTraLuuBaiViet(@RequestParam("idBaiViet") Long baiVietId, @RequestParam("userId") Long userId) {
+		return luuBaiVietService.daLuuBaiViet(userId, baiVietId);
     }
 
     /**
@@ -157,7 +157,6 @@ public class BaiVietController {
      * @param baiViet: nội dung mới, sẽ được cập nhật của bài viết đó
      */
 
-    @Transactional
     @PutMapping("{id}")
     public ResponseEntity<BaiViet> update(@PathVariable Long id, @RequestBody BaiViet baiViet) {
         try {
@@ -175,7 +174,6 @@ public class BaiVietController {
      *
      */
     @DeleteMapping("{id}")
-    @Transactional
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         try {
             baiVietService.xoaBaiViet(id); // Sử dụng BaiVietService

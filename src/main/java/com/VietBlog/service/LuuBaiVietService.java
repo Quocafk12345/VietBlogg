@@ -28,15 +28,17 @@ public class LuuBaiVietService {
 
 	// Lưu bài viết
 	@Transactional
-	public LuuBaiViet luuBaiViet(Long userId, Long baiVietId) {
+	public boolean luuBaiViet(Long userId, Long baiVietId) {
 		LuuBaiViet_ID id = new LuuBaiViet_ID(userId, baiVietId);
 		if (luuBaiVietRepository.existsById(id)) {
-			throw new RuntimeException("Người dùng đã lưu bài viết này rồi");
+			luuBaiVietRepository.deleteById(id);
+			return false;
 		}
 		LuuBaiViet luuBaiViet = new LuuBaiViet(id,
 				userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng")),
 				baiVietRepository.findById(baiVietId).orElseThrow(() -> new RuntimeException("Không tìm thấy bài viết")));
-		return luuBaiVietRepository.save(luuBaiViet);
+		luuBaiVietRepository.save(luuBaiViet);
+		return true;
 	}
 
 	// Bỏ lưu bài viết

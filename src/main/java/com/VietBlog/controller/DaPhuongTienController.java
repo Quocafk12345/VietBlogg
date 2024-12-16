@@ -49,7 +49,6 @@ public class DaPhuongTienController {
 			}
 			return ResponseEntity.ok(daPhuongTiens);
 		} catch (Exception e) {
-			e.printStackTrace();
 			return ResponseEntity.badRequest().build();
 		}
 	}
@@ -76,8 +75,10 @@ public class DaPhuongTienController {
 	public List<DaPhuongTienDTO> chuyenDoi(List<DaPhuongTien> listDaPhuongTien) {
 		return listDaPhuongTien.stream()
 				.map(daPhuongTien -> new DaPhuongTienDTO(
+						daPhuongTien.getId(),
 						daPhuongTien.getDuongDan(),
-						daPhuongTien.getMoTa()
+						daPhuongTien.getMoTa(),
+						daPhuongTien.getLoai()
 				))
 				.collect(Collectors.toList());
 	}

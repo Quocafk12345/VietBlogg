@@ -117,7 +117,12 @@
 						<!-- Bên phải: Chia sẻ, Lưu -->
 						<div>
 							<button class="btn btn-light me-2"><i class="bi bi-share"></i> Chia sẻ</button>
-							<button class="btn btn-light"><i class="bi bi-bookmark"></i> Lưu</button>
+							<button class="btn btn-light" ng-click="toggleLuuBaiViet(chiTietBaiViet)"
+							        ng-if="!chiTietBaiViet.daLuu"><i class="bi bi-bookmark"></i> Lưu
+							</button>
+							<button class="btn btn-primary" ng-click="toggleLuuBaiViet(chiTietBaiViet)"
+							        ng-if="chiTietBaiViet.daLuu"><i class="bi bi-bookmark"></i> Bỏ lưu
+							</button>
 						</div>
 					</div>
 					<!-- Kết thúc tương tác bài viết -->
@@ -130,10 +135,11 @@
 				<div class="comments-section">
 					<div class="comment mb-4" ng-repeat="binhLuan in danhSachBinhLuan">
 						<div class="d-flex">
-							<a th:href="@{/trang-ca-nhan/}" ng-click="chuyenTrang($event,binhLuan.user.id)">
 							<img src="https://via.placeholder.com/50" class="rounded-circle me-3" alt="User Avatar">
 							<div>
-								<h6 class="mb-0">{{binhLuan.user.tenNguoiDung}}</h6>
+								<h6 class="mb-0"><a ng-click="chuyenTrang($event,binhLuan.user.id)"
+								                    th:href="@{/trang-ca-nhan/}">{{binhLuan.user.tenNguoiDung}}</a>
+								</h6>
 								<small class="text-muted">{{binhLuan.thoiGianDang}}</small>
 								<p class="mt-2">{{binhLuan.noiDung}}</p>
 								<div class="comment-action">
@@ -232,7 +238,7 @@
 <!-- AngularJS -->
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 <script th:inline="javascript">
-	var baiVietId = [[${idBaiViet}]];
+	var baiVietId_chiTietBaiViet = [[${idBaiViet}]];
 	var currentUser = [[${session.currentUser}]];
 </script>
 <script th:src="@{/js/Sanitize/node_modules/angular-sanitize/angular-sanitize.js}"></script>

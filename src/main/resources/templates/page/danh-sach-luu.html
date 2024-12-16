@@ -24,7 +24,10 @@
 			<div class="container mt-4" ng-controller="BaiVietController">
 				<h2>Danh sách đã lưu</h2>
 				
-				<div class="list-group" ng-repeat="baiViet in danhSachLuu">
+				<div class="text-center" ng-if="danhSachLuu.length === 0">Chưa có bài viết nào, ở đây trống vắng quá
+				</div>
+				
+				<div class="list-group" ng-if="danhSachLuu.length > 0" ng-repeat="baiViet in danhSachLuu">
 					<a href="#" class="list-group-item list-group-item-action">
 						<div class="d-flex w-100 justify-content-between">
 							<h5 class="mb-1">{{ baiViet.tieuDe }}</h5>

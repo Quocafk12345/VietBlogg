@@ -28,7 +28,6 @@ import java.util.Map;
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/user")
-@SessionAttributes("currentUser")
 public class UserController {
 
 	private final UserService userService;
@@ -125,6 +124,7 @@ public class UserController {
 		response.put("isBlocking", isBlocking);
 		return ResponseEntity.ok(response);
 	}
+
 	@GetMapping("/{userId}/checkFollowStatus")
 	public ResponseEntity<Map<String, Boolean>> checkFollowStatus(@PathVariable Long userId, @RequestParam Long userFollowId) {
 		LuotFollowId followId = new LuotFollowId(userFollowId, userId);

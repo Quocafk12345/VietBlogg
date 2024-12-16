@@ -10,6 +10,7 @@ mainApp.controller("nhomController", function ($scope, $http, $window) {
             .then(function (resp) {
                 $scope.DSnhom_daThamGia = resp.data;
                 $scope.layDSNhomTong();
+                console.log($scope.DSnhom_daThamGia);
             })
             .catch(error => {
                 console.log("Error", error);
@@ -26,11 +27,21 @@ mainApp.controller("nhomController", function ($scope, $http, $window) {
                 $scope.DSnhom_tong.forEach(nhomTong => {
                     nhomTong.daThamGia = false;
 
+                    $scope.layThongTinNhom_SoThanhVien(nhomTong.id)
+                        .then(function (soThanhVien) {
+                            nhomTong.soLuongThanhVien = soThanhVien;
+                        });
+
                     // Kiểm tra xem nhóm này có trong danh sách nhóm đã tham gia hay không
                     $scope.DSnhom_daThamGia.forEach(nhomDaThamGia => {
                         if (nhomTong.id === nhomDaThamGia.id) {
                             nhomTong.daThamGia = true;
                         }
+                        $scope.layThongTinNhom_SoThanhVien(nhomDaThamGia.id)
+                            .then(function (soThanhVien) {
+                                nhomDaThamGia.soLuongThanhVien = soThanhVien;
+                            });
+
                     });
                 });
             })

@@ -1,0 +1,26 @@
+/* bài viết */
+.post-header {
+    transform: translate(-10px, 20px);
+}
+
+.user-info {
+    padding: 10px 60px 10px 10px;
+    background-color: #f8f8f8;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.post-content {
+    background-color: #fff;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.post-head-btn {
+    transform: translate(0, -15px);
+}
+
+
+
+       
