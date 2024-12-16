@@ -1,10 +1,14 @@
 package com.VietBlog.service;
 
-import com.VietBlog.entity.*;
+import com.VietBlog.entity.LuotFollow;
+import com.VietBlog.entity.LuotFollowId;
+import com.VietBlog.entity.User;
 import com.VietBlog.repository.LuotFollowRepository;
 import com.VietBlog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Service
@@ -20,6 +24,7 @@ public class LuotFollowService {
 		this.userRepository = userRepository;
 	}
 
+	@Transactional
 	public boolean toggleFollow(Long userId, Long userFollowId) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new RuntimeException("User không tồn tại."));
