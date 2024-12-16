@@ -9,116 +9,126 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 	
-	<!-- css -->
-	<link rel="stylesheet" th:href="@{/css/include/navbar_new.css}">
-	<link rel="stylesheet" th:href="@{/css/include/navbar.css}">
-	<link rel="stylesheet" th:href="@{/css/Page/home.css}">
+	<link rel="stylesheet" th:href="@{/css/Chung.css}">
+	<link rel="stylesheet" th:href="@{/css/include/Menu.css}">
+	<link rel="stylesheet" th:href="@{/css/BaiViet.css}">
 	
 	<style>
-		.rounded-circle {
-			width: 20px;
-			height: 20px;
+		.avatar {
+			width: 30px;
+			height: 30px;
+			object-fit: cover;
 		}
 	</style>
 
 </head>
 <body>
-<div class="container-fluid p-0">
-	<div th:replace="~{include/navbar :: navbar}"></div>
-	<main class="row">
-		<div class="col-3" th:replace="~{include/sidebar :: sidebar}"></div>
-		<!--	Giao diện đăng bài	-->
-		<div class="col-10" ng-controller="BaiVietController">
-			<div class="col-8 p-3 m-auto">
-				<div class="container mt-4" ng-controller="nhomController">
-					<h2>
-						<span ng-if="!chinhSuaBaiViet">Tạo bài viết</span>
-						<span ng-if="chinhSuaBaiViet">Chỉnh sửa bài viết</span>
-					</h2>
-					<button aria-expanded="false" class="btn btn-secondary dropdown-toggle"
-					        data-bs-toggle="dropdown"
-					        id="dropdownMenuButton" type="button">
-									<span class="selected-item">
-										<img alt="Icon" class="rounded-circle" ng-if="mucDuocChon.hinhAnh">
-										{{mucDuocChon.ten}}
-									</span>
-					</button>
-					<ul class="nav nav-tabs mb-3 mt-3">
-						<li class="nav-item">
-							<a class="nav-link active" data-bs-toggle="tab" href="#text">Nội dung</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" data-bs-toggle="tab" href="#images">Hình ảnh</a>
-						</li>
-					</ul>
-					<div class="tab-content">
-						<div class="tab-pane active" id="text">
-							<div class="mb-3">
-								<div class="dropdown">
-									<ul aria-labelledby="dropdownMenuButton" class="dropdown-menu">
-										<li><h6 class="dropdown-header">Trang cá nhân</h6></li>
-										<li class="dropdown-item" ng-repeat="profile in thongTinUser">
-											<a class="dropdown-item" href="#" ng-click="chonNoiDangBai(profile)">
-												<img alt="Icon" class="rounded-circle" ng-src="{{profile.hinhDaiDien}}">
-												{{profile.ten}}
-											</a>
-										</li>
-										<li>
-											<hr class="dropdown-divider">
-										</li>
-										<li><h6 class="dropdown-header">Nhóm của bạn</h6></li>
-										<li class="dropdown-item" ng-repeat="group in DSnhom_daThamGia">
-											<a class="dropdown-item" href="#" ng-click="chonNoiDangBai(group)">
-												<img alt="Icon" class="rounded-circle" ng-src="{{group.hinhDaiDien}}">
-												{{group.ten}}
-												<span class="text-muted ms-2">{{group.soLuongThanhVien}} thành viên</span>
-											</a>
-										</li>
-									</ul>
-								</div>
-							</div>
-							<div class="mb-3">
-								<label class="form-label" for="tieuDe">Tiêu đề <span
-										class="text-danger">*</span></label>
-								<input class="form-control border border-1 rounded" id="tieuDe"
-								       ng-model="baiViet.tieuDe"
-								       placeholder="Nhập tiêu đề bài viết" type="text">
-							</div>
-							<div class="mb-3">
-								<label class="form-label" for="editor1">Nội dung <span
-										class="text-danger">*</span></label>
-								<textarea class="form-control border border-1 rounded" id="editor1"
-								          name="noiDung" ng-model="baiViet.noiDung" placeholder="Nhập nội dung bài viết"
-								          rows="10"></textarea>
-							</div>
-							<button class="btn btn-primary" ng-click="dangBai()" ng-if="!chinhSuaBaiViet">Đăng bài
-							</button>
-							<button class="btn btn-secondary" ng-click="luuNhap()" ng-if="!chinhSuaBaiViet">Lưu nháp
-							</button>
-							<button class="btn btn-primary" ng-click="capNhatBaiViet()" ng-if="chinhSuaBaiViet">Cập
-								nhật
-							</button>
-						</div>
-						<div class="tab-pane fade" id="images">
-							<div class="mb-3">
-								<input class="form-control" id="imageUpload" multiple onchange="angular.element(this).scope().xemTruocHinhAnh(this)"
-								       type="file"></div>
-							<div class="preview-area">
-								<div class="preview-item" ng-repeat="media in DSdaPhuongTien track by $index">
-									<img alt="{{media.file.name}}" class="img-fluid"
-									     ng-if="media.file.type.startsWith('image/')" ng-src="{{media.preview}}">
-									<video class="img-fluid" controls
-									       ng-attr-src="{{media.preview}}" ng-if="media.file.type.startsWith('video/')"></video>
-									<input class="form-control mt-2" ng-model="media.moTa" placeholder="Mô tả"
-									       type="text">
-								</div>
-							</div>
-						</div>
+<div th:replace="~{include/navbar :: navbar}"></div>
+<div class="main">
+	<div class="col-3" th:replace="~{include/sidebar :: sidebar}"></div>
+	<!--	Giao diện đăng bài	-->
+	<div class="content scrollable-container" ng-controller="BaiVietController">
+		<h2>
+			<span ng-if="!chinhSuaBaiViet">Tạo bài viết</span>
+			<span ng-if="chinhSuaBaiViet">Chỉnh sửa bài viết</span>
+		</h2>
+		<button aria-expanded="false" class="btn btn-secondary dropdown-toggle"
+		        data-bs-toggle="dropdown"
+		        id="dropdownMenuButton" type="button">
+				<span class="selected-item">
+					<img alt="Icon" class="rounded-circle" ng-if="mucDuocChon.hinhAnh">
+					{{mucDuocChon.ten}}
+				</span>
+		</button>
+		<ul class="nav nav-tabs mb-3 mt-3">
+			<li class="nav-item">
+				<a class="nav-link active" data-bs-toggle="tab" href="#text">Nội dung</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-bs-toggle="tab" href="#images">Hình ảnh</a>
+			</li>
+		</ul>
+		<div class="tab-content" ng-controller="nhomController">
+			<div class="tab-pane active" id="text">
+				<div class="mb-3">
+					<div class="dropdown">
+						<ul aria-labelledby="dropdownMenuButton" class="dropdown-menu">
+							<li><h6 class="dropdown-header">Trang cá nhân</h6></li>
+							<li class="dropdown-item" ng-repeat="profile in thongTinUser">
+								<a class="dropdown-item" href="#" ng-click="chonNoiDangBai(profile)">
+									<img alt="Icon" class="rounded-circle avatar" ng-src="{{profile.hinhDaiDien}}">
+									{{profile.ten}}
+								</a>
+							</li>
+							<li>
+								<hr class="dropdown-divider">
+							</li>
+							<li><h6 class="dropdown-header">Nhóm của bạn</h6></li>
+							<li class="dropdown-item" ng-repeat="group in DSnhom_daThamGia">
+								<a class="dropdown-item" href="#" ng-click="chonNoiDangBai(group)">
+									<img alt="Icon" class="rounded-circle avatar me-2" ng-src="{{group.hinhDaiDien}}">
+									{{group.ten}}
+									<span class="text-muted ms-2">{{group.soLuongThanhVien}} thành viên</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="mb-3">
+					<label class="form-label" for="tieuDe">Tiêu đề <span
+							class="text-danger">*</span></label>
+					<input class="form-control border border-1 rounded" id="tieuDe"
+					       ng-model="baiViet.tieuDe"
+					       placeholder="Nhập tiêu đề bài viết" type="text">
+				</div>
+				<div class="mb-3">
+					<label class="form-label" for="editor1">Nội dung <span
+							class="text-danger">*</span></label>
+					<textarea class="form-control border border-1 rounded" id="editor1"
+					          name="noiDung" ng-model="baiViet.noiDung" placeholder="Nhập nội dung bài viết"
+					          rows="10"></textarea>
+				</div>
+				<button class="btn btn-primary" ng-click="dangBai()" ng-if="!chinhSuaBaiViet">Đăng bài
+				</button>
+				<button class="btn btn-secondary" ng-click="luuNhap()" ng-if="!chinhSuaBaiViet">Lưu nháp
+				</button>
+				<button class="btn btn-primary" ng-click="capNhatBaiViet()" ng-if="chinhSuaBaiViet">Cập
+					nhật
+				</button>
+			</div>
+			<div class="tab-pane fade" id="images">
+				<h3 ng-if="chinhSuaBaiViet">Đa phương tiện hiện có</h3>
+				<div class="mb-3">
+					<input class="form-control" id="newImageUpload" multiple
+					       onchange="angular.element(this).scope().xemTruocHinhAnh(this)" type="file">
+				</div>
+				<div class="preview-area">
+					<div class="preview-item" ng-repeat="media in baiViet.DSdaPhuongTien track by $index">
+						<img alt="{{media.ten}}" class="img-fluid" ng-if="media.loai === 'HINH_ANH'"
+						     ng-src="{{media.duongDan}}">
+						<video class="img-fluid" controls ng-if="media.loai === 'VIDEO'"
+						       ng-src="{{media.duongDan}}"></video>
+						<span ng-if="media.loai === 'KHAC'">File khác: {{ media.ten }}</span>
+						<input class="form-control mt-2" ng-model="media.moTa" placeholder="Mô tả" type="text">
+						<button class="btn btn-danger mt-2" ng-click="xoaDaPhuongTien(media)">Xóa</button>
+					</div>
+				</div>
+				
+				<h3 ng-if="!chinhSuaBaiViet">Thêm đa phương tiện mới</h3>
+				<div class="preview-area">
+					<div class="preview-item" ng-repeat="media in DSdaPhuongTienMoi track by $index">
+						<img alt="{{media.file.name}}" class="img-fluid" ng-if="media.loai === 'HINH_ANH'"
+						     ng-src="{{media.preview}}">
+						<video class="img-fluid" controls ng-if="media.loai === 'VIDEO'"
+						       ng-src="{{media.preview}}"></video>
+						<span ng-if="media.loai === 'KHAC'">File khác: {{ media.ten }}</span>
+						<input class="form-control mt-2" ng-model="media.moTa" placeholder="Mô tả" type="text">
+						<button class="btn btn-danger mt-2" ng-click="xoaDaPhuongTien(media)">Xóa</button>
 					</div>
 				</div>
 			</div>
 		</div>
-	</main>
+	</div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
@@ -128,7 +138,7 @@
 </script>
 <script th:src="@{/js/CKEditor/ckeditor.js}"></script>
 <script>
-	CKEDITOR.replace( 'editor1', {
+	CKEDITOR.replace('editor1', {
 		// Đường dẫn đến file config.js
 		customConfig: '/js/CKEditor/config.js'
 	});
@@ -138,5 +148,6 @@
 <script th:src="@{/js/BaiViet_ctrl.js}"></script>
 <script th:src="@{/js/Nhom_ctrl.js}"></script>
 <script th:src="@{/js/DangNhap_ctrl.js}"></script>
+<script th:src="@{/js/Sidebar.js}"></script>
 </body>
 </html>

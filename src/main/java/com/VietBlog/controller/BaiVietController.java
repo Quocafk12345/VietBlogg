@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -175,7 +174,6 @@ public class BaiVietController {
      *
      */
     @DeleteMapping("{id}")
-    @Transactional
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         try {
             baiVietService.xoaBaiViet(id); // Sử dụng BaiVietService

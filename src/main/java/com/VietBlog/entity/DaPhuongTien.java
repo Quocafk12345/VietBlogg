@@ -24,7 +24,7 @@ public class DaPhuongTien {
 	private Long id;
 
 	@NotNull
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "Id_Bai_Viet", nullable = false)
 	private BaiViet baiViet;
 

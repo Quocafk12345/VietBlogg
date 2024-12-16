@@ -4,189 +4,208 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VietBlog Navbar</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-	<style>
-
-        /* Căn chỉnh cho sidebar */
-        #sidebar {
-            height: 100vh;
-            background-color: #f8f9fa;
-            color: #343a40;
-            border-right: 1px solid #e0e0e0;
-        }
-
-        #sidebar .nav-item {
-            list-style: none;
-        }
-
-        #sidebar .nav-link {
-            font-size: 1.1rem;
-            padding: 10px;
-            color: #343a40;
-        }
-
-        #sidebar .nav-link.active {
-            border-radius: 5px;
-            background-color: gray;
-            font-weight: bold;
-            color: #fff;
-        }
-        .dropdown-toggle{
-            font-weight: bold;
-        }
-
-        #sidebar .nav-link i {
-            margin-right: 10px;
-        }
-
-        #sidebar .nav-link img {
-            margin-right: 10px;
-        }
-
-        #sidebar .nav-link:hover {
-            color: #212529;
-        }
-
-        #sidebar .dropdown-toggle::after {
-            display: inline-block;
-            margin-left: 0.255em;
-            vertical-align: 0.255em;
-            border: 0.3em solid transparent;
-            border-top-color: #343a40;
-        }
-
-        #sidebar .collapse .nav-link {
-            font-size: 0.95rem;
-            padding-left: 30px;
-        }
-
-        #sidebar .rounded-circle {
-            width: 20px;
-            height: 20px;
-        }
-
-        #sidebar ul {
-            list-style: none;  /* Loại bỏ dấu chấm */
-            padding-left: 0;   /* Loại bỏ thụt vào của danh sách */
-            margin-left: 0;    /* Loại bỏ margin của danh sách */
-        }
-
-        #sidebar ul li {
-            padding: 8px 16px; /* Thêm khoảng cách đều cho các mục */
-            margin: 0;         /* Loại bỏ margin của từng mục */
-        }
-
-        #sidebar .nav-link {
-            font-size: 1.1rem;
-            padding: 10px 16px;
-            color: #343a40;
-            display: flex;     /* Căn các phần tử theo hàng ngang */
-            align-items: center; /* Căn giữa các icon và văn bản */
-        }
-
-        #sidebar .nav-link img {
-            margin-right: 10px; /* Khoảng cách giữa ảnh và văn bản */
-        }
-
-        #sidebar .nav-link i {
-            margin-right: 10px; /* Khoảng cách giữa icon và văn bản */
-        }
-
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            #sidebar {
-                display: none;
-            }
-
-            #sidebar.collapsed {
-                display: block;
-            }
-        }
-
-    </style>
-</head>
+	<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">-->
+	<!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">-->
+	<!--	<style>-->
+	
+	<!--        /* Căn chỉnh cho sidebar */-->
+	<!--        #sidebar {-->
+	<!--            height: 100vh;-->
+	<!--            background-color: #f8f9fa;-->
+	<!--            color: #343a40;-->
+	<!--            border-right: 1px solid #e0e0e0;-->
+	<!--        }-->
+	
+	<!--        #sidebar .nav-item {-->
+	<!--            list-style: none;-->
+	<!--        }-->
+	
+	<!--        #sidebar .nav-link {-->
+	<!--            font-size: 1.1rem;-->
+	<!--            padding: 10px;-->
+	<!--            color: #343a40;-->
+	<!--        }-->
+	
+	<!--        #sidebar .nav-link.active {-->
+	<!--            border-radius: 5px;-->
+	<!--            background-color: gray;-->
+	<!--            font-weight: bold;-->
+	<!--            color: #fff;-->
+	<!--        }-->
+	<!--        .dropdown-toggle{-->
+	<!--            font-weight: bold;-->
+	<!--        }-->
+	
+	<!--        #sidebar .nav-link i {-->
+	<!--            margin-right: 10px;-->
+	<!--        }-->
+	
+	<!--        #sidebar .nav-link img {-->
+	<!--            margin-right: 10px;-->
+	<!--        }-->
+	
+	<!--        #sidebar .nav-link:hover {-->
+	<!--            color: #212529;-->
+	<!--        }-->
+	
+	<!--        #sidebar .dropdown-toggle::after {-->
+	<!--            display: inline-block;-->
+	<!--            margin-left: 0.255em;-->
+	<!--            vertical-align: 0.255em;-->
+	<!--            border: 0.3em solid transparent;-->
+	<!--            border-top-color: #343a40;-->
+	<!--        }-->
+	
+	<!--        #sidebar .collapse .nav-link {-->
+	<!--            font-size: 0.95rem;-->
+	<!--            padding-left: 30px;-->
+	<!--        }-->
+	
+	<!--        #sidebar .rounded-circle {-->
+	<!--            width: 20px;-->
+	<!--            height: 20px;-->
+	<!--        }-->
+	
+	<!--        #sidebar ul {-->
+	<!--            list-style: none;  /* Loại bỏ dấu chấm */-->
+	<!--            padding-left: 0;   /* Loại bỏ thụt vào của danh sách */-->
+	<!--            margin-left: 0;    /* Loại bỏ margin của danh sách */-->
+	<!--        }-->
+	
+	<!--        #sidebar ul li {-->
+	<!--            padding: 8px 16px; /* Thêm khoảng cách đều cho các mục */-->
+	<!--            margin: 0;         /* Loại bỏ margin của từng mục */-->
+	<!--        }-->
+	
+	<!--        #sidebar .nav-link {-->
+	<!--            font-size: 1.1rem;-->
+	<!--            padding: 10px 16px;-->
+	<!--            color: #343a40;-->
+	<!--            display: flex;     /* Căn các phần tử theo hàng ngang */-->
+	<!--            align-items: center; /* Căn giữa các icon và văn bản */-->
+	<!--        }-->
+	
+	<!--        #sidebar .nav-link img {-->
+	<!--            margin-right: 10px; /* Khoảng cách giữa ảnh và văn bản */-->
+	<!--        }-->
+	
+	<!--        #sidebar .nav-link i {-->
+	<!--            margin-right: 10px; /* Khoảng cách giữa icon và văn bản */-->
+	<!--        }-->
+	
+	
+	<!--        /* Responsive */-->
+	<!--        @media (max-width: 768px) {-->
+	<!--            #sidebar {-->
+	<!--                display: none;-->
+	<!--            }-->
+	
+	<!--            #sidebar.collapsed {-->
+	<!--                display: block;-->
+	<!--            }-->
+	<!--        }-->
+	
+	<!--    </style>-->
+	<!--</head>-->
 <body>
-<nav id="sidebar" class="col-2 d-md-block bg-light sidebar collapse " th:fragment="sidebar">
-    <div class="position-sticky pt-3">
-        <ul class="nav flex-column">
-            <li class="nav-item">
-	            <a class="nav-link" th:href="@{/index}">
-                    <i class="bi bi-house-door"></i> Trang chủ
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/cong-dong}">
-                    <i class="bi bi-fire"></i> Cộng đồng
-                </a>
-            </li>
-	        <li class="nav-item">
-		        <a class="nav-link" th:href="@{/danh-sach-luu}">
-			        <i class="bi bi-app"></i> Danh sách lưu
-		        </a>
-	        </li>
-	        <li class="nav-item">
-		        <a class="nav-link" th:href="@{/nhap}">
-			        <i class="bi bi-app"></i> Nháp
-		        </a>
-	        </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <i class="bi bi-compass"></i> Khám phá
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <i class="bi bi-app"></i> Hỗ trợ
-                </a>
-            </li>
+<!--<nav id="sidebar" class="col-2 d-md-block bg-light sidebar collapse " th:fragment="sidebar">-->
+<!--    <div class="position-sticky pt-3">-->
+<!--        <ul class="nav flex-column">-->
+<!--            <li class="nav-item">-->
+<!--	            <a class="nav-link" th:href="@{/index}">-->
+<!--                    <i class="bi bi-house-door"></i> Trang chủ-->
+<!--                </a>-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" th:href="@{/cong-dong}">-->
+<!--                    <i class="bi bi-fire"></i> Cộng đồng-->
+<!--                </a>-->
+<!--            </li>-->
+<!--	        <li class="nav-item">-->
+<!--		        <a class="nav-link" >-->
+<!--			        <i class="bi bi-app"></i> Danh sách lưu-->
+<!--		        </a>-->
+<!--	        </li>-->
+<!--	        <li class="nav-item">-->
+<!--		        <a class="nav-link" th:href="@{/nhap}">-->
+<!--			        <i class="bi bi-app"></i> Nháp-->
+<!--		        </a>-->
+<!--	        </li>-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" href="#">-->
+<!--                    <i class="bi bi-compass"></i> Khám phá-->
+<!--                </a>-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" href="#">-->
+<!--                    <i class="bi bi-app"></i> Hỗ trợ-->
+<!--                </a>-->
+<!--            </li>-->
 
-            <!-- Đang Theo Dõi Dropdown -->
-            <li class="nav-item">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#followingMenu" role="button" aria-expanded="false" aria-controls="followingMenu">
-                    Đang theo dõi
-                </a>
-                <ul class="collapse" id="followingMenu">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <img src="https://via.placeholder.com/20" alt="Avatar 1" class="rounded-circle"> Người theo dõi 1
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <img src="https://via.placeholder.com/20" alt="Avatar 2" class="rounded-circle"> Người theo dõi 2
-                        </a>
-                    </li>
-                    <!-- Thêm những người theo dõi khác nếu cần -->
-                </ul>
-            </li>
+<!--            &lt;!&ndash; Đang Theo Dõi Dropdown &ndash;&gt;-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#followingMenu" role="button" aria-expanded="false" aria-controls="followingMenu">-->
+<!--                    Đang theo dõi-->
+<!--                </a>-->
+<!--                <ul class="collapse" id="followingMenu">-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="#">-->
+<!--                            <img src="https://via.placeholder.com/20" alt="Avatar 1" class="rounded-circle"> Người theo dõi 1-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="#">-->
+<!--                            <img src="https://via.placeholder.com/20" alt="Avatar 2" class="rounded-circle"> Người theo dõi 2-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    &lt;!&ndash; Thêm những người theo dõi khác nếu cần &ndash;&gt;-->
+<!--                </ul>-->
+<!--            </li>-->
 
-            <!-- Nhóm Dropdown -->
-            <li class="nav-item" ng-controller="nhomController">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#groupMenu" role="button" aria-expanded="false" aria-controls="groupMenu">
-                    Nhóm
-                </a>
-                <ul class="collapse" id="groupMenu">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/api/nhom/tao-nhom" ng-click="chuyenTrangTaoNhom($event)">
-                            <i class="bi bi-plus-circle"></i> Tạo nhóm
-                        </a>
-                    </li>
+<!--            &lt;!&ndash; Nhóm Dropdown &ndash;&gt;-->
+<!--            <li class="nav-item" ng-controller="nhomController">-->
+<!--                <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#groupMenu" role="button" aria-expanded="false" aria-controls="groupMenu">-->
+<!--                    Nhóm-->
+<!--                </a>-->
+<!--                <ul class="collapse" id="groupMenu">-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="/tao-nhom" ng-click="chuyenTrangTaoNhom($event)">-->
+<!--                            <i class="bi bi-plus-circle"></i> Tạo nhóm-->
+<!--                        </a>-->
+<!--                    </li>-->
 
-                    <div>
-	                    <li class="nav-item" ng-repeat="nhom in DSnhom_daThamGia">
-                            <a class="nav-link" th:href="@{/nhom/chi-tiet/}" ng-click="chuyenTrang($event, nhom.id)">
-                                <img ng-src="{{ nhom.hinhDaiDien }}" alt="Avatar Group 1" class="rounded-circle"> {{ nhom.ten }}
-                            </a>
-                        </li>
-                    </div>
-                </ul>
-            </li>
+<!--                    <div>-->
+<!--	                    <li class="nav-item" ng-repeat="nhom in DSnhom_daThamGia">-->
+<!--                            <a class="nav-link" th:href="@{/nhom/chi-tiet/}" ng-click="chuyenTrang($event, nhom.id, '/nhom/chi-tiet/')">-->
+<!--                                <img ng-src="{{ nhom.hinhDaiDien }}" alt="Avatar Group 1" class="rounded-circle"> {{ nhom.ten }}-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                    </div>-->
+<!--                </ul>-->
+<!--            </li>-->
 
-        </ul>
-    </div>
-</nav>
+<!--        </ul>-->
+<!--    </div>-->
+<!--</nav>-->
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar" th:fragment="sidebar">
+	<a class="btn menu-item" th:href="@{/index}"><i class="bi bi-house"></i><span>Trang chủ</span></a>
+	<a class="btn menu-item"><i class="bi bi-fire"></i><span>Đang theo dõi </span></a>
+	<a class="btn menu-item" th:href="@{/cong-dong}"><i class="bi bi-people"></i><span>Cộng đồng</span></a>
+	<a class="btn menu-item"><i class="bi bi-collection"></i><span>Hỗ trợ</span></a>
+	<hr>
+	<a class="btn btn-dark m-2 menu-item" th:href="@{/dang-bai}"><i class="bi bi-plus-square"></i><span>Đăng bài</span></a>
+	<a class="btn menu-item" th:href="@{/danh-sach-luu}"><span>Bài viết đã lưu </span></a>
+	<a class="btn menu-item"><span>Bài viết đã thích</span></a>
+	<a class="btn menu-item"><span>Bài viết của bạn</span></a>
+	<a class="btn menu-item" th:href="@{/nhap}"><span>Bài viết nháp</span></a>
+	<hr>
+	<a class="btn menu-item"><span>Chính sách quyền riêng tư </span></a>
+	<a class="btn menu-item"><span>Chính sách bài viết</span></a>
+	<a class="btn menu-item"><span>Chính sách bảo mật</span></a>
+	<a class="btn menu-item"><span>Chính sách Cộng đồng </span></a>
+	<a class="btn menu-item"><span>Chính sách Bản quyền</span></a>
+</div>
 
 <script th:src="@{/js/Nhom_ctrl.js}"></script>
 </body>

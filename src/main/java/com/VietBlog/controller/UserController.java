@@ -124,6 +124,7 @@ public class UserController {
 		response.put("isBlocking", isBlocking);
 		return ResponseEntity.ok(response);
 	}
+
 	@GetMapping("/{userId}/checkFollowStatus")
 	public ResponseEntity<Map<String, Boolean>> checkFollowStatus(@PathVariable Long userId, @RequestParam Long userFollowId) {
 		LuotFollowId followId = new LuotFollowId(userFollowId, userId);

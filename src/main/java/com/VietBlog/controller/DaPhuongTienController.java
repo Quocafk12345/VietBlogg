@@ -34,17 +34,6 @@ public class DaPhuongTienController {
 		}
 	}
 
-	@GetMapping("/{idBaiViet}/chinh-sua")
-	public ResponseEntity<List<DaPhuongTien>> layDSDaPhuongTien_PhanChinhSua(@PathVariable Long idBaiViet) {
-		try {
-			List<DaPhuongTien> DSDaPhuongTien = daPhuongTienService.layDaPhuongTienTheoBaiViet(idBaiViet);
-			return ResponseEntity.ok(DSDaPhuongTien);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.badRequest().build();
-		}
-	}
-
 	@PostMapping(value = "/dang-tai/{baiVietId}", consumes = "multipart/form-data")
 	public ResponseEntity<List<DaPhuongTien>> uploadDaPhuongTien(@PathVariable("baiVietId") Long baiVietId,
 	                                                             @RequestParam("DSfile") MultipartFile[] DSfile,
@@ -60,7 +49,6 @@ public class DaPhuongTienController {
 			}
 			return ResponseEntity.ok(daPhuongTiens);
 		} catch (Exception e) {
-			e.printStackTrace();
 			return ResponseEntity.badRequest().build();
 		}
 	}
@@ -87,8 +75,10 @@ public class DaPhuongTienController {
 	public List<DaPhuongTienDTO> chuyenDoi(List<DaPhuongTien> listDaPhuongTien) {
 		return listDaPhuongTien.stream()
 				.map(daPhuongTien -> new DaPhuongTienDTO(
+						daPhuongTien.getId(),
 						daPhuongTien.getDuongDan(),
-						daPhuongTien.getMoTa()
+						daPhuongTien.getMoTa(),
+						daPhuongTien.getLoai()
 				))
 				.collect(Collectors.toList());
 	}
