@@ -10,6 +10,9 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class BaiVietService {
@@ -87,4 +90,28 @@ public class BaiVietService {
 	public List<BaiViet> getBaiVietByNhomIdAndUserId(Long nhomId, Long userId) {
 		return baiVietRepository.findByNhomIdAndUserId(nhomId, userId);
 	}
+
+//	public List<Map<String, Object>> countPostsByMonthAllUsers() {
+//		List<Object[]> results = baiVietRepository.countPostsByMonthAllUsers();
+//		List<Map<String, Object>> counts = new ArrayList<>();
+//		for (Object[] result : results) {
+//			Map<String, Object> map = new HashMap<>();
+//			map.put("month", result[0]);
+//			map.put("count", result[1]);
+//			counts.add(map);
+//		}
+//		return counts;
+//	}
+public List<Map<String, Object>> countPostsByMonthAllUsers() {
+	List<Object[]> results = baiVietRepository.countPostsByMonthAllUsers();
+	List<Map<String, Object>> counts = new ArrayList<>();
+	for (Object[] result : results) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("month", result[0]);
+		map.put("year", result[1]); // Thêm năm vào map
+		map.put("count", result[2]); // count bây giờ là result[2]
+		counts.add(map);
+	}
+	return counts;
+}
 }

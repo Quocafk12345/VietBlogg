@@ -1,0 +1,87 @@
+body {
+    margin: 0;
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+    font-family: 'Bahnschrift', sans-serif;
+}
+
+.logo {
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px; /* Kích thước ô vuông */
+    height: 50px;
+    border-radius: 8px; /* Bo góc */
+    background-color: #000000; /* Màu nền */
+    color: #ffffff; /* Màu chữ */
+    font-size: 24px; /* Kích thước chữ */
+    font-weight: bold;
+    font-family: Arial, sans-serif; /* Font chữ */
+    cursor: pointer;
+  }
+
+/* Main layout */
+.main{
+    height: 100%;
+    width: 100%;
+}
+
+.main .col-1{
+    padding: 10px;
+}
+
+.sidebar{
+    height: 100%;
+    width: 80px;
+    margin: 0 auto;
+    padding: 10px;
+    
+}
+
+.sidebar .nav-link {
+    color: white; 
+}
+
+
+.nav{
+    height: 100%;
+    max-height: 700px;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-link:hover {
+    color: white;
+}
+
+.nav-link.active {
+
+}
+
+.nav-link i {
+    color: white; 
+}
+/* main */
+/* content */
+.tab-content{
+    padding: 20px;
+}
+
+.tab-content .tab-pane{
+    padding: 10px;
+    height: 75vh;
+    overflow-y: auto;
+}
+/* admin info */
+.admin-info{
+    padding: 50px auto;
+}
+
+.admin-info .admin-card{
+    background-color: #f1f1f1;
+    margin: 20px auto;
+    padding: 20px;
+}

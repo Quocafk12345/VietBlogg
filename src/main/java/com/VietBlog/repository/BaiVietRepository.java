@@ -33,4 +33,17 @@ public interface BaiVietRepository extends JpaRepository<BaiViet, Long> {
     //Bài vieest user trong nhóm
     @Query("SELECT bv FROM BaiViet bv WHERE bv.nhom.id = :nhomId AND bv.user.id = :userId")
     List<BaiViet> findByNhomIdAndUserId(@Param("nhomId") Long nhomId, @Param("userId") Long userId);
+
+//    @Query("SELECT FUNCTION('month', bv.ngayTao) AS month, COUNT(bv) AS count " +
+//            "FROM BaiViet bv " +
+//            "WHERE bv.user.vaiTro = 'USER' " +
+//            "GROUP BY FUNCTION('month', bv.ngayTao)")
+//    List<Object[]> countPostsByMonthAllUsers();
+@Query("SELECT FUNCTION('month', bv.ngayTao) AS month, " +
+        "       FUNCTION('year', bv.ngayTao) AS year, " + // Thêm dòng này để lấy năm
+        "       COUNT(bv) AS count " +
+        "FROM BaiViet bv " +
+        "WHERE bv.user.vaiTro = 'USER' " +
+        "GROUP BY FUNCTION('month', bv.ngayTao), FUNCTION('year', bv.ngayTao)") // Group by cả tháng và năm
+List<Object[]> countPostsByMonthAllUsers();
 }

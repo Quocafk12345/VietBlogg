@@ -1,5 +1,5 @@
-var mainApp = angular.module('mainApp', ['ngRoute']);
-mainApp.controller('quanLyController', function($scope, $http, $window) {
+var mainApp = angular.module('mainApp', ['ngRoute', 'ngSanitize']);
+mainApp.controller('quanLyController', function($scope, $http, $window, $sce) {
     $scope.currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
     // Lấy danh sách người dùng
@@ -25,7 +25,13 @@ mainApp.controller('quanLyController', function($scope, $http, $window) {
             // Duyệt qua danh sách bài viết
             $scope.baiViets.forEach(function(baiViet) {
                 trangThaiCounts[baiViet.trangThai]++;
+                $sce.trustAsHtml(baiViet.noiDung);
             });
+
+            // Cập nhật tổng số bài viết đã đăng và chưa duyệt
+            document.getElementById("tongDaDang").innerText = trangThaiCounts['DA_DANG'];
+            document.getElementById("tongChuaDuyet").innerText = trangThaiCounts['CHO_DUYET'];
+            document.getElementById("tongNhap").innerText = trangThaiCounts['NHAP'];
 
             // Vẽ biểu đồ cột cho trạng thái bài viết
             var ctx = document.getElementById('baiVietChart').getContext('2d');
@@ -118,11 +124,54 @@ mainApp.controller('quanLyController', function($scope, $http, $window) {
                                         stepSize: 1
                                     }
                                 }]
-                            }
+                            },
+                            responsive: true,
+                            maintainAspectRatio: false
                         }
                     });
                 });
         });
+
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawAllUserPostCountChart);
+
+    function drawAllUserPostCountChart() {
+        $http.get(`${host_DangNhap}/api/quan-tri-vien/posts/count-by-month-all-users`)
+            .then(function(response) {
+                // Kiểm tra xem response.data có phải là array và không rỗng hay không
+                if (Array.isArray(response.data) && response.data.length > 0) {
+                    // Tạo DataTable và thêm dữ liệu
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Tháng');
+                    data.addColumn('number', 'Tổng số bài viết');
+                    response.data.forEach(function (row) {
+                        // data.addRow([row.month.toString(), row.count]); // Ép kiểu row.month thành string
+                        var monthYear = row.month.toString() + "/" + row.year.toString(); // Nối tháng và năm
+                        data.addRow([monthYear, row.count]);
+                    });
+                    // Tùy chọn biểu đồ
+                    var options = {
+                        title: 'Thống kê số lượng bài viết theo tháng', // Thay đổi tiêu đề
+                        width: 690, // Đặt chiều rộng
+                        height: 300, // Đặt chiều cao
+                        colors: ['red'], // Đặt màu cột
+                        vAxis: {title: 'Tổng số bài viết'},
+                        hAxis: {title: 'Tháng'}
+                    };
+
+                    // Vẽ biểu đồ
+                    var chart = new google.visualization.ColumnChart(document.getElementById('allUserPostCountChart')); // Xóa .getContext('2d')
+                    chart.draw(data, options);
+                } else {
+                    // Xử lý trường hợp response không phải là array hoặc array rỗng
+                    console.error("API không trả về dữ liệu đúng định dạng hoặc dữ liệu rỗng.");
+                    // Hiển thị thông báo lỗi cho người dùng hoặc vẽ biểu đồ với dữ liệu mặc định
+                }
+            })
+            .catch(function(error) {
+                console.error("API error:", error);
+            });
+    }
 
     // Lấy danh sách Admin và vẽ biểu đồ
     $http.get(`${host_DangNhap}/api/user/admin`)
@@ -130,8 +179,10 @@ mainApp.controller('quanLyController', function($scope, $http, $window) {
             $scope.admins = response.data;
 
             Promise.all([
+                $http.get(`${host_DangNhap}/api/user/admin`),
                 $http.get(`${host_DangNhap}/api/user/user`),
-                $http.get(`${host_DangNhap}/api/user/admin`)
+                $http.get(`${host_DangNhap}/api/bai-viet`),
+                $http.get(`${host_DangNhap}/api/quan-tri-vien/posts/count-by-month-all-users`) // Thêm API này vào Promise.all
             ])
                 .then(function (results) {
                     $scope.users = results[0].data;
@@ -224,10 +275,113 @@ mainApp.controller('quanLyController', function($scope, $http, $window) {
                     tablinks[i].className = tablinks[i].className.replace(" active", "");
                 }
                 document.getElementById(tabName).style.display = "block";
-                evt.currentTarget.className += " active";
+                event.currentTarget.className += " active";
             }
+            Promise.all([
+                $http.get(`${host_DangNhap}/api/bai-viet`),
+                $http.get(`${host_DangNhap}/api/binh-luan`),
+                $http.get(`${host_DangNhap}/api/bai-viet/like`)
+            ])
+                .then(function (results) {
+                    $scope.baiViets = results[0].data;
+                    $scope.binhLuans = results[1].data;
+                    $scope.likes = results[2].data;
+
+                    // ... (Code tính toán số lượng bài viết theo trạng thái)
+
+                    // Tính tổng số lượt thích
+                    var tongLuotThich = $scope.likes.length;
+
+                    // Tính tổng số bình luận
+                    var tongBinhLuan = $scope.binhLuans.length;
 
             // Mở tab "Quản lý người dùng" mặc định
             document.getElementById("defaultOpen").click();
+            // Cập nhật tổng số lượt thích và bình luận
+            document.getElementById("tongLuotThich").innerText = tongLuotThich;
+            document.getElementById("tongBinhLuan").innerText = tongBinhLuan;
         });
-})
+
+    $http.get(`${host_DangNhap}/api/bai-viet/like`)
+        .then(function (response) {
+            $scope.likes = response.data; // Lưu danh sách lượt thích vào $scope.likes
+        });
+
+            $scope.timKiem = function() {
+                // Lọc người dùng
+                $scope.users = $scope.users.filter(function(user) {
+                    return user.tenNguoiDung.toLowerCase().includes($scope.searchKeyword.toLowerCase()) ||
+                        user.email.toLowerCase().includes($scope.searchKeyword.toLowerCase());
+                });
+
+                // Lọc admin
+                $scope.admins = $scope.admins.filter(function(admin) {
+                    return admin.tenNguoiDung.toLowerCase().includes($scope.searchKeyword.toLowerCase()) ||
+                        admin.email.toLowerCase().includes($scope.searchKeyword.toLowerCase());
+                });
+
+                // Lọc bài viết
+                $scope.baiViets = $scope.baiViets.filter(function(baiViet) {
+                    return baiViet.tieuDe.toLowerCase().includes($scope.searchKeyword.toLowerCase()) ||
+                        baiViet.noiDung.toLowerCase().includes($scope.searchKeyword.toLowerCase()) ||
+                        baiViet.user.tenNguoiDung.toLowerCase().includes($scope.searchKeyword.toLowerCase());
+                });
+            };
+            $scope.locBaiViet = function(loaiLoc) {
+                $http.get(`${host_DangNhap}/api/bai-viet`) // Lấy lại danh sách bài viết gốc
+                    .then(function(response) {
+                        $scope.baiViets = response.data;
+
+                        if (loaiLoc === '2023') {
+                            // Lọc bài viết năm 2023
+                            $scope.baiViets = $scope.baiViets.filter(function(baiViet) {
+                                var baiVietYear = new Date(baiViet.ngayTao).getFullYear();
+                                return baiVietYear === 2023;
+                            });
+                        } else if (loaiLoc === '2024') {
+                            // Lọc bài viết năm 2024
+                            $scope.baiViets = $scope.baiViets.filter(function(baiViet) {
+                                var baiVietYear = new Date(baiViet.ngayTao).getFullYear();
+                                return baiVietYear === 2024;
+                            });
+                        } else if (loaiLoc === 'like') {
+                            // Lọc bài viết nổi bật (được nhiều like)
+                            $scope.baiViets.sort(function(a, b) {
+                                // Sắp xếp giảm dần theo số lượt thích (giả sử mỗi bài viết có thuộc tính 'soLuotThich')
+                                return b.soLuotThich - a.soLuotThich;
+                            });
+                            $scope.baiViets = $scope.baiViets.slice(0, 5); // Lấy 5 bài viết đầu tiên
+                        }
+                    });
+            };
+            $scope.locBaiViet = function(loaiLoc) {
+                $http.get(`${host_DangNhap}/api/bai-viet`)
+                    .then(function(response) {
+                        $scope.baiViets = response.data;
+
+                        if (loaiLoc === '2023') {
+                            // Lọc bài viết năm 2023
+                            $scope.baiViets = $scope.baiViets.filter(function(baiViet) {
+                                var baiVietYear = new Date(baiViet.ngayTao).getFullYear(); // Thêm new Date(...) ở đây
+                                return baiVietYear === 2023;
+                            });
+                        } else if (loaiLoc === '2024') {
+                            // Lọc bài viết năm 2024
+                            $scope.baiViets = $scope.baiViets.filter(function(baiViet) {
+                                var baiVietYear = new Date(baiViet.ngayTao).getFullYear(); // Thêm new Date(...) ở đây
+                                return baiVietYear === 2024;
+                            });
+                        } else if (loaiLoc === 'like') {
+                            // Lọc bài viết nổi bật (được nhiều like)
+                            $scope.baiViets.sort(function(a, b) {
+                                // Sắp xếp giảm dần theo số lượt thích (giả sử mỗi bài viết có thuộc tính 'soLuotThich')
+                                return b.soLuotThich - a.soLuotThich;
+                            });
+                            $scope.baiViets = $scope.baiViets.slice(0, 5); // Lấy 5 bài viết đầu tiên
+                        }
+                    });
+            };
+            // Mở tab "Quản lý người dùng" mặc định
+            document.getElementById("defaultOpen").click();
+        });
+});
