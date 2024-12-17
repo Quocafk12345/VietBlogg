@@ -53,19 +53,19 @@ public class DaPhuongTienController {
 		}
 	}
 
-	@PutMapping("/chinh-sua")
-	public ResponseEntity<DaPhuongTien> chinhSuaDaPhuongTien(@RequestParam("daPhuongTien") DaPhuongTien daPhuongTien, @RequestParam("file") MultipartFile file) {
+	@PutMapping(value = "/chinh-sua/{id}", consumes = "multipart/form-data")
+	public ResponseEntity<DaPhuongTien> chinhSuaDaPhuongTien(@PathVariable Long id, @RequestParam("moTa") String moTa) {
 		try {
-			return ResponseEntity.ok(daPhuongTienService.capNhatDaPhuongTien(daPhuongTien, file));
+			return ResponseEntity.ok(daPhuongTienService.capNhatDaPhuongTien(id, moTa));
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().build();
 		}
 	}
 
-	@DeleteMapping("/xoa")
-	public ResponseEntity<?> xoaDaPhuongTien(@RequestParam("daPhuongTien") DaPhuongTien daPhuongTien) {
+	@DeleteMapping("/xoa/{id}")
+	public ResponseEntity<?> xoaDaPhuongTien(@PathVariable("id") Long id) {
 		try {
-			daPhuongTienService.xoaDaPhuongTien(daPhuongTien);
+			daPhuongTienService.xoaDaPhuongTien(daPhuongTienService.layDaPhuongTienTheoId(id));
 			return ResponseEntity.ok().build();
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().build();

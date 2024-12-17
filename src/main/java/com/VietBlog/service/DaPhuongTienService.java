@@ -38,6 +38,13 @@ public class DaPhuongTienService {
 		return daPhuongTienRepository.findByBaiViet_Id(idBaiViet);
 	}
 
+	public DaPhuongTien layDaPhuongTienTheoId(Long id) {
+		if (daPhuongTienRepository.findById(id).isPresent()) {
+			return daPhuongTienRepository.findById(id).get();
+		} else return null;
+	}
+
+
 	public DaPhuongTien layDaPhuongTienTheoDuongDan(String duongDan) {
 		return daPhuongTienRepository.findByDuongDan(duongDan);
 	}
@@ -74,24 +81,15 @@ public class DaPhuongTienService {
 	}
 
 	@Transactional
-	public DaPhuongTien capNhatDaPhuongTien(DaPhuongTien daPhuongTien, MultipartFile filePhuongTien) {
+	public DaPhuongTien capNhatDaPhuongTien(Long id, String moTa) {
 		try {
-			String duongDanCu = daPhuongTien.getDuongDan();
-
-			Map uploadResult = cloudinary.uploader().upload(filePhuongTien.getBytes(), ObjectUtils.emptyMap());
-			String duongDanMoi = (String) uploadResult.get("secure_url");
-
-			daPhuongTien.setDuongDan(duongDanMoi);
-			daPhuongTienRepository.save(daPhuongTien);
-
-			// Xóa file cũ trên Cloudinary (nếu có)
-			if (duongDanCu != null && !duongDanCu.isEmpty()) {
-				xoaFileTrenCloudinary(duongDanCu);
+			DaPhuongTien dpt = daPhuongTienRepository.findById(id).get();
+			if (daPhuongTienRepository.findById(id).isPresent()) {
+				dpt.setMoTa(moTa);
+				daPhuongTienRepository.save(dpt);
 			}
-			return daPhuongTien;
-
+			return dpt;
 		} catch (Exception e) {
-			e.printStackTrace();
 			return null;
 		}
 	}

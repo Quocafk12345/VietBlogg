@@ -17,11 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 
 @CrossOrigin("*")
 @RestController
@@ -54,12 +52,6 @@ public class UserController {
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
-	}
-
-	@PostMapping("/dang-xuat")
-	public ResponseEntity<?> logout(SessionStatus sessionStatus) {
-		sessionStatus.setComplete();
-		return ResponseEntity.ok().body(Map.of("message", "Đăng xuất thành công"));
 	}
 
 	@PutMapping("/update")

@@ -61,7 +61,7 @@ mainApp.controller('BinhLuanController', function($scope, $http, timeService) {
     $scope.themBinhLuan = function(binhLuan) {
         var binhLuanMoi = {
             noiDung: null,
-            baiViet: { id: baiVietId }, // Gửi kèm ID bài viết
+            baiViet: {id: baiVietId_chiTietBaiViet}, // Gửi kèm ID bài viết
             user: { id: currentUser.id }, // Thay 1 bằng ID người dùng hiện tại
             binhLuanCha: null
         };
@@ -84,10 +84,10 @@ mainApp.controller('BinhLuanController', function($scope, $http, timeService) {
             console.log("Vui lòng nhập nội dung bình luận.");
         }
 
-        $http.post(`${host_BinhLuan}/${baiVietId}`, binhLuanMoi)
+        $http.post(`${host_BinhLuan}/${baiVietId_chiTietBaiViet}`, binhLuanMoi)
             .then(resp => {
                 console.log("Bình luận đã được thêm:", resp.data);
-                $scope.layBinhLuan(baiVietId);
+                $scope.layBinhLuan(baiVietId_chiTietBaiViet);
                 document.getElementById('binhLuanInput').value = "";
             })
             .catch(error => {
@@ -101,4 +101,6 @@ mainApp.controller('BinhLuanController', function($scope, $http, timeService) {
     };
 
     $scope.layBinhLuan(baiVietId_chiTietBaiViet);
+
+    console.log($scope.danhSachBinhLuan);
 });

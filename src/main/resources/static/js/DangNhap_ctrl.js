@@ -26,7 +26,7 @@ mainApp.controller('DangNhapController', function ($scope, $http, $window) {
     $scope.logout = function () {
         $http({
             method: 'POST',
-            url: `${host_DangNhap}/api/user/dang-xuat`,
+            url: `${host_DangNhap}/dang-xuat`,
             responseType: 'text' // Chỉ định responseType là 'text' nếu máy chủ trả về chuỗi
         }).then(function(response) {
             $window.location.href = `${host_DangNhap}/dang-nhap`; // Redirect đến /logout

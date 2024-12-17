@@ -20,9 +20,9 @@
 
 </head>
 <body>
-<div class="container-fluid p-0">
-    <div th:replace="~{include/navbar :: navbar}"></div>
-    <main class="row">
+<div th:replace="~{include/navbar :: navbar}"></div>
+<div class="main">
+	<div th:replace="~{include/sidebar :: sidebar}"></div>
         <div class="col-3 sidebar">
             <!-- Phần trên: Nav & Tabs -->
             <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
