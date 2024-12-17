@@ -85,3 +85,96 @@ body {
     margin: 20px auto;
     padding: 20px;
 }
+.thong-ke {
+    display: flex; /* Sắp xếp các item theo hàng ngang */
+    justify-content: space-around; /* Phân bố đều khoảng cách giữa các item */
+    margin-bottom: 20px; /* Khoảng cách với phần tử bên dưới */
+    border: 1px solid #ccc; /* Thêm viền cho khung */
+    padding: 10px; /* Thêm padding */
+    margin-bottom: 20px; /* Thêm margin dưới */
+    /* Thêm các thuộc tính CSS khác tùy chỉnh */
+}
+
+/* CSS cho bảng danh sách nhóm */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px; /* Thêm lề cho bảng */
+    font-family: Arial, sans-serif; /* Chọn font chữ */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Thêm đổ bóng */
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 15px; /* Tăng padding */
+    text-align: left;
+    line-height: 1.5; /* Tăng khoảng cách dòng */
+}
+
+th {
+    background-color: #f5f5f5; /* Màu nền nhạt cho tiêu đề */
+    font-weight: bold;
+    font-size: 16px; /* Tăng kích thước chữ */
+}
+
+/* CSS cho nút xóa */
+table button {
+    background-color: #f44336; /* Màu đỏ */
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+td {
+    font-size: 14px; /* Tăng kích thước chữ */
+}
+
+tr:hover {
+    background-color: #f0f0f5; /* Hiệu ứng hover */
+}
+#nhom table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px; /* Thêm lề cho bảng */
+    font-family: Arial, sans-serif; /* Chọn font chữ */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Thêm đổ bóng */
+}
+
+#nhom th, #nhom td {
+    border: 1px solid #ddd;
+    padding: 15px; /* Tăng padding */
+    text-align: left;
+    line-height: 1.5; /* Tăng khoảng cách dòng */
+}
+
+#nhom th {
+    background-color: #f5f5f5; /* Màu nền nhạt cho tiêu đề */
+    font-weight: bold;
+    font-size: 16px; /* Tăng kích thước chữ */
+}
+
+#nhom td {
+    font-size: 14px; /* Tăng kích thước chữ */
+}
+
+#nhom tr:hover {
+    background-color: #f0f0f5; /* Hiệu ứng hover */
+}
+
+/* CSS cho phần thống kê nhóm tham gia */
+.nhom-tham-gia {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    text-align: center; /* Căn giữa nội dung */
+}
+
+.nhom-tham-gia .so-lieu {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}

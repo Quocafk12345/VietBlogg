@@ -244,4 +244,9 @@ public class NhomController {
         int soLuong = nhomService.demSoLuongThanhVien(nhomId);
         return ResponseEntity.ok(soLuong);
     }
+    @GetMapping("/tat-ca")
+    public ResponseEntity<List<Nhom>> layTatCaNhom() {
+        List<Nhom> nhoms = nhomService.layToanBoNhom();
+        return ResponseEntity.ok(nhoms);
+    }
 }

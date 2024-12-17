@@ -131,7 +131,28 @@
 
             </div>
             <div class="tab-pane fade" id="v-pills-groups" role="tabpanel" aria-labelledby="v-pills-groups-tab" tabindex="0">
-                Nhóm
+                <div id="nhom" class="tabcontent">
+                    <h2>Danh sách nhóm</h2>
+                    <p>Tổng số nhóm: {{ tongSoNhom }}</p> <div class="horizontal-forms">
+                <table>
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên nhóm</th>
+                            <th>Giới thiệu</th>
+                            <th>Hành động</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="nhom in nhoms">
+                            <td>{{ nhom.id }}</td>
+                            <td>{{ nhom.ten }}</td>
+                            <td>{{ nhom.gioiThieu }}</td>
+                            <td><button ng-click="deleteNhom(nhom.id)">Xóa</button></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="tab-pane fade" id="v-pills-baiviet" role="tabpanel" aria-labelledby="v-pills-baiviet-tab" tabindex="0">
                 <h2>Danh sách bài viết</h2>
@@ -147,14 +168,6 @@
                     <div class="thong-ke-item">
                         <p class="so-lieu" id="tongNhap">0</p>
                         <p class="chu-thich">Bài Nháp</p>
-                    </div>
-                    <div class="thong-ke-item">
-                        <p class="so-lieu" th:text="${tongLuotThich}"></p>
-                        <p class="chu-thich">Thích</p>
-                    </div>
-                    <div class="thong-ke-item">
-                        <p class="so-lieu" th:text="${tongBinhLuan}"></p>
-                        <p class="chu-thich">Bình luận</p>
                     </div>
                 </div>
                 <table>
@@ -189,10 +202,6 @@
                     </div>
                 </div>
                 <div id="allUserPostCountChart" style="width: 900px; height: 500px;">
-                </div>
-
-                <div id="nhom" class="tabcontent">
-                    <h2>Danh sách nhóm</h2>
                 </div>
             </div>
         </div>

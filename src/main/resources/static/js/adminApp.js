@@ -8,7 +8,35 @@ mainApp.controller('quanLyController', function($scope, $http, $window, $sce) {
             $scope.users = response.data;
         });
 
-    // ... (Các hàm khác)
+    // Lấy danh sách tất cả nhóm
+    $http.get(`${host_DangNhap}/api/nhom/tat-ca`)
+        .then(function(response) {
+            $scope.nhoms = response.data;
+            $scope.tongSoNhom = $scope.nhoms.length; // Tính tổng số nhóm
+        });
+
+    // Lấy danh sách nhóm người dùng đã tham gia
+    $http.get(`${host_DangNhap}/api/nhom/user/` + $scope.currentUser.id)
+        .then(function(response) {
+            $scope.nhomsThamGia = response.data;
+            document.getElementById("tongNhomThamGia").innerText = $scope.nhomsThamGia.length;
+        });
+
+    // Xóa nhóm
+    $scope.deleteNhom = function(nhomId) {
+        if (confirm("Bạn có chắc chắn muốn xóa nhóm này?")) {
+            $http.delete(`${host_DangNhap}/api/nhom/` + nhomId)
+                .then(function(response) {
+                    $scope.nhoms = $scope.nhoms.filter(nhom => nhom.id !== nhomId);
+                    alert("Xóa nhóm thành công!");
+                })
+                .catch(function(error) {
+                    console.error("Lỗi khi xóa nhóm:", error);
+                    alert("Xóa nhóm thất bại!");
+                });
+        }
+    };
+
 
     // Lấy danh sách bài viết và vẽ biểu đồ cột
     $http.get(`${host_DangNhap}/api/bai-viet`)
@@ -213,8 +241,7 @@ mainApp.controller('quanLyController', function($scope, $http, $window, $sce) {
 
                     });
                 });
-
-
+            
             $scope.logout = function () {
                 $http({
                     method: 'POST',
@@ -252,18 +279,7 @@ mainApp.controller('quanLyController', function($scope, $http, $window, $sce) {
                 $scope.editingUser = null; // Ẩn form sửa
             };
 
-            $scope.deleteUser = function (userId) {
-                if (confirm("Bạn có chắc chắn muốn xóa người dùng này?")) {
-                    $http.delete(`${host_DangNhap}/api/user/${userId}`)
-                        .then(function (response) {
-                            // Xóa người dùng khỏi danh sách sau khi xóa
-                            $scope.users = $scope.users.filter(function (u) {
-                                return u.id !== userId;
-                            });
-                        });
-                }
-            };
-
+// Lấy danh sách nhóm
             $scope.openTab = function (evt, tabName) {
                 var i, tabcontent, tablinks;
                 tabcontent = document.getElementsByClassName("tabcontent");
@@ -278,6 +294,7 @@ mainApp.controller('quanLyController', function($scope, $http, $window, $sce) {
                 event.currentTarget.className += " active";
             }
             Promise.all([
+                $http.get(`${host_DangNhap}/api/nhom/danh-sach`),
                 $http.get(`${host_DangNhap}/api/bai-viet`),
                 $http.get(`${host_DangNhap}/api/binh-luan`),
                 $http.get(`${host_DangNhap}/api/bai-viet/like`)
@@ -381,6 +398,8 @@ mainApp.controller('quanLyController', function($scope, $http, $window, $sce) {
                         }
                     });
             };
+
+
             // Mở tab "Quản lý người dùng" mặc định
             document.getElementById("defaultOpen").click();
         });

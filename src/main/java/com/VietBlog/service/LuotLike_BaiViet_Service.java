@@ -75,4 +75,9 @@ public class LuotLike_BaiViet_Service {
 	public List<BaiViet> layDanhSachBaiVietDaLike(Integer userId) {
 		return luotLikeRepository.findBaiVietLikedByUserId(userId);
 	}
+
+	// Lấy tổng số lượt thích
+	public Long tongLuotThich() {
+		return luotLike_BaiViet_Repository.tongLuotThich();
+	}
 }

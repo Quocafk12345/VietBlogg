@@ -96,5 +96,11 @@ public class BinhLuanService {
 	public int demLuotBinhLuan(Long baiVietId) {
 		return binhLuanRepository.countBinhLuanByBaiVietId(baiVietId);
 	}
+	// Lấy tổng số bình luận
 
+
+	// Lấy tổng số bình luận
+	public Long tongBinhLuan() {
+		return binhLuanRepository.tongBinhLuan();
+	}
 }

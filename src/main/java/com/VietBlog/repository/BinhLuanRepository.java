@@ -26,4 +26,7 @@ public interface BinhLuanRepository extends JpaRepository<BinhLuan, Long> {
     @Query("SELECT bl FROM BinhLuan bl WHERE bl.baiViet.id = :baiVietId AND bl.level = 0")
     List<BinhLuan> findRootCommentsByBaiVietId(@Param("baiVietId") Long baiVietId);
 
+    // Đếm tổng số bình luận
+    @Query("SELECT COUNT(bl) FROM BinhLuan bl")
+    Long tongBinhLuan();
 }

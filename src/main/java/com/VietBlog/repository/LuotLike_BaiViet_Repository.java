@@ -26,4 +26,10 @@ public interface LuotLike_BaiViet_Repository extends JpaRepository<LuotLike_BaiV
     // Kiểm tra xem một người dùng đã like một bài viết chưa
     boolean existsById(@NonNull LuotLike_BaiViet_ID id);
     void deleteById(LuotLike_BaiViet_ID id);
+
+    // ... (Các phương thức khác)
+
+    // Lấy tổng số lượt thích
+    @Query("SELECT COUNT(ll) FROM LuotLike_BaiViet ll")
+    Long tongLuotThich();
 }
