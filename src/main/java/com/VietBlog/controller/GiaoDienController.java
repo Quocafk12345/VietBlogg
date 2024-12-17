@@ -1,14 +1,29 @@
 package com.VietBlog.controller;
 
 import com.VietBlog.entity.User;
+import com.VietBlog.service.BaiVietService;
+import com.VietBlog.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
 @Controller
 @SessionAttributes("currentUser")
 public class GiaoDienController {
+
+	private final UserService userService;
+	private final BaiVietService baiVietService;
+
+	@Autowired
+	public GiaoDienController(UserService userService, BaiVietService baiVietService) {
+		this.userService = userService;
+		this.baiVietService = baiVietService;
+	}
 
 	// trang đăng nhập
 	@GetMapping("/dang-nhap")
@@ -153,18 +168,53 @@ public class GiaoDienController {
 	}
 
 	@GetMapping("/cai-dat")
-	public String hienThiCaiDat(Model model) {
-		if (model.getAttribute("currentUser") != null) {
-			return "account/trang-ca-nhan";
-		} else return "redirect:/dang-nhap";
+	public String hienThiCaiDat(Model model, @ModelAttribute("currentUser") User currentUser) {
+		if (currentUser == null) {
+			return "redirect:/dang-nhap"; // Chuyển hướng đến trang đăng nhập nếu chưa đăng nhập
+		}
+
+		try {
+			// Thêm thông tin giao diện vào model
+			model.addAttribute("user", currentUser);
+			model.addAttribute("mauNen", currentUser.getTheme());
+
+			return "page/cai-dat-ca-nhan";
+		} catch (Exception e) {
+			model.addAttribute("errorMessage", "Có lỗi xảy ra khi xử lý yêu cầu.");
+			return "error";
+		}
 	}
 
 	// Profile page
 	@GetMapping("/trang-ca-nhan/{userId}")
-	public String showProfile(Model model) {
-		if (model.getAttribute("currentUser") != null) {
-			return "account/trang-ca-nhan";
-		} else return "redirect:/dang-nhap";
+	public String showProfile(@PathVariable(value = "userId", required = false) Long userId, Model model) {
+		// Fetch user by ID
+		User user = userService.findById(userId);
+		if (user != null) {
+			// Add user info to the model
+			model.addAttribute("user", user);
+
+			// Calculate days since registration
+			LocalDate registrationDate = user.getNgayTao();
+			long daysSinceRegistration = ChronoUnit.DAYS.between(registrationDate, LocalDate.now());
+			model.addAttribute("daysSinceRegistration", daysSinceRegistration);
+
+			// Get total number of posts by user
+			int totalBaiViet = baiVietService.demSoLuongBaiVietChoUser(userId);
+			model.addAttribute("totalBaiViet", totalBaiViet);
+
+			int totalLike = userService.countLikesByUserId(userId);
+			model.addAttribute("totalLikes", totalLike);
+
+			int totalFollow = userService.countFollowsByUserId(userId);
+			model.addAttribute("totalFollows", totalFollow);
+		} else {
+			// Handle case where user is not found
+			model.addAttribute("error", "User không tồn tại.");
+			return "redirect:/dang-nhap"; // Redirect to login if the user is not found
+		}
+
+		return "account/trang-ca-nhan"; // Return to profile page
 	}
 
 

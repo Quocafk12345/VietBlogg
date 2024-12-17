@@ -247,12 +247,11 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
-    // chuyển sang trang Chi tiết bài viết
-    $scope.chuyenTrang = function ($event, id, duongDan) {
-        $event.preventDefault();
-        $event.target.href = duongDan + id;
-        window.location.href = $event.target.href;
+// Ví dụ: trong hàm xem chi tiết bài viết
+    $scope.xemChiTietBaiViet = function (baiVietId) {
+        ChuyenTrangService.chuyenTrang(baiVietId, '/bai-viet/');
     };
+
 
     // tải bài viết trong Chi tiết bài viết
     $scope.taiBaiVietDuocChon = function (baiVietId) {

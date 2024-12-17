@@ -1,9 +1,6 @@
 package com.VietBlog.controller;
 
-import com.VietBlog.entity.BlockUser_ID;
-import com.VietBlog.entity.LuotFollow;
-import com.VietBlog.entity.LuotFollowId;
-import com.VietBlog.entity.User;
+import com.VietBlog.entity.*;
 import com.VietBlog.handle.FollowStatusWebSocketHandler;
 import com.VietBlog.repository.BaiVietRepository;
 import com.VietBlog.repository.BlockUserRepository;
@@ -19,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
@@ -34,8 +30,7 @@ import java.util.stream.Collectors;
 public class UserController {
 
 	private final UserRepository userRepository;
-	private SimpMessagingTemplate messagingTemplate;
-
+	private final SimpMessagingTemplate messagingTemplate;
 	private final UserService userService;
 	private final LuotFollowService luotFollowService;
 	private final LuotFollowRepository luotFollowRepository;
@@ -44,11 +39,12 @@ public class UserController {
 	private final BlockUserRepository blockUserRepository;
 
 	@Autowired
-	public UserController(UserService userService, LuotFollowService luotFollowService, LuotFollowRepository luotFollowRepository, BaiVietRepository baiVietRepository, BaiVietService baiVietService, LuotLike_BaiViet_Service luotLike_BaiViet_Service, UserRepository userRepository, BlockUserService blockUserService, BlockUserRepository blockUserRepository) {
+	public UserController(UserService userService, LuotFollowService luotFollowService, LuotFollowRepository luotFollowRepository, BaiVietRepository baiVietRepository, BaiVietService baiVietService, LuotLike_BaiViet_Service luotLike_BaiViet_Service, UserRepository userRepository, SimpMessagingTemplate messagingTemplate, FollowStatusWebSocketHandler webSocketHandler, BlockUserService blockUserService, BlockUserRepository blockUserRepository) {
 		this.userService = userService;
 		this.luotFollowService = luotFollowService;
 		this.luotFollowRepository = luotFollowRepository;
-        this.webSocketHandler = webSocketHandler;
+		this.messagingTemplate = messagingTemplate;
+		this.webSocketHandler = webSocketHandler;
 		this.blockUserService = blockUserService;
 		this.blockUserRepository = blockUserRepository;
 		this.userRepository = userRepository;
@@ -79,7 +75,7 @@ public class UserController {
 
 	@PostMapping("/upload-avatar")
 	public ResponseEntity<?> uploadAvatar(@RequestParam("file") MultipartFile file,
-										  @RequestParam("userId") Long userId) {
+	                                      @RequestParam("userId") Long userId) {
 		try {
 			User user = userService.findById(userId);
 			if (user == null) {
@@ -94,7 +90,7 @@ public class UserController {
 	@GetMapping("/{userId}/isFollowing")
 	public ResponseEntity<Boolean> isFollowing(@PathVariable Long userId, @RequestParam Long userFollowId) {
 		try {
-			boolean isFollowing = luotFollowService.isFollowing(userFollowId, userId);
+			boolean isFollowing = luotFollowService.kiemTraFollow(userId, userFollowId);
 			return ResponseEntity.ok(isFollowing);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
@@ -219,7 +215,7 @@ public class UserController {
 	@ApiResponse(responseCode = "404", description = "Không tìm thấy người dùng")
 	@GetMapping("/{id}/luot-follow")
 	public ResponseEntity<Integer> demLuotFollow(@PathVariable Long id) {
-		Integer luotFollow = luotFollowRepository.countFollowersByUserId(id);
+		Integer luotFollow = luotFollowRepository.demSoLuongNguoiDuocTheoDoi(id);
 		return ResponseEntity.ok(luotFollow);
 	}
 

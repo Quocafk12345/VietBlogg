@@ -141,14 +141,11 @@ mainApp.controller("UserController", function ($scope, $http) {
     };
     $scope.layBaiVietTheoUserId(userId);
 
-    // chuyển sang trang Chi tiết bài viết
-    $scope.chuyenTrang = function ($event, baiVietId) {
-        console.log(baiVietId);
+    $scope.chuyenTrang = function ($event, userId) {
         $event.preventDefault();
-        $event.target.href = '/bai-viet/' + baiVietId;
+        $event.target.href = '/trang-ca-nhan/' + userId;
         window.location.href = $event.target.href;
     };
-
 
     const checkBlockStatus = function () {
         if (!userId) {

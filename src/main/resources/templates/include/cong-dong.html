@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" ng-app="mainApp" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 	<meta charset="UTF-8">
@@ -9,69 +9,46 @@
 	<!-- bootstrap 5 -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-	<!-- css -->
-	<link rel="stylesheet" th:href="@{/css/include/navbar_new.css}">
-	<link rel="stylesheet" th:href="@{/css/include/navbar.css}">
-	<link rel="stylesheet" th:href="@{/css/Page/home.css}">
-	<style>
-		/* CSS cho trang Cộng đồng */
-		.nhom-item {
-			border: 1px solid #dee2e6;
-			padding: 15px;
-			margin-bottom: 15px;
-			border-radius: 5px;
-		}
-		
-		.nhom-item img {
-			width: 50px;
-			height: 50px;
-			object-fit: cover;
-			border-radius: 50%;
-			margin-right: 10px;
-		}
-		
-		.nhom-item .btn {
-			margin-top: 10px;
-		}
-	</style>
+	<link rel="stylesheet" th:href="@{/css/Chung.css}">
+	<link rel="stylesheet" th:href="@{/css/include/Menu.css}">
+	<link rel="stylesheet" th:href="@{/css/BaiViet.css}">
 </head>
-
-<body ng-app="mainApp">
-<div class="container-fluid p-0">
-	<div th:replace="~{include/navbar :: navbar}"></div>
-	<main class="row">
-		<div th:replace="~{include/sidebar :: sidebar}" class="col-3"></div>
-		<div class="col-9">
-			<div class="container mt-4">
-				<h2 class="mb-4">Cộng đồng</h2>
-				<div class="row" ng-controller="nhomController">
-					<div class="col-md-4" ng-repeat="nhom in DSnhom_tong">
-						<div class="nhom-item">
-							<div class="d-flex align-items-center">
-								<img alt="Hình đại diện nhóm" ng-src="{{nhom.hinhDaiDien}}">
-								<div>
-									<h5>
-										<a class="text-decoration-none text-dark" ng-click="chuyenTrang($event, nhom.id)"
-										   th:href="@{/nhom/chi-tiet/}">
-											{{nhom.ten}}
-										</a>
-									</h5>
-									<p class="text-muted">{{nhom.gioiThieu | limitTo: 100}}...</p>
-								</div>
-							</div>
+<body>
+<div th:replace="~{include/navbar :: navbar}"></div>
+<div class="main">
+	<div th:replace="~{include/sidebar :: sidebar}"></div>
+	<div class="col-9">
+		<div class="container mt-4">
+			<h2 class="mb-4">Cộng đồng</h2>
+			<div class="row" ng-controller="nhomController">
+				<div class="col-md-4" ng-repeat="nhom in DSnhom_tong">
+					<div class="nhom-item">
+						<div class="d-flex align-items-center">
+							<img alt="Hình đại diện nhóm" class="rounded-circle"
+							     ng-src="{{nhom.hinhDaiDien}}" style="width: 50px; height: 50px;">
 							<div>
-								<button class="btn btn-danger" ng-click="roiKhoiNhom(nhom.id)"
-								        ng-show="nhom.daThamGia">Đã tham gia
-								</button>
-								<button class="btn btn-success" ng-click="thamGiaNhom(nhom.id)"
-								        ng-show="!nhom.daThamGia">Tham gia
-								</button>
+								<h5>
+									<a class="text-decoration-none text-dark" ng-click="chuyenTrang($event, nhom.id)"
+									   th:href="@{/nhom/chi-tiet/}">
+										{{nhom.ten}}
+									</a>
+								</h5>
+								<p class="text-muted">{{nhom.gioiThieu | limitTo: 100}}...</p>
 							</div>
+						</div>
+						<div>
+							<button class="btn btn-danger" ng-click="roiKhoiNhom(nhom.id)"
+							        ng-show="nhom.daThamGia">Đã tham gia
+							</button>
+							<button class="btn btn-success" ng-click="thamGiaNhom(nhom.id)"
+							        ng-show="!nhom.daThamGia">Tham gia
+							</button>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 	</main>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>

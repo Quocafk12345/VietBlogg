@@ -109,7 +109,9 @@
 													     class="rounded-circle me-3" src="https://via.placeholder.com/50"
 													     style="max-width: 50px; max-height: 50px;">
 													<div>
-														<h6 class="mb-0">{{reply.user.tenNguoiDung}}</h6>
+														<h6 class="mb-0"><a
+																ng-click="chuyenTrang($event,reply.user.id)">{{reply.user.tenNguoiDung}}</a>
+														</h6>
 														<small class="text-muted">{{reply.thoiGianDang}}</small>
 														<p class="mt-2">{{reply.noiDung}}</p>
 														<div class="comment-action">
@@ -144,7 +146,9 @@
 																     src="https://via.placeholder.com/50"
 																     style="max-width: 50px; max-height: 50px;">
 																<div>
-																	<h6 class="mb-0">{{reply2.user.tenNguoiDung}}</h6>
+																	<h6 class="mb-0"><a
+																			ng-click="chuyenTrang($event,reply2.user.id)">{{reply2.user.tenNguoiDung}}</a>
+																	</h6>
 																	<small class="text-muted">{{reply2.thoiGianDang}}</small>
 																	<p class="mt-2">{{reply2.noiDung}}</p>
 																	<div class="comment-action">
@@ -201,7 +205,7 @@
 	<!-- AngularJS -->
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 	<script th:inline="javascript">
-		var baiVietId_chiTietBaiViet = [[${idBaiViet}]];
+		var baiVietId_chiTietBaiViet = undefined;
 		var currentUser = [[${session.currentUser}]];
 	</script>
 	<script th:src="@{/js/Sanitize/node_modules/angular-sanitize/angular-sanitize.js}"></script>
@@ -211,7 +215,7 @@
 	<script th:src="@{/js/BaiViet_ctrl.js}"></script>
 	<script th:src="@{/js/BinhLuan_ctrl.js}"></script>
 	<script th:src="@{/js/Nhom_ctrl.js}"></script>
-
+</div>
 </body>
 </html>
 
