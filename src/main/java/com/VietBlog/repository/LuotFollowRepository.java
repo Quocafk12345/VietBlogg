@@ -1,5 +1,6 @@
 package com.VietBlog.repository;
 
+import com.VietBlog.entity.BlockUser_ID;
 import com.VietBlog.entity.LuotFollow;
 import com.VietBlog.entity.LuotFollowId;
 import com.VietBlog.entity.User;

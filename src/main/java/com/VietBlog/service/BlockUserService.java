@@ -16,6 +16,14 @@ public class BlockUserService {
         this.blockUserRepository = blockUserRepository;
         this.userRepository = userRepository;
     }
+    public boolean daBlock(Long userId, Long userBlockId) {
+        BlockUser_ID blockUserId = new BlockUser_ID(userId, userBlockId);
+        return blockUserRepository.existsById(blockUserId);
+    }
+    // Kiểm tra nếu người dùng bị chặn, trả về true nếu bị chặn, false nếu không bị chặn
+    public boolean checkBlock(Long userId, Long otherUserId) {
+        return daBlock(userId, otherUserId) || daBlock(otherUserId, userId); // Kiểm tra cả 2 chiều
+    }
 
     public boolean toggleBlock(Long userId, Long userBlockId) {
         User user = userRepository.findById(userId)
