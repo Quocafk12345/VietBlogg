@@ -158,6 +158,4 @@ public class GiaoDienController {
 
         return "account/trang-ca-nhan"; // Return to profile page
     }
-
-
 }

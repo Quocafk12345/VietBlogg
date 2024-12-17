@@ -20,6 +20,10 @@ public class LuotFollowService {
 		this.userRepository = userRepository;
 	}
 
+	public boolean isFollowing(Long userFollowId, Long userId) {
+		return luotFollowRepository.existsById(new LuotFollowId(userFollowId, userId));
+	}
+
 	public boolean toggleFollow(Long userId, Long userFollowId) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new RuntimeException("User không tồn tại."));
@@ -43,6 +47,7 @@ public class LuotFollowService {
 			return true; // Trả về trạng thái "đã follow"
 		}
 	}
+
 
 
 

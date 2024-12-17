@@ -1,9 +1,6 @@
 package com.VietBlog.controller;
 
-import com.VietBlog.entity.BlockUser_ID;
-import com.VietBlog.entity.LuotFollow;
-import com.VietBlog.entity.LuotFollowId;
-import com.VietBlog.entity.User;
+import com.VietBlog.entity.*;
 import com.VietBlog.handle.FollowStatusWebSocketHandler;
 import com.VietBlog.repository.BaiVietRepository;
 import com.VietBlog.repository.BlockUserRepository;
@@ -24,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @CrossOrigin("*")
 @RestController
@@ -91,7 +89,15 @@ public class UserController {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
-
+	@GetMapping("/{userId}/isFollowing")
+	public ResponseEntity<Boolean> isFollowing(@PathVariable Long userId, @RequestParam Long userFollowId) {
+		try {
+			boolean isFollowing = luotFollowService.isFollowing(userFollowId, userId);
+			return ResponseEntity.ok(isFollowing);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
+		}
+	}
 	@PostMapping("/{userId}/toggleFollow")
 	public ResponseEntity<?> toggleFollow(@PathVariable("userId") Long userId, @RequestParam Long userFollowId) {
 		try {
@@ -126,9 +132,9 @@ public class UserController {
 		return ResponseEntity.ok(response);
 	}
 	@GetMapping("/{userId}/checkFollowStatus")
-	public ResponseEntity<Map<String, Boolean>> checkFollowStatus(@PathVariable Long userId, @RequestParam Long userFollowId) {
-		LuotFollowId followId = new LuotFollowId(userFollowId, userId);
-		boolean isFollowing = luotFollowRepository.existsById(followId);
+	public ResponseEntity<?> checkFollowStatus(@PathVariable("userId") Long userId, @RequestParam Long UserFollowId){
+		LuotFollowId luotFollowId = new LuotFollowId(userId,UserFollowId);
+		boolean isFollowing = luotFollowRepository.existsById(luotFollowId);
 
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("isFollowing", isFollowing);
@@ -144,15 +150,38 @@ public class UserController {
 		return ResponseEntity.ok(luotFollow);
 	}
 
-	@GetMapping("/following/{userId}")
-	public ResponseEntity<List<User>> getFollowing(@PathVariable Long userId) {
-		List<User> following = luotFollowService.layDanhSachFollowing(userId);
-		return ResponseEntity.ok(following);
-	}
-
 	@GetMapping("/follower/{userId}")
 	public ResponseEntity<List<User>> getFollower(@PathVariable Long userId) {
 		List<User> followere = luotFollowService.layDanhSachFollowers(userId);
 		return ResponseEntity.ok(followere);
+	}
+	// Lấy danh sách người theo dõi
+	@GetMapping("/{userId}/followers")
+	public ResponseEntity<List<UserResponse>> getFollowers(@PathVariable Long userId) {
+		try {
+			List<User> followers = luotFollowService.layDanhSachFollowers(userId);
+			// Chuyển đổi User entity thành DTO để tránh trả về thông tin nhạy cảm
+			List<UserResponse> response = followers.stream()
+					.map(user -> new UserResponse(user.getId(), user.getTenNguoiDung(), user.getEmail()))
+					.collect(Collectors.toList());
+			return ResponseEntity.ok(response);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
+	// Lấy danh sách người đang theo dõi
+	@GetMapping("/{userId}/following")
+	public ResponseEntity<List<UserResponse>> getFollowing(@PathVariable Long userId) {
+		try {
+			List<User> following = luotFollowService.layDanhSachFollowing(userId);
+			// Chuyển đổi User entity thành DTO
+			List<UserResponse> response = following.stream()
+					.map(user -> new UserResponse(user.getId(), user.getTenNguoiDung(), user.getEmail()))
+					.collect(Collectors.toList());
+			return ResponseEntity.ok(response);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 }

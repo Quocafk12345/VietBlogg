@@ -16,6 +16,10 @@ public class BlockUserService {
         this.blockUserRepository = blockUserRepository;
         this.userRepository = userRepository;
     }
+    public boolean daBlock(Long userId, Long userBlockId) {
+        BlockUser_ID blockUserId = new BlockUser_ID(userId, userBlockId);
+        return blockUserRepository.existsById(blockUserId);
+    }
 
     public boolean toggleBlock(Long userId, Long userBlockId) {
         User user = userRepository.findById(userId)

@@ -1,4 +1,21 @@
 /* CSS tùy chỉnh cho trang cá nhân */
+/* Định nghĩa các lớp CSS cho màu sắc của nút */
+.follow {
+    background-color: green; /* Màu xanh khi chưa follow */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.unfollow {
+    background-color: gray; /* Màu xám khi đã follow */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
 .profile-header {
     background: #f8f9fa;
     padding: 20px;

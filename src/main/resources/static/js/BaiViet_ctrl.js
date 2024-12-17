@@ -2,6 +2,7 @@ let host_BaiViet = "http://localhost:8080/api/bai-viet";
 
 mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService, $sce, $timeout) {  // Inject $q
 
+    const url = window.location.href;
     $scope.bangTin = [];
     $scope.dangTheoDoi = [];
     $scope.chiTietBaiViet = {};
@@ -29,6 +30,8 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
 
     // lấy bài viết của người dùng, load vào trang cá nhân
     $scope.layBaiVietCuaUser = function (userId) {
+        const url1 = window.location.href;
+        userId = url1.split("/").pop();
         var url = `${host_BaiViet}/user/${userId}`;
         $http.get(url)
             .then(resp => {
@@ -41,6 +44,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
                 console.error("Error", error);
             });
     };
+    $scope.layBaiVietCuaUser(currentUser.id);
 
 // tải tất cả bài viết đã đăng
     $scope.taiBaiViet = function () {

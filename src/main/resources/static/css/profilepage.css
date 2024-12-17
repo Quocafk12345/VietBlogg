@@ -537,3 +537,10 @@ body {
     font-size: 16px;
     pointer-events: none;
 }
+.bai-viet {
+    word-wrap: break-word; /* Ngắt chữ khi cần thiết */
+    overflow-wrap: break-word; /* Ngắt chữ khi không đủ chỗ */
+    word-break: break-word; /* Ngắt từ tại các điểm hợp lý */
+    white-space: normal; /* Cho phép văn bản xuống dòng */
+}
+
