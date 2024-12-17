@@ -1,10 +1,7 @@
 package com.VietBlog.entity;
 
-import com.VietBlog.constraints.DaPhuongTien.DaPhuongTien_Loai;
-import com.VietBlog.constraints.DaPhuongTien.DaPhuongTien_Loai_Converter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +21,7 @@ public class DaPhuongTien {
 	private Long id;
 
 	@NotNull
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "Id_Bai_Viet", nullable = false)
 	private BaiViet baiViet;
 
@@ -38,11 +35,5 @@ public class DaPhuongTien {
 	@Lob
 	@Column(name = "Mo_Ta")
 	private String moTa;
-
-	@Size(max = 50)
-	@Nationalized
-	@Column(name = "Loai", length = 50)
-	@Convert(converter = DaPhuongTien_Loai_Converter.class)
-	private DaPhuongTien_Loai loai;
 
 }

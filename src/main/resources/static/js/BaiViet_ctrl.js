@@ -1,6 +1,6 @@
 let host_BaiViet = "http://localhost:8080/api/bai-viet";
 
-mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService, ChuyenTrangService, $sce, $timeout, $window) {  // Inject $q
+mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService, $sce, $timeout, $window) {  // Inject $q
 
     $scope.DSdaPhuongTienMoi = [];
     $scope.DSdaPhuongTienXoa = [];
@@ -69,7 +69,6 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
 
     // code xử lý bài viết
     $scope.xuLyThongTinBaiViet = function (baiViet) {
-        var currentUserCopy = angular.copy(currentUser); // Tạo bản sao của currentUser
         var promises = [];
         angular.forEach(baiViet, function (baiVietObject) {
             promises.push($scope.demLuotLike(baiVietObject.id));
@@ -81,7 +80,6 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             promises.push($scope.kiemTraLuuBaiViet(baiVietObject)
                 .then(function (daLuu) {
                     baiVietObject.daLuu = daLuu; // Sửa baiViet thành baiVietObject
-                    baiVietObject.laChuBaiViet = baiVietObject.user.id === currentUserCopy.id;
                 }));
             promises.push($scope.layDSdaPhuongTienChoBai(baiVietObject.id)
                 .then(function (daPhuongTien) {

@@ -137,7 +137,7 @@ public class UserService {
 	}
 
 	public int countFollowsByUserId(Long userId){
-		return luotFollowRepository.demSoLuongNguoiDuocTheoDoi(userId);
+		return luotFollowRepository.countFollowersByUserId(userId);
 	}
 
 }

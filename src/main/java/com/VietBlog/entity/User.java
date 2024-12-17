@@ -1,17 +1,17 @@
 package com.VietBlog.entity;
 
-import com.VietBlog.constraints.User.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
+
+import com.VietBlog.constraints.User.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
@@ -80,12 +80,4 @@ public class User implements Serializable {
     @Convert(converter = Font_Converter.class)
     @Column(name = "Font")
     private Font_User font;
-
-	@JsonIgnore
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<LuotFollow> following;
-
-	@JsonIgnore
-	@OneToMany(mappedBy = "userFollow", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<LuotFollow> followers;
 }

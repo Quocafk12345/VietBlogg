@@ -37,7 +37,7 @@ public class DaPhuongTienController {
 	@PostMapping(value = "/dang-tai/{baiVietId}", consumes = "multipart/form-data")
 	public ResponseEntity<List<DaPhuongTien>> uploadDaPhuongTien(@PathVariable("baiVietId") Long baiVietId,
 	                                                             @RequestParam("DSfile") MultipartFile[] DSfile,
-	                                                             @RequestParam(value = "DSMoTa", required = false) String[] DSMoTa) {
+	                                                             @RequestParam("DSMoTa") String[] DSMoTa) {
 		try {
 			List<DaPhuongTien> daPhuongTiens = new ArrayList<>();
 
@@ -49,6 +49,7 @@ public class DaPhuongTienController {
 			}
 			return ResponseEntity.ok(daPhuongTiens);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.badRequest().build();
 		}
 	}
@@ -75,10 +76,8 @@ public class DaPhuongTienController {
 	public List<DaPhuongTienDTO> chuyenDoi(List<DaPhuongTien> listDaPhuongTien) {
 		return listDaPhuongTien.stream()
 				.map(daPhuongTien -> new DaPhuongTienDTO(
-						daPhuongTien.getId(),
 						daPhuongTien.getDuongDan(),
-						daPhuongTien.getMoTa(),
-						daPhuongTien.getLoai()
+						daPhuongTien.getMoTa()
 				))
 				.collect(Collectors.toList());
 	}

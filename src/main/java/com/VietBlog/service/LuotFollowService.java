@@ -1,8 +1,6 @@
 package com.VietBlog.service;
 
-import com.VietBlog.entity.LuotFollow;
-import com.VietBlog.entity.LuotFollowId;
-import com.VietBlog.entity.User;
+import com.VietBlog.entity.*;
 import com.VietBlog.repository.LuotFollowRepository;
 import com.VietBlog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,29 +44,31 @@ public class LuotFollowService {
 		}
 	}
 
+
+
 	// Kiểm tra xem một người dùng đã follow người dùng khác chưa
-	public boolean kiemTraFollow(Long userId, Long userFollowId) {
+	public boolean daFollow(Long userId, Long userFollowId) {
 		LuotFollowId luotFollowId = new LuotFollowId(userId, userFollowId);
 		return luotFollowRepository.existsById(luotFollowId);
 	}
 
 	// Đếm số lượng người dùng mà một người dùng đang follow
 	public int demSoLuongFollowing(Long userId) {
-		return luotFollowRepository.demSoLuongNguoiDuocTheoDoi(userId);
+		return luotFollowRepository.countFollowingByUserId(userId);
 	}
 
 	// Đếm số lượng người dùng đang follow một người dùng
 	public int demSoLuongFollowers(Long userId) {
-		return luotFollowRepository.demSoLuongNguoiTheoDoi(userId);
+		return luotFollowRepository.countFollowersByUserId(userId);
 	}
 
 	// Lấy danh sách người dùng mà một người dùng đang follow
 	public List<User> layDanhSachFollowing(Long userId) {
-		return luotFollowRepository.layDSNguoiDuocTheoDoi(userId);
+		return luotFollowRepository.findFollowingByUserId(userId);
 	}
 
 	// Lấy danh sách người dùng đang follow một người dùng
 	public List<User> layDanhSachFollowers(Long userId) {
-		return luotFollowRepository.layDSNguoiTheoDoi(userId);
+		return luotFollowRepository.findFollowersByUserId(userId);
 	}
 }
