@@ -100,5 +100,5 @@ mainApp.controller('BinhLuanController', function($scope, $http, timeService) {
         binhLuan.showReplyForm = !binhLuan.showReplyForm; // Đảo trạng thái hiển thị form
     };
 
-    $scope.layBinhLuan(baiVietId_chiTietBaiViet);
+    $scope.layBinhLuan(baiVietId);
 });

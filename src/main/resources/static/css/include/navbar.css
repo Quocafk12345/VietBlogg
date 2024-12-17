@@ -1,0 +1,136 @@
+.navbar-brand {
+    text-align: center;
+    font-weight: 900;
+    font-size: 33px;
+}
+
+.dropdown-toggle .rounded-circle {
+    margin-right: 8px;
+}
+
+.search{
+    background-color: #fff;
+}
+
+.search input{
+    border: none;
+}
+
+.search button{
+    background-color: gray;
+    border: none;
+    color: #fff;
+    font-weight: bold;
+}
+
+.add-post{
+    background-color: gray;
+    border: gray;
+}
+
+
+
+
+/* Căn chỉnh cho các button khi thu nhỏ */
+@media (max-width: 768px) {
+    .navbar .btn {
+        margin-top: 10px;
+    }
+}
+
+
+#sidebar {
+    height: 100vh;
+    background-color: #f8f9fa;
+    color: #343a40;
+    border-right: 1px solid #e0e0e0;
+}
+
+#sidebar .nav-item {
+    list-style: none;
+}
+
+#sidebar .nav-link {
+    font-size: 1.1rem;
+    padding: 10px;
+    color: #343a40;
+}
+
+#sidebar .nav-link.active {
+    border-radius: 5px;
+    background-color: gray;
+    font-weight: bold;
+    color: #fff;
+}
+.dropdown-toggle{
+    font-weight: bold;
+}
+
+#sidebar .nav-link i {
+    margin-right: 10px;
+}
+
+#sidebar .nav-link img {
+    margin-right: 10px;
+}
+
+#sidebar .nav-link:hover {
+    color: #212529;
+}
+
+#sidebar .dropdown-toggle::after {
+    display: inline-block;
+    margin-left: 0.255em;
+    vertical-align: 0.255em;
+    border: 0.3em solid transparent;
+    border-top-color: #343a40;
+}
+
+#sidebar .collapse .nav-link {
+    font-size: 0.95rem;
+    padding-left: 30px;
+}
+
+#sidebar .rounded-circle {
+    width: 20px;
+    height: 20px;
+}
+
+#sidebar ul {
+    list-style: none;  /* Loại bỏ dấu chấm */
+    padding-left: 0;   /* Loại bỏ thụt vào của danh sách */
+    margin-left: 0;    /* Loại bỏ margin của danh sách */
+}
+
+#sidebar ul li {
+    padding: 8px 16px; /* Thêm khoảng cách đều cho các mục */
+    margin: 0;         /* Loại bỏ margin của từng mục */
+}
+
+#sidebar .nav-link {
+    font-size: 1.1rem;
+    padding: 10px 16px;
+    color: #343a40;
+    display: flex;     /* Căn các phần tử theo hàng ngang */
+    align-items: center; /* Căn giữa các icon và văn bản */
+}
+
+#sidebar .nav-link img {
+    margin-right: 10px; /* Khoảng cách giữa ảnh và văn bản */
+}
+
+#sidebar .nav-link i {
+    margin-right: 10px; /* Khoảng cách giữa icon và văn bản */
+}
+
+
+/* Responsive */
+@media (max-width: 768px) {
+    #sidebar {
+        display: none;
+    }
+
+    #sidebar.collapsed {
+        display: block;
+    }
+}

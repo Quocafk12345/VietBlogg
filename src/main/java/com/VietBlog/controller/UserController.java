@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -122,7 +123,7 @@ public class UserController {
 	@ApiResponse(responseCode = "404", description = "Không tìm thấy người dùng")
 	@GetMapping("/{id}/luot-follow")
 	public ResponseEntity<Integer> demLuotFollow(@PathVariable Long id) {
-		Integer luotFollow = luotFollowRepository.demSoLuongNguoiDuocTheoDoi(id);
+		Integer luotFollow = luotFollowService.demSoLuongFollowing(id);
 		return ResponseEntity.ok(luotFollow);
 	}
 

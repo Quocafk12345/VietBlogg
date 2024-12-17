@@ -167,7 +167,9 @@
 												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 											</div>
 											<div class="modal-body">
-												<select ng-model="$parent.nguoiNhanId"</select>
+												<select ng-model="$parent.nguoiNhanId"
+												        ng-options="thanhVien.userId as thanhVien.tenNguoiDung + ' - ' + thanhVien.vaiTro for thanhVien in danhSachThanhVien_TabNhuongQuyen">
+												</select>
 											</div>
 											<div class="modal-footer">
 												<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>

@@ -1,6 +1,5 @@
 package com.VietBlog.service;
 
-import com.VietBlog.constraints.DaPhuongTien.DaPhuongTien_Loai;
 import com.VietBlog.entity.BaiViet;
 import com.VietBlog.entity.DaPhuongTien;
 import com.VietBlog.repository.BaiVietRepository;
@@ -45,30 +44,21 @@ public class DaPhuongTienService {
 	@Transactional
 	public DaPhuongTien themDaPhuongTienChoBaiViet(Long baiVietId, MultipartFile filePhuongTien, String moTa) throws IOException {
 		Map<?, ?> uploadResult;
-		DaPhuongTien_Loai loaiFile; // Thêm biến để lưu loại file
 
-		// Kiểm tra kiểu file và set giá trị cho loaiFile
+		// Kiểm tra kiểu file để sử dụng phương thức upload phù hợp
 		if (Objects.requireNonNull(filePhuongTien.getContentType()).startsWith("image/")) {
 			uploadResult = cloudinary.uploader().upload(filePhuongTien.getBytes(), ObjectUtils.emptyMap());
-			loaiFile = DaPhuongTien_Loai.HINH_ANH;
 		} else if (filePhuongTien.getContentType().startsWith("video/")) {
 			uploadResult = cloudinary.uploader().uploadLarge(filePhuongTien.getBytes(), ObjectUtils.asMap("resource_type", "video"));
-			loaiFile = DaPhuongTien_Loai.VIDEO;
 		} else {
-			// Xử lý các loại file khác
-			uploadResult = cloudinary.uploader().upload(filePhuongTien.getBytes(), ObjectUtils.emptyMap()); // Hoặc phương thức upload phù hợp
-			loaiFile = DaPhuongTien_Loai.KHAC;
+			throw new IllegalArgumentException("Invalid file type");
 		}
-
 		String duongDan = (String) uploadResult.get("secure_url");
 		DaPhuongTien daPhuongTien = new DaPhuongTien();
 		daPhuongTien.setDuongDan(duongDan);
 		daPhuongTien.setMoTa(moTa);
 		Optional<BaiViet> baiViet = baiVietRepository.findById(baiVietId);
 		daPhuongTien.setBaiViet(baiViet.orElseThrow(() -> new EntityNotFoundException("Không tìm thấy bài viết có ID: " + baiVietId)));
-
-		daPhuongTien.setLoai(loaiFile); // Set giá trị cho thuộc tính loai
-
 		daPhuongTienRepository.save(daPhuongTien);
 		return daPhuongTien;
 	}

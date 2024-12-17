@@ -29,7 +29,6 @@ public class LuotLike_BaiViet_Service {
 		this.luotLike_BaiViet_Repository = luotLike_BaiViet_Repository;
 	}
 
-	@Transactional
 	public boolean toggleLike(Long idBaiViet, Long userId) {
 		// Kiểm tra người dùng và bài viết có tồn tại không
 		User user = userRepository.findById(userId)
