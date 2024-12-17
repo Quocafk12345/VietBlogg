@@ -3,7 +3,10 @@ package com.VietBlog.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -29,8 +32,8 @@ public class LuotFollowId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LuotFollowId entity = (LuotFollowId) o;
-        return Objects.equals(this.userFollow_Id, entity.userId) &&
-                Objects.equals(this.userId, entity.userId);
+	    return Objects.equals(this.userId, entity.userId) &&
+			    Objects.equals(this.userFollow_Id, entity.userFollow_Id);
     }
 
     @Override
