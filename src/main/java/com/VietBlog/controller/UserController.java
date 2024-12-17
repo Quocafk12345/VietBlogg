@@ -90,7 +90,7 @@ public class UserController {
 	@GetMapping("/{userId}/isFollowing")
 	public ResponseEntity<Boolean> isFollowing(@PathVariable Long userId, @RequestParam Long userFollowId) {
 		try {
-			boolean isFollowing = luotFollowService.kiemTraFollow(userId, userFollowId);
+			boolean isFollowing = luotFollowService.daFollow(userId, userFollowId);
 			return ResponseEntity.ok(isFollowing);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);

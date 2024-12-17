@@ -1,14 +1,12 @@
 package com.VietBlog.controller;
 
-import com.VietBlog.constraints.BaiViet.TrangThai_BaiViet;
 import com.VietBlog.entity.BaiViet;
-import com.VietBlog.entity.User;
+import com.VietBlog.repository.BaiVietRepository;
 import com.VietBlog.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,14 +24,16 @@ public class BaiVietController {
     private final LuotLike_BaiViet_Service luotLike_BaiViet_Service;
     private final BinhLuanService binhLuanService;
     private final NhomService nhomService;
+	private final BaiVietRepository baiVietRepository;
 
     @Autowired
-    public BaiVietController(BaiVietService baiVietService, LuotLike_BaiViet_Service luotLike_BaiViet_Service, LuuBaiVietService luuBaiVietService, BinhLuanService binhLuanService, NhomService nhomService) {
+    public BaiVietController(BaiVietService baiVietService, LuotLike_BaiViet_Service luotLike_BaiViet_Service, LuuBaiVietService luuBaiVietService, BinhLuanService binhLuanService, NhomService nhomService, BaiVietRepository baiVietRepository) {
         this.baiVietService = baiVietService;
         this.luotLike_BaiViet_Service = luotLike_BaiViet_Service;
         this.luuBaiVietService = luuBaiVietService;
         this.binhLuanService = binhLuanService;
         this.nhomService = nhomService;
+	    this.baiVietRepository = baiVietRepository;
     }
 
     /**
@@ -73,6 +73,15 @@ public class BaiVietController {
             return ResponseEntity.ok(baiViet);
         }
     }
+
+	@GetMapping("/{id}/nhap")
+	public ResponseEntity<List<BaiViet>> layDanhSachBaiVietNhapCuaUser(@PathVariable Long id) {
+		try {
+			return ResponseEntity.ok(baiVietRepository.findBaiVietNhapCuaUser(id));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
 
     /**
      * Phương thức đếm số lượt like của một bài viết
@@ -116,11 +125,9 @@ public class BaiVietController {
      * @param baiViet: Các thông tin của một bài viết
      */
     @PostMapping("/dang-bai")
-    @Transactional
     public ResponseEntity<BaiViet> dangBaiViet(@RequestBody BaiViet baiViet) {
         try {
              // Sử dụng BaiVietService
-            baiViet.setTrangThai(TrangThai_BaiViet.DA_DANG);
             baiVietService.themBaiViet(baiViet);
             return ResponseEntity.ok(baiViet);
         } catch (Exception e) {
@@ -134,11 +141,14 @@ public class BaiVietController {
      * @param user: User đang đăng nhập
      *
      */
-    @Transactional
     @PostMapping("/luu-bai")
-    public ResponseEntity<?> luuBaiVietVaoDSLuu(@RequestBody BaiViet baiViet, @RequestBody User user) {
-        luuBaiVietService.luuBaiViet(user.getId(), baiViet.getId());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> luuBaiVietVaoDSLuu(@RequestParam("idBaiViet") Long baiVietId, @RequestParam("userId") Long userId) {
+	    return ResponseEntity.ok(luuBaiVietService.luuBaiViet(userId, baiVietId));
+    }
+
+	@GetMapping("/luu-bai/kiem-tra")
+	public boolean kiemTraLuuBaiViet(@RequestParam("idBaiViet") Long baiVietId, @RequestParam("userId") Long userId) {
+		return luuBaiVietService.daLuuBaiViet(userId, baiVietId);
     }
 
     /**
@@ -147,7 +157,6 @@ public class BaiVietController {
      * @param baiViet: nội dung mới, sẽ được cập nhật của bài viết đó
      */
 
-    @Transactional
     @PutMapping("{id}")
     public ResponseEntity<BaiViet> update(@PathVariable Long id, @RequestBody BaiViet baiViet) {
         try {
@@ -165,7 +174,6 @@ public class BaiVietController {
      *
      */
     @DeleteMapping("{id}")
-    @Transactional
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         try {
             baiVietService.xoaBaiViet(id); // Sử dụng BaiVietService
