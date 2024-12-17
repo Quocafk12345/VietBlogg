@@ -181,5 +181,13 @@ public class NhomService {
 	public List<Nhom> layDanhSachNhomCuaThanhVien(Long userId) {
 		return nhomRepository.findNhomByUserId(userId);
 	}
-
+	// Trong NhomService
+//	public List<Nhom> layTatCaNhom() {
+//		List<Nhom> nhoms = nhomRepository.findAll();
+//		for (Nhom nhom : nhoms) {
+//			int soLuongThanhVien = nhomRepository.countThanhVienByNhomId(nhom.getId()); // Đếm số lượng thành viên
+//			nhom.setSoLuongThanhVien(soLuongThanhVien); // Cập nhật số lượng thành viên cho nhóm
+//		}
+//		return nhoms;
+//	}
 }

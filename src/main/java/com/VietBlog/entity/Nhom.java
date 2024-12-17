@@ -59,6 +59,9 @@ public class Nhom {
     @Transient // Thuộc tính này sẽ không được lưu vào database
     private boolean daThamGia;
 
+//    @Column(name = "so_luong_thanh_vien") // Thêm thuộc tính này
+//    private int soLuongThanhVien;
+
     // Thêm Test Nhóm
     public Nhom(Long id, String ten, String gioiThieu, String hinhDaiDien) {
         this.id = id;

@@ -51,6 +51,55 @@ mainApp.controller('quanLyController', function ($scope, $http, $window, $sce) {
                 });
         }
     };
+    // Lấy danh sách tất cả nhóm và vẽ biểu đồ cột
+    $http.get(`${host_DangNhap}/api/nhom/tat-ca`)
+        .then(function(response) {
+            $scope.nhoms = response.data;
+            $scope.tongSoNhom = $scope.nhoms.length; // Tính tổng số nhóm
+
+            // Lấy số lượng thành viên cho mỗi nhóm
+            var nhomLabels = [];
+            var soLuongThanhVienData = [];
+            $scope.nhoms.forEach(function(nhom) {
+                nhomLabels.push(nhom.ten);
+                soLuongThanhVienData.push(nhom.soLuongThanhVien);
+            });
+
+            // Vẽ biểu đồ cột sau khi đã có dữ liệu
+            return new Promise(function(resolve, reject) {
+                var ctx = document.getElementById('nhomThanhVienChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: nhomLabels,
+                        datasets: [{
+                            label: 'Số lượng thành viên trong nhóm',
+                            data: soLuongThanhVienData,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
+                                    stepSize: 1
+                                }
+                            }]
+                        }
+                    }
+                });
+                resolve(myChart);
+            });
+        })
+        .then(function(myChart) {
+            // Biểu đồ đã được vẽ, bạn có thể thực hiện các thao tác khác ở đây nếu cần
+        })
+        .catch(function(error) {
+            console.error("Lỗi khi lấy danh sách nhóm:", error);
+        });
 
     // Lấy danh sách bài viết và vẽ biểu đồ cột
     $http.get(`${host_DangNhap}/api/bai-viet`)
