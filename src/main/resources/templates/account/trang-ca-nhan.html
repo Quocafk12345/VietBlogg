@@ -1,108 +1,116 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" ng-app="mainApp">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VietBlog</title>
-
-    <!-- bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-    <!-- AngularJS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
-
-    <!-- css -->
-    <link rel="stylesheet" th:href="@{/css/include/navbar_new.css}">
-    <link rel="stylesheet" th:href="@{/css/include/navbar.css}">
-    <link rel="stylesheet" th:href="@{/css/account/TrangCaNhan.css}">
-
-
+    <title>Trang Cá Nhân</title>
+    <link rel="stylesheet" href="../css/profilepage.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
 </head>
 <body>
-<div th:replace="~{include/navbar :: navbar}"></div>
-<div class="container mt-4">
-    <!-- Phần thông tin người dùng -->
-    <div class="profile-header d-flex align-items-center">
-        <img src="https://via.placeholder.com/100" alt="Avatar" class="avatar">
-        <div class="profile-info">
-            <h2>Nguyễn Văn A</h2>
-            <p><strong>Người theo dõi:</strong> 150</p>
-            <p><strong>Bài đã đăng:</strong> 45</p>
-            <p><strong>Tiểu sử:</strong> Yêu thích chia sẻ kiến thức về lập trình và công nghệ.</p>
-            <div class="btn-group">
-                <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Quản lý tài khoản</button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Chỉnh sửa thông tin</a></li>
-                    <li><a class="dropdown-item" href="#">Đổi mật khẩu</a></li>
-                    <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
-                </ul>
+<div class="profile-container" ng-controller="BaiVietController">
+    <div class="profile-header">
+        <div class="profile-avatar">
+            <img th:src="@{'/img/' + ${user.hinhDaiDien}}" alt="Avatar">
+        </div>
+        <h1 th:text="${user.tenNguoiDung}"></h1>
+        <p class="level">
+            <span class="member-level"><img class="vip-icon"
+                                            src="https://via.placeholder.com/20" alt="VIP"> VIP |</span>
+            <span class="member-time" th:text="'Tham gia: ' + ${daysSinceRegistration} + ' ngày'"></span>
+        </p>
+        <div class="profile-stats">
+            <div class="stat-item">
+                <span>Tổng số bài viết:</span> <strong><p><span th:text="${totalBaiViet}">0</span></p></strong>
             </div>
-            <button class="btn btn-primary">Cài đặt</button>
+            <div class="stat-item">
+                <span>Lượt Like:</span> <strong><p><span th:text="${totalLikes}">0</span></p></strong>
+            </div>
+            <div class="stat-item">
+                <span>Lượt theo dõi:</span> <strong><p><span th:text="${totalFollows}">0</span></p></strong>
+            </div>
+            <div>
+                <button ng-click="toggleFollow(userId)">Theo dõi</button>
+            </div>
         </div>
     </div>
 
-    <!-- Phần bài đăng -->
-    <ul class="nav nav-tabs mt-4" id="myTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <a class="nav-link active" id="posts-tab" data-bs-toggle="tab" href="#posts" role="tab" aria-controls="posts" aria-selected="true">Bài đăng</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" id="shared-tab" data-bs-toggle="tab" href="#shared" role="tab" aria-controls="shared" aria-selected="false">Bài chia sẻ</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" id="saved-tab" data-bs-toggle="tab" href="#saved" role="tab" aria-controls="saved" aria-selected="false">Đã lưu</a>
-        </li>
-    </ul>
+    <!-- Tab Navigation -->
+    <div class="tabs">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Bài viết</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Giới thiệu</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Bạn bè</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="photo-tab" data-bs-toggle="tab" href="#photo" role="tab" aria-controls="photo" aria-selected="false">Ảnh</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="video-tab" data-bs-toggle="tab" href="#video" role="tab" aria-controls="video" aria-selected="false">Video</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="more-tab" data-bs-toggle="tab" href="#more" role="tab" aria-controls="more" aria-selected="false">Xem thêm</a>
+            </li>
+        </ul>
+    </div>
 
+    <!-- Tab Content -->
     <div class="tab-content" id="myTabContent">
-        <!-- Tab Bài đăng -->
-        <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="post-item">
-                        <img src="https://via.placeholder.com/500x300" alt="Thumbnail" class="thumbnail">
-                        <h6>Bài đăng 1</h6>
-                        <p>Nội dung tóm tắt bài đăng 1... Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                        <a href="#" class="btn btn-link">Xem thêm</a>
-                    </div>
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div class="topics" id="topicContainer">
+                <h2>Chủ đề bài đã viết</h2>
+                <div class="topic-container" ng-repeat="baiViet in baiVietNguoiDung">
+                    <a th:href="@{/chi-tiet-bai-viet/}" style="color: #000000" ng-click="chuyenTrang($event, baiViet.id)" class="text-decoration-none text-dark">
+                        <div class="topic-item">
+                            <h3>{{baiViet.tieuDe}}</h3>
+                            <small>Thời gian đăng: <span>{{baiViet.thoiGianDang}}</span></small>
+                            <hr>
+                        </div>
+                    </a>
                 </div>
-
             </div>
         </div>
-
-        <!-- Tab Bài chia sẻ -->
-        <div class="tab-pane fade" id="shared" role="tabpanel" aria-labelledby="shared-tab">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="post-item">
-                        <img src="https://via.placeholder.com/500x300" alt="Thumbnail" class="thumbnail">
-                        <h6>Bài chia sẻ 1</h6>
-                        <p>Nội dung tóm tắt bài chia sẻ 1... Aenean commodo ligula eget dolor. Aenean massa.</p>
-                        <a href="#" class="btn btn-link">Xem thêm</a>
-                    </div>
-                </div>
-
-            </div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <h3>Giới thiệu</h3>
+            <p>Thông tin giới thiệu về người dùng...</p>
         </div>
-
-        <!-- Tab Đã lưu -->
-        <div class="tab-pane fade" id="saved" role="tabpanel" aria-labelledby="saved-tab">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="post-item">
-                        <img src="https://via.placeholder.com/500x300" alt="Thumbnail" class="thumbnail">
-                        <h6>Bài đã lưu 1</h6>
-                        <p>Nội dung tóm tắt bài đã lưu 1... Curabitur sodales ligula in libero. Sed dignissim lacinia nunc.</p>
-                        <a href="#" class="btn btn-link">Xem thêm</a>
-                    </div>
-                </div>
-
-            </div>
+        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+            <h3>Bạn bè</h3>
+            <p>Danh sách bạn bè của người dùng...</p>
+        </div>
+        <div class="tab-pane fade" id="photo" role="tabpanel" aria-labelledby="photo-tab">
+            <h3>Ảnh</h3>
+            <p>Ảnh của người dùng...</p>
+        </div>
+        <div class="tab-pane fade" id="video" role="tabpanel" aria-labelledby="video-tab">
+            <h3>Video</h3>
+            <p>Video của người dùng...</p>
+        </div>
+        <div class="tab-pane fade" id="more" role="tabpanel" aria-labelledby="more-tab">
+            <h3>Xem thêm</h3>
+            <p>Thông tin thêm về người dùng...</p>
         </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- AngularJS -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+<script th:inline="javascript">
+    var currentUserId = [[${session.currentUser.id}]];
+</script>
+<script th:src="@{/js/MainApp.js}"></script>
+<script th:src="@{/js/BaiViet_ctrl.js}"></script>
+<script th:src="@{/js/DangNhap_ctrl.js}"></script>
+<script th:src="@{/js/Nhom_ctrl.js}"></script>
 </body>
-
+</html>

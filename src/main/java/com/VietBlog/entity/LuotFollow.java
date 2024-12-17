@@ -25,5 +25,4 @@ public class LuotFollow implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "User_Follow_Id", nullable = false)
     private User userFollow;
-
 }
