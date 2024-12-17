@@ -47,7 +47,7 @@ public class DangKyControllerTest {
         // Thông tin đăng ký
         String email = "test" + System.currentTimeMillis() + "@gmail.com"; // Tạo email unique
         String tenDangNhap = "testuser" + System.currentTimeMillis(); // Tạo tên đăng nhập unique
-        String tenNguoiDung = "Nguyễn Văn A";
+        String tenNguoiDung = "Trần Bảo Hoài";
         String matKhau = "password123";
         String gioiTinh = "true"; // Nam
         String ngaySinh = "2000-01-01";

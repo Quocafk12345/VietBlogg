@@ -1,0 +1,161 @@
+var mainApp = angular.module('mainApp', ['ngRoute']);
+mainApp.controller('quanLyController', function($scope, $http, $window) {
+    $scope.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+    // Lấy danh sách người dùng
+    $http.get(`${host_DangNhap}/api/user/user`)
+        .then(function (response) {
+            $scope.users = response.data;
+        });
+
+    // ... (Các hàm khác)
+
+// Lấy danh sách bài viết và vẽ biểu đồ
+    $http.get(`${host_DangNhap}/api/bai-viet`)
+        .then(function(response) {
+            $scope.baiViets = response.data;
+
+            // Khởi tạo biến để lưu số lượng bài viết theo trạng thái
+            var trangThaiCounts = {
+                "NHAP": 0,
+                "DA_DANG": 0
+            };
+
+            // Duyệt qua danh sách bài viết
+            $scope.baiViets.forEach(function(baiViet) {
+                // Tăng biến đếm tương ứng với trạng thái của bài viết
+                trangThaiCounts[baiViet.trangThai]++;
+            });
+
+            // Vẽ biểu đồ tròn cho trạng thái bài viết
+            var ctx = document.getElementById('baiVietChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['NHÁP', 'ĐÃ ĐĂNG'],
+                    datasets: [{
+                        label: 'Số lượng',
+                        data: [trangThaiCounts['NHAP'], trangThaiCounts['DA_DANG']],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+            });
+        });
+
+// ... (Các hàm khác)
+
+    // Lấy danh sách Admin và vẽ biểu đồ
+    $http.get(`${host_DangNhap}/api/user/admin`)
+        .then(function (response) {
+            $scope.admins = response.data;
+
+            Promise.all([
+                $http.get(`${host_DangNhap}/api/user/user`),
+                $http.get(`${host_DangNhap}/api/user/admin`)
+            ])
+                .then(function (results) {
+                    $scope.users = results[0].data;
+                    $scope.admins = results[1].data;
+                    // Vẽ biểu đồ sau khi lấy được dữ liệu Admin
+                    var ctx = document.getElementById('userChart').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: ['User', 'Admin'],
+                            datasets: [{
+                                label: 'Số lượng',
+                                data: [$scope.users.length, $scope.admins.length],
+                                backgroundColor: [
+                                    'rgba(54, 162, 235, 0.2)',
+                                    'rgba(255, 99, 132, 0.2)'
+                                ],
+                                borderColor: [
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 99, 132, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            // Thiết lập tùy chọn cho biểu đồ
+                        }
+
+                    });
+                });
+
+
+            $scope.logout = function () {
+                $http({
+                    method: 'POST',
+                    url: `${host_DangNhap}/api/user/dang-xuat`,
+                    responseType: 'text'
+                }).then(function (response) {
+                    localStorage.removeItem('currentUser');
+                    $window.location.href = `${host_DangNhap}/dang-nhap`;
+                }, function (error) {
+                    console.error("Lỗi khi đăng xuất:", error);
+                });
+            };
+
+            $scope.editingUser = null; // Biến lưu trữ người dùng đang được sửa
+
+            $scope.editUser = function (user) {
+                $scope.editingUser = angular.copy(user); // Sao chép người dùng để sửa
+            };
+
+            $scope.saveUser = function () {
+                $http.put(`${host_DangNhap}/api/user/${$scope.editingUser.id}`, $scope.editingUser)
+                    .then(function (response) {
+                        // Cập nhật danh sách người dùng sau khi sửa
+                        $scope.users = $scope.users.map(function (u) {
+                            if (u.id === $scope.editingUser.id) {
+                                return response.data;
+                            }
+                            return u;
+                        });
+                        $scope.editingUser = null; // Ẩn form sửa
+                    });
+            };
+
+            $scope.cancelEdit = function () {
+                $scope.editingUser = null; // Ẩn form sửa
+            };
+
+            $scope.deleteUser = function (userId) {
+                if (confirm("Bạn có chắc chắn muốn xóa người dùng này?")) {
+                    $http.delete(`${host_DangNhap}/api/user/${userId}`)
+                        .then(function (response) {
+                            // Xóa người dùng khỏi danh sách sau khi xóa
+                            $scope.users = $scope.users.filter(function (u) {
+                                return u.id !== userId;
+                            });
+                        });
+                }
+            };
+
+            $scope.openTab = function (evt, tabName) {
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+                document.getElementById(tabName).style.display = "block";
+                evt.currentTarget.className += " active";
+            }
+
+            // Mở tab "Quản lý người dùng" mặc định
+            document.getElementById("defaultOpen").click();
+        });
+})

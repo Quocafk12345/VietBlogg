@@ -1,9 +1,11 @@
 package com.VietBlog.repository;
 
+import com.VietBlog.constraints.User.VaiTro_User;
 import com.VietBlog.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -27,4 +29,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // Kiểm tra xem tên đăng nhập đã tồn tại chưa
     boolean existsByTenDangNhap(String tenDangNhap);
 
+    List<User> findByVaiTro(VaiTro_User vaiTro);
 }

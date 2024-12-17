@@ -1,5 +1,6 @@
 package com.VietBlog.controller;
 
+import com.VietBlog.constraints.User.VaiTro_User;
 import com.VietBlog.entity.BlockUserID;
 import com.VietBlog.entity.LuotFollow;
 import com.VietBlog.entity.LuotFollowId;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @CrossOrigin("*")
@@ -36,15 +38,17 @@ public class UserController {
 	private final FollowStatusWebSocketHandler webSocketHandler;
 	private final BlockUserService blockUserService;
 	private final BlockUserRepository blockUserRepository;
+	private final UserRepository userRepository;
 
 	@Autowired
-	public UserController(UserService userService, LuotFollowService luotFollowService, LuotFollowRepository luotFollowRepository, BaiVietRepository baiVietRepository, BaiVietService baiVietService, LuotLike_BaiViet_Service luotLike_BaiViet_Service, UserRepository userRepository, FollowStatusWebSocketHandler webSocketHandler, BlockUserService blockUserService, BlockUserRepository blockUserRepository) {
+	public UserController(UserService userService, LuotFollowService luotFollowService, LuotFollowRepository luotFollowRepository, BaiVietRepository baiVietRepository, BaiVietService baiVietService, LuotLike_BaiViet_Service luotLike_BaiViet_Service, FollowStatusWebSocketHandler webSocketHandler, BlockUserService blockUserService, BlockUserRepository blockUserRepository, UserRepository userRepository) {
 		this.userService = userService;
 		this.luotFollowService = luotFollowService;
 		this.luotFollowRepository = luotFollowRepository;
         this.webSocketHandler = webSocketHandler;
 		this.blockUserService = blockUserService;
 		this.blockUserRepository = blockUserRepository;
+		this.userRepository = userRepository;
 	}
 
 	@Operation(summary = "Đăng nhập tài khoản", description = "Nhận thông tin chi tiết của người dùng và lưu vào session.")
@@ -142,4 +146,36 @@ public class UserController {
 		Integer luotFollow = luotFollowRepository.countFollowersByUserId(id);
 		return ResponseEntity.ok(luotFollow);
 	}
+
+	@GetMapping("/all")
+	public List<User> getAllUsers() {
+		return userService.getAllUsers(); // Lấy danh sách tất cả người dùng
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+		User updatedUser = userService.updateUser(id, user);
+		if (updatedUser != null) {
+			return ResponseEntity.ok(updatedUser);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+		userService.deleteUser(id);
+		return ResponseEntity.noContent().build();
+	}
+
+	@GetMapping("/user") // API endpoint mới
+	public List<User> getUsersByVaiTro() {
+		return userRepository.findByVaiTro((VaiTro_User.USER));
+	}
+
+	@GetMapping("/admin") // API endpoint mới
+	public List<User> getAdminsByVaiTro() {
+		return userRepository.findByVaiTro((VaiTro_User.ADMIN));
+	}
+
 }

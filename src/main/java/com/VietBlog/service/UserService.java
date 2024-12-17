@@ -2,6 +2,7 @@ package com.VietBlog.service;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -170,5 +171,23 @@ public class UserService {
 		String dienThoaiRegex = "^[0-9]{10,11}$";
 		return dienThoai.matches(dienThoaiRegex); // Kiểm tra email có khớp với regex không
 	}
+
+	public List<User> getAllUsers() {
+		return userRepository.findAll();
+	}
+
+	public User updateUser(Long id, User user) {
+		if (userRepository.existsById(id)) {
+			user.setId(id); // Đảm bảo ID không bị thay đổi
+			return userRepository.save(user);
+		} else {
+			return null; // Hoặc throw exception nếu cần
+		}
+	}
+
+	public void deleteUser(Long id) {
+		userRepository.deleteById(id);
+	}
+
 }
 

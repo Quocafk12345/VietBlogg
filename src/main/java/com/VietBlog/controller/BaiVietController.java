@@ -166,9 +166,22 @@ public class BaiVietController {
      * @param id: Id của bài viết
      *
      */
+//    @DeleteMapping("{id}")
+//    @Transactional
+//    public ResponseEntity<Void> delete(@PathVariable Long id) {
+//        try {
+//            baiVietService.xoaBaiViet(id); // Sử dụng BaiVietService
+//            return ResponseEntity.ok().build();
+//        } catch (RuntimeException e) {
+//            return ResponseEntity.notFound().build();
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().build();
+//        }
+//    }
+
     @DeleteMapping("{id}")
     @Transactional
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) { // Giữ nguyên phương thức này
         try {
             baiVietService.xoaBaiViet(id); // Sử dụng BaiVietService
             return ResponseEntity.ok().build();
@@ -195,5 +208,10 @@ public class BaiVietController {
         } catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage()).hasBody();
         }
+    }
+
+    @GetMapping("/bai-viet")
+    public List<BaiViet> getAllBaiViet() {
+        return baiVietService.getAllBaiViet();
     }
 }

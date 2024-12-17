@@ -1,0 +1,25 @@
+<h2>Quản lý bài viết</h2>
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Tiêu đề</th>
+    <th>Tác giả</th>
+    <th>Ngày đăng</th>
+    <th>Hành động</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr ng-repeat="baiViet in baiViets">
+    <td>{{ baiViet.id }}</td>
+    <td>{{ baiViet.tieuDe }}</td>
+    <td>{{ baiViet.user.tenNguoiDung }}</td>
+    <td>{{ baiViet.thoiGianDang }}</td>
+    <td>
+      <button>Xem</button>
+      <button>Duyệt</button>
+      <button>Xóa</button>
+    </td>
+  </tr>
+  </tbody>
+</table>

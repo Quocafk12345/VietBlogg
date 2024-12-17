@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="mainApp">
+<head>
+  <meta charset="UTF-8">
+  <title>Trang Quản Lý</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-route/1.8.3/angular-route.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+  <style>
+    /*#userChart {*/
+    /*  width: 150px;*/
+    /*  height: 150px;*/
+    /*}*/
+    /*#baiVietChart{*/
+    /*  width: 120px;*/
+    /*  height:  120px;*/
+    /*}*/
+
+    .tab {
+      overflow: hidden;
+      border: 1px solid #ccc;
+      background-color: #f1f1f1;
+    }
+
+    .tab button {
+      background-color: inherit;
+      float: left;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 14px 16px;
+      transition: 0.3s;
+      font-size: 17px;
+    }
+
+    .tab button:hover {
+      background-color: #ddd;
+    }
+
+    .tabcontent {
+      display: none;
+      padding: 6px 12px;
+      border: 1px solid #ccc;
+      border-top: none;
+    }
+    .horizontal-forms {
+      display: flex;
+    }
+    .form-container {
+      width: 50%; /* Điều chỉnh độ rộng của mỗi form */
+      padding: 0 10px; /* Khoảng cách giữa các form */
+    }
+    .tab {
+      overflow: hidden;
+      border: 1px solid #ccc;
+      background-color: #f1f1f1;
+    }
+
+    .tab button {
+      background-color: inherit;
+      float: left;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 14px 16px;
+      transition: 0.3s;
+      font-size: 17px;
+    }
+
+    .tab button:hover {
+      background-color: #ddd;
+    }
+
+    .tabcontent {
+      display: none;
+      padding: 6px 12px;
+      border: 1px solid #ccc;
+      border-top: none;
+    }
+    .horizontal-forms {
+      display: flex;
+    }
+    .form-container {
+      width: 50%; /* Điều chỉnh độ rộng của mỗi form */
+      padding: 0 10px; /* Khoảng cách giữa các form */
+    }
+    /* CSS cho bảng */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 2px solid black; /* Đường viền đậm hơn */
+    }
+    th, td {
+      border: 1px solid black; /* Đường viền đậm hơn */
+      padding: 8px;
+      text-align: left;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="container" ng-controller="quanLyController">
+  <h1>Trang Quản Lý</h1>
+
+  <div ng-show="currentUser">
+    <span th:text="${session.currentUser != null} ? ${session.currentUser.tenNguoiDung} : 'Tên người dùng'"></span>
+    <button class="dropdown-item" ng-click="logout()">Đăng xuất</button>
+  </div>
+
+  <div class="tab">
+    <button class="tablinks" ng-click="openTab(event, 'nguoiDung')" id="defaultOpen">Quản lý người dùng</button>
+    <button class="tablinks" ng-click="openTab(event, 'baiViet')">Quản lý bài viết</button>
+    <button class="tablinks" ng-click="openTab(event, 'nhom')">Quản lý nhóm</button>
+  </div>
+
+  <div id="nguoiDung" class="tabcontent">
+    <div class="horizontal-forms">
+      <div class="form-container">
+        <h2>Danh sách người dùng</h2>
+        <table>
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>Tên người dùng</th>
+            <th>Email</th>
+            <th>Vai trò</th>
+            <th>Hành động</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="user in users">
+            <td>{{ user.id }}</td>
+            <td>{{ user.tenNguoiDung }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.vaiTro }}</td>
+            <td>
+              <button ng-click="editUser(user)">Sửa</button>
+              <button ng-click="deleteUser(user.id)">Xóa</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div ng-show="editingUser">
+          <h3>Sửa người dùng</h3>
+          <form ng-submit="saveUser()">
+            <input type="hidden" ng-model="editingUser.id">
+            Tên người dùng: <input type="text" ng-model="editingUser.tenNguoiDung"><br>
+            Email: <input type="email" ng-model="editingUser.email"><br>
+            Vai trò:
+            <select ng-model="editingUser.vaiTro">
+              <option value="USER">USER</option>
+              <option value="ADMIN">ADMIN</option>
+            </select><br>
+            <button type="submit">Lưu</button>
+            <button type="button" ng-click="cancelEdit()">Hủy</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="form-container">
+        <h2>Danh sách tài khoản Admin</h2>
+        <table>
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>Tên người dùng</th>
+            <th>Email</th>
+            <th>Vai trò</th>
+            <th>Hành động</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="admin in admins">
+            <td>{{ admin.id }}</td>
+            <td>{{ admin.tenNguoiDung }}</td>
+            <td>{{ admin.email }}</td>
+            <td>{{ admin.vaiTro }}</td>
+            <td>
+              <button ng-click="editUser(admin)">Sửa</button>
+              <button ng-click="deleteUser(admin.id)">Xóa</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <h2>Biểu đồ số lượng User và Admin</h2>
+        <canvas id="userChart"></canvas>
+      </div>
+      </div>
+    </div>
+
+  <div id="baiViet" class="tabcontent">
+    <h2>Danh sách bài viết</h2>
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Tiêu đề</th>
+        <th>Nội dung</th>
+        <th>Ngày tạo</th>
+        <th>Trạng thái</th>
+        <th>Người đăng</th>
+        <th>Hành động</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="baiViet in baiViets">
+        <td>{{ baiViet.id }}</td>
+        <td>{{ baiViet.tieuDe }}</td>
+        <td>{{ baiViet.noiDung }}</td>
+        <td>{{ baiViet.ngayTao }}</td>
+        <td>{{ baiViet.trangThai }}</td>
+        <td>{{ baiViet.user.tenNguoiDung }}</td>
+      </tr>
+      </tbody>
+    </table>
+    <div style="width: 300px; height: 150px">
+      <canvas id="baiVietChart"></canvas>
+    </div>
+  </div>
+
+  <div id="nhom" class="tabcontent">
+    <h2>Danh sách nhóm</h2>
+  </div>
+</div>
+<script th:src="@{/js/adminApp.js}"></script>
+<script th:src="@{/js/DangNhap_ctrl.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+</body>
+</html>

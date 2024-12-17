@@ -1,5 +1,6 @@
 package com.VietBlog.controller;
 
+import com.VietBlog.constraints.User.VaiTro_User;
 import com.VietBlog.entity.BaiViet;
 import com.VietBlog.entity.User;
 import com.VietBlog.service.BaiVietService;
@@ -31,11 +32,35 @@ public class GiaoDienController {
         return "account/dang-nhap";
     }
 
-    @PostMapping("/dang-nhap-thanh-cong") // Endpoint mới để lưu User vào session
+//    @PostMapping("/dang-nhap-thanh-cong") // Endpoint mới để lưu User vào session
+//    public String loginSuccess(@RequestBody User user, Model model) {
+//        model.addAttribute("currentUser", user);
+//        return "redirect:/index"; // Redirect đến trang index
+//    }
+
+    // ... (Các phần khác của controller)
+
+    @PostMapping("/dang-nhap-thanh-cong")
     public String loginSuccess(@RequestBody User user, Model model) {
         model.addAttribute("currentUser", user);
-        return "redirect:/index"; // Redirect đến trang index
+
+        if (user.getVaiTro() == VaiTro_User.USER) {
+            return "redirect:/index"; // Chuyển hướng đến trang chủ cho User
+        } else if (user.getVaiTro() == VaiTro_User.ADMIN) {
+            return "redirect:/quan-ly"; // Chuyển hướng đến trang quản lý cho Admin
+        } else {
+            return "redirect:/dang-nhap"; // Điều hướng về đăng nhập nếu vai trò không hợp lệ
+        }
     }
+
+    @GetMapping("/quan-ly")
+    public String quanLyPage(Model model, @ModelAttribute("currentUser") User currentUser) {
+        if (currentUser == null || currentUser.getVaiTro() != VaiTro_User.ADMIN) {
+            return "redirect:/dang-nhap"; // Chuyển hướng đến trang đăng nhập nếu chưa đăng nhập hoặc không phải Admin
+        }
+        return "quan-ly"; // Trả về view "quan-ly.html" cho Admin
+    }
+
 
     // trang chi tiết nhóm
     @GetMapping("/nhom/chi-tiet/{idNhom}")

@@ -12,11 +12,19 @@ mainApp.controller('loginController', function ($scope, $http, $window) {
             transformRequest: angular.identity, // Không serialize dữ liệu
             headers: {'Content-Type': undefined} // Để browser tự set Content-Type
         }).then(function successCallback(response) {
-            var user = response.data; // Lấy User từ response
+            var user = response.data;
+
+            // Lưu thông tin user vào localStorage (hoặc sessionStorage)
+            localStorage.setItem('currentUser', JSON.stringify(user));
 
             $http.post(`${host_DangNhap}/dang-nhap-thanh-cong`, user)
                 .then(function () {
-                    $window.location.href = `${host_DangNhap}/index`; // Chuyển hướng đến /index
+                    // Chuyển hướng dựa trên vai trò
+                    if (user.vaiTro === 'ADMIN') {
+                        $window.location.href = `${host_DangNhap}/quan-ly`; // Chuyển đến trang quản lý
+                    } else {
+                        $window.location.href = `${host_DangNhap}/index`; // Chuyển đến trang chủ
+                    }
                 });
         }).catch((error) => {
             console.log("Error", error);
