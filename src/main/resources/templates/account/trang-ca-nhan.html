@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org" ng-app="mainApp">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" ng-app="mainApp" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +9,261 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f9;
+            padding-top: 20px;
+        }
+
+        .profile-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .profile-header {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-avatar img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border: 5px solid #4CAF50;
+        }
+
+        .profile-header h1 {
+            margin-top: 15px;
+            font-size: 2rem;
+            color: #333;
+        }
+
+        .profile-header .level {
+            color: #666;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .stat-item {
+            text-align: center;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .stat-item strong {
+            display: block;
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        .tabs {
+            margin-bottom: 20px;
+        }
+
+        .nav-tabs {
+            border-bottom: 2px solid #ddd;
+        }
+
+        .nav-link {
+            border: none;
+            border-radius: 0;
+            padding: 10px 20px;
+            color: #555;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background-color: #f1f1f1;
+            color: #007bff;
+        }
+
+        .nav-link.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .tab-content {
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-pane {
+            display: flex;
+            flex-direction: row;
+            gap: 40px;
+        }
+
+        .topic-item h3 {
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        .topic-item small {
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .topic-item hr {
+            border: 1px solid #ddd;
+        }
+
+        .follower, .following {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .follower ul, .following ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .follower li, .following li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .follower img, .following img {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            background-color: gray;
+        }
+
+        .follow-btn {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .follow-btn button, .follow-btn select {
+            padding: 10px;
+            font-size: 1rem;
+            width: 200px;
+        }
+        /* Tab content container */
+        .tab-content {
+            margin-top: 20px;
+            padding: 20px;
+            border-top: 1px solid #ddd;
+        }
+
+        /* Common styles for tab pane */
+        .tab-pane {
+            margin-bottom: 20px;
+        }
+
+        /* Styles for topic items (bài viết) */
+        .topic-item {
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .topic-item h3 {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .topic-item small {
+            font-size: 14px;
+            color: #777;
+        }
+
+        .topic-item hr {
+            border: 1px solid #eee;
+        }
+
+        /* Styles for follower and following list */
+        .follower, .following {
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .follower ul, .following ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .follower li, .following li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #ffffff;
+            border-radius: 6px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .follower li img, .following li img {
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .follower li p, .following li p {
+            font-size: 16px;
+            color: #333;
+            margin: 0;
+        }
+
+        /* Empty state for no followers or following */
+        .follower p, .following p {
+            font-size: 16px;
+            color: #999;
+        }
+
+        /* Styles for links inside topic-item */
+        .topic-item a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .topic-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 767px) {
+            .topic-item h3 {
+                font-size: 16px;
+            }
+
+            .follower li, .following li {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .follower li img, .following li img {
+                margin-bottom: 10px;
+                margin-right: 0;
+            }
+        }
+
+    </style>
 </head>
 <body>
 <div class="profile-container" ng-controller="UserController">
@@ -22,7 +277,7 @@
                                             src="https://via.placeholder.com/20" alt="VIP"> VIP |</span>
             <span class="member-time" th:text="'Tham gia: ' + ${daysSinceRegistration} + ' ngày'"></span>
         </p>
-        < class="profile-stats">
+        <div class="profile-stats">
             <div class="stat-item">
                 <span>Tổng số bài viết:</span> <strong><p><span th:text="${totalBaiViet}">0</span></p></strong>
             </div>
@@ -32,11 +287,15 @@
             <div class="stat-item">
                 <span>Lượt theo dõi:</span> <strong><p><span th:text="${totalFollows}">0</span></p></strong>
             </div>
-                <div ng-show="isFollowing !== undefined">
-                    <button class="btn btn-primary" ng-click="toggleFollow()">
-                        {{ isFollowing ? 'Unfollow' : 'Follow' }}
-                    </button>
-                </div>
+        </div>
+        <div class="follow-btn">
+            <button ng-if="isFollowing" class="btn btn-primary" ng-click="toggleFollow()">Follow</button>
+            <select ng-if="!isFollowing" class="form-select" ng-model="selectedAction" ng-change="handleAction(selectedAction)">
+                <option value="" disabled selected>Đang follow</option>
+                <option value="unfollow">Hủy Follow</option>
+                <option value="report">Báo cáo Tài khoản</option>
+                <option value="toggleBlock">Chặn</option>
+            </select>
         </div>
     </div>
 
@@ -59,6 +318,12 @@
                 <a class="nav-link" id="video-tab" data-bs-toggle="tab" href="#video" role="tab" aria-controls="video" aria-selected="false">Video</a>
             </li>
             <li class="nav-item" role="presentation">
+                <a class="nav-link" id="follower-tab" data-bs-toggle="tab" href="#follower" role="tab" aria-controls="follower" aria-selected="false">Follower</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="following-tab" data-bs-toggle="tab" href="#following" role="tab" aria-controls="following" aria-selected="false">Following</a>
+            </li>
+            <li class="nav-item" role="presentation">
                 <a class="nav-link" id="more-tab" data-bs-toggle="tab" href="#more" role="tab" aria-controls="more" aria-selected="false">Xem thêm</a>
             </li>
         </ul>
@@ -68,7 +333,7 @@
     <div class="tab-content" id="myTabContent" ng-repeat="bai in baiVietNguoiDung">
         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
             <div class="topics" id="topicContainer">
-                <div class="bai-viet" >
+                <div class="bai-viet">
                     <a th:href="@{/chi-tiet-bai-viet/}" style="color: #000000" ng-click="chuyenTrang($event, bai.id)" class="text-decoration-none text-dark">
                         <div class="topic-item">
                             <h3>{{bai.tieuDe}}</h3>
@@ -79,44 +344,54 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            <h3>Giới thiệu</h3>
-            <p>Thông tin giới thiệu về người dùng...</p>
+        <div class="tab-pane fade" id="follower" role="tabpanel" aria-labelledby="follower-tab">
+            <div class="follower">
+                <div ng-if="followers && followers.length > 0">
+                    <ul>
+                        <li ng-repeat="follower in followers">
+                            <img ng-src="{{ follower.hinhDaiDien }}" alt="{{ follower.tenNguoiDung }}'s Avatar" width="50" height="50">
+                            <p>{{ follower.tenNguoiDung }}</p>
+                        </li>
+                    </ul>
+                </div>
+                <div ng-if="!followers || followers.length === 0">
+                    <p>Chưa có người theo dõi.</p>
+                </div>
+            </div>
         </div>
-        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-            <h3>Bạn bè</h3>
-            <p>Danh sách bạn bè của người dùng...</p>
+
+        <div class="tab-pane fade" id="following" role="tabpanel" aria-labelledby="following-tab">
+            <div class="following">
+                <div ng-if="following && following.length > 0">
+                    <ul>
+                        <li ng-repeat="follow in following">
+                            <img ng-src="{{ follow.hinhDaiDien }}" alt="{{ follow.tenNguoiDung }}'s Avatar" width="50" height="50">
+                            <p>{{ follow.tenNguoiDung }}</p>
+                        </li>
+                    </ul>
+                </div>
+                <div ng-if="!following || following.length === 0">
+                    <p>Không theo dõi ai.</p>
+                </div>
+            </div>
         </div>
-        <div class="tab-pane fade" id="photo" role="tabpanel" aria-labelledby="photo-tab">
-            <h3>Ảnh</h3>
-            <p>Ảnh của người dùng...</p>
-        </div>
-        <div class="tab-pane fade" id="video" role="tabpanel" aria-labelledby="video-tab">
-            <h3>Video</h3>
-            <p>Video của người dùng...</p>
-        </div>
-        <div class="tab-pane fade" id="more" role="tabpanel" aria-labelledby="more-tab">
-            <h3>Xem thêm</h3>
-            <p>Thông tin thêm về người dùng...</p>
-        </div>
+
+        <!-- Other Tab Contents here -->
     </div>
 </div>
-</div>
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<!-- AngularJS -->
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 <script th:inline="javascript">
     var currentUser = [[${session.currentUser}]];
 </script>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 <script th:src="@{/js/MainApp.js}"></script>
 <script th:src="@{/js/BaiViet_ctrl.js}"></script>
 <script th:src="@{/js/DangNhap_ctrl.js}"></script>
 <script th:src="@{/js/Nhom_ctrl.js}"></script>
 <script th:src="@{/js/Follow_ctrl.js}"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-sanitize.min.js"></script>
-
 </body>
 </html>

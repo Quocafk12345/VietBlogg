@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +29,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/user")
 @SessionAttributes("currentUser")
 public class UserController {
+
+	private final UserRepository userRepository;
+	private SimpMessagingTemplate messagingTemplate;
 
 	private final UserService userService;
 	private final LuotFollowService luotFollowService;
@@ -44,6 +48,7 @@ public class UserController {
         this.webSocketHandler = webSocketHandler;
 		this.blockUserService = blockUserService;
 		this.blockUserRepository = blockUserRepository;
+		this.userRepository = userRepository;
 	}
 
 	@Operation(summary = "Đăng nhập tài khoản", description = "Nhận thông tin chi tiết của người dùng và lưu vào session.")
@@ -98,17 +103,88 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
 		}
 	}
-	@PostMapping("/{userId}/toggleFollow")
-	public ResponseEntity<?> toggleFollow(@PathVariable("userId") Long userId, @RequestParam Long userFollowId) {
-		try {
-			boolean isFollowing = luotFollowService.toggleFollow(userId,userFollowId);
-			webSocketHandler.sendFollowStatusChange(userId, !isFollowing);
-			return ResponseEntity.ok(isFollowing);
-		}catch (RuntimeException e){
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+	public void notifyFollowChange(Long userId, Long userFollowId, boolean isFollowing) {
+		Map<String, Object> message = new HashMap<>();
+		message.put("userId", userId);
+		message.put("userFollowId", userFollowId);
+		message.put("isFollowing", isFollowing);
+		messagingTemplate.convertAndSend("/topic/follow-status", message);
+	}
+
+
+	// Follow user (thêm vào danh sách follow)
+	public boolean follow(Long userId, Long userFollowId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new RuntimeException("User không tồn tại."));
+		User currentUser = userRepository.findById(userFollowId)
+				.orElseThrow(() -> new RuntimeException("Chưa login."));
+
+		// Tạo ID cho bảng trung gian
+		LuotFollowId luotFollowId = new LuotFollowId(userId, userFollowId);
+
+		if (luotFollowRepository.existsById(luotFollowId)) {
+			return false; // Nếu đã follow rồi thì không làm gì, trả về false
+		} else {
+			// Nếu chưa follow, thêm bản ghi mới vào bảng trung gian
+			LuotFollow luotFollow = new LuotFollow();
+			luotFollow.setId(luotFollowId);
+			luotFollow.setUser(user);
+			luotFollow.setUserFollow(currentUser);
+			luotFollowRepository.save(luotFollow);
+			return true; // Đã follow thành công
 		}
 	}
+	@GetMapping("/check-block")
+	public boolean checkBlock(@RequestParam Long userId, @RequestParam Long otherUserId) {
+		return blockUserService.checkBlock(userId, otherUserId);
+	}
+
+
+	// Unfollow user (hủy theo dõi)
+	public boolean unfollow(Long userId, Long userFollowId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new RuntimeException("User không tồn tại."));
+		User currentUser = userRepository.findById(userFollowId)
+				.orElseThrow(() -> new RuntimeException("Chưa login."));
+
+		// Tạo ID cho bảng trung gian
+		LuotFollowId luotFollowId = new LuotFollowId(userId, userFollowId);
+
+		if (luotFollowRepository.existsById(luotFollowId)) {
+			// Nếu đã follow, xóa bản ghi
+			luotFollowRepository.deleteById(luotFollowId);
+			return false; // Trả về trạng thái "không follow"
+		}
+		return true; // Nếu không có bản ghi, tức là chưa follow, trả về true
+	}
+	@PostMapping("/{userId}/toggleFollow")
+	public ResponseEntity<?> toggleFollow(
+			@PathVariable("userId") Long userId,
+			@RequestParam Long userFollowId) {
+		if (userId == null || userFollowId == null) {
+			return ResponseEntity.badRequest().body("UserId và UserFollowId không được để trống.");
+		}
+
+		try {
+			// Thay đổi trạng thái Follow
+			boolean isFollowing = luotFollowService.toggleFollow(userId, userFollowId);
+
+			// Gửi thông báo trạng thái mới qua WebSocket
+			webSocketHandler.sendFollowStatusChange(userId, isFollowing);
+
+			// Phản hồi trạng thái hiện tại (true: đang follow, false: hủy follow)
+			Map<String, Object> response = new HashMap<>();
+			response.put("isFollowing", isFollowing);
+			response.put("message", isFollowing ? "Đã follow thành công." : "Đã hủy follow.");
+
+			return ResponseEntity.ok(response);
+
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Có lỗi xảy ra: " + e.getMessage());
+		}
+	}
+
 
 	@PostMapping("/{userId}/toggleBlock")
 	public ResponseEntity<?> toggleBlock(@PathVariable("userId") Long userId, @RequestParam Long blockUserId){

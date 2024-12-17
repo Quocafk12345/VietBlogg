@@ -3,19 +3,119 @@ let host_Follow = "http://localhost:8080/api/user";
 mainApp.controller("UserController", function ($scope, $http) {
     $scope.isFollowing = false;
     $scope.isBlock = false;
+    $scope.followers = []; // Mảng lưu trữ danh sách người theo dõi
+    $scope.followingList = []; // Mảng lưu trữ danh sách người đang theo dõi
 
+    $scope.selectedTab = 'followers';
     const url = window.location.href;
     const userId = url.split("/").pop(); // Lấy phần cuối URL , người dùng cần follow
     const userFollowId = currentUser; // Người dùng đăng nhập
-    let socket = new WebSocket("ws://localhost:8080/ws/follow-status");
-    $scope.baiVietNguoiDung = {};
+
+    let socket = new SockJS('http://localhost:8080/ws');
+    const stompClient = Stomp.over(socket);
     socket.onmessage = function (event) {
-        const data = JSON.parse(event.data);
-        if (data.userId === parseInt(userId)) {
-            $scope.isFollowing = data.isFollowing;
-            $scope.$apply();
+        let data = JSON.parse(event.data);
+        if (data.userFollowId === currentUser.id) {
+            // Người được follow
+            $scope.$apply(() => {
+                $scope.luotFollower += data.isFollowing ? 1 : -1;
+            });
         }
+    };
+    // Kiểm tra xem người dùng có follow chưa
+    $scope.kiemTraFollow = function (userFollowId, userId) {
+        var url = `/api/follow/kiem-tra?userFollowId=${userFollowId}&userId=${userId}`;
+        return $http.get(url)
+            .then(function (response) {
+                return response.data; // Trả về giá trị boolean
+            })
+            .catch(function (error) {
+                console.error("Lỗi khi kiểm tra follow:", error);
+            });
+    };
+
+    // Follow user
+    $scope.followUser = function (userId, userFollowId) {
+        var url = "/api/follow/follow";
+        return $http.post(url, null, { params: { userId: userId, userFollowId: userFollowId } })
+            .then(function (response) {
+                var isFollowing = response.data;
+                if (isFollowing) {
+                    console.log("Follow thành công");
+                    // Cập nhật lại UI sau khi follow
+                    $scope.updateFollowStatus(userFollowId, true);
+                } else {
+                    console.log("Người dùng đã follow rồi");
+                }
+            })
+            .catch(function (error) {
+                console.error("Lỗi khi follow:", error);
+            });
+    };
+
+    // Unfollow user
+    $scope.unfollowUser = function (userId, userFollowId) {
+        var url = "/api/follow/unfollow";
+        return $http.post(url, null, { params: { userId: userId, userFollowId: userFollowId } })
+            .then(function (response) {
+                var isFollowing = response.data;
+                if (!isFollowing) {
+                    console.log("Unfollow thành công");
+                    // Cập nhật lại UI sau khi unfollow
+                    $scope.updateFollowStatus(userFollowId, false);
+                } else {
+                    console.log("Người dùng không follow.");
+                }
+            })
+            .catch(function (error) {
+                console.error("Lỗi khi unfollow:", error);
+            });
+    };
+
+    // Cập nhật trạng thái follow/unfollow trên UI
+    $scope.updateFollowStatus = function (userFollowId, isFollowing) {
+        var user = $scope.dangTheoDoi.find(u => u.id === userFollowId);
+        if (user) {
+            user.isFollowing = isFollowing;
+        }
+    };
+
+    // Chọn tab
+    $scope.selectTab = function(tab) {
+        $scope.selectedTab = tab;
+        if (tab === 'followers') {
+            $scope.layDanhSachNguoiTheoDoi();
+        } else if (tab === 'following') {
+            $scope.layDanhSachNguoiDangTheoDoi();
+        }
+    };
+
+    // Toggle follow/unfollow
+    $scope.toggleFollow = function (userId, userFollowId) {
+        $scope.kiemTraFollow(userFollowId, userId).then(function (isFollowing) {
+            if (isFollowing) {
+                // Nếu đã follow, hủy follow
+                $scope.unfollowUser(userId, userFollowId);
+            } else {
+                // Nếu chưa follow, tiến hành follow
+                $scope.followUser(userId, userFollowId);
+            }
+        });
     }
+
+    stompClient.connect({}, function (frame){
+        console.log('Connected: ' + frame);
+
+        //Subcribe de nhan trang thai follow tu server
+        stompClient.subscribe('/topic/follow-status', function (message){
+            const data = JSON.parse(message.body);
+            if(data.userId === parseInt(userId)){
+                $scope.isFollowing = data.isFollowing;
+                $scope.$apply(); //Update View
+            }
+        });
+    });
+    $scope.baiVietNguoiDung = {};
 
     // Kiểm tra nếu là trang cá nhân
     $scope.isOwnProfile = currentUser === userFollowId;
@@ -124,8 +224,12 @@ mainApp.controller("UserController", function ($scope, $http) {
 
         // Gửi yêu cầu API để cập nhật trạng thái follow
         const url = `${host_Follow}/${userId}/toggleFollow?userFollowId=${currentUser.id}`;
-        $http.post(url, { isFollowing: $scope.isFollowing })
-            .then(function(response) {
+        const payload = {
+            followId: currentUser.id,
+            followedId: userId
+        };
+        $http.post(url, payload)
+            .then((response) =>{
                 console.log("Trạng thái follow đã thay đổi:", response.data);
             })
             .catch(function(error) {
@@ -213,6 +317,12 @@ mainApp.controller("UserController", function ($scope, $http) {
                 console.log("Error:", error);
             });
     };
+    $scope.initFollowState = function () {
+        angular.forEach($scope.dangTheoDoi, function (userFollow) {
+            $scope.kiemTraFollow(userFollow);
+        });
+    };
+    $scope.initFollowState();
 
     // Gọi hàm lấy danh sách người theo dõi và người đang theo dõi khi trang được tải
     $scope.layDanhSachNguoiTheoDoi();

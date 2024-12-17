@@ -16,69 +16,9 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     $scope.thongTinUser = [
         {ten: currentUser.tenNguoiDung, hinhDaiDien: 'https://via.placeholder.com/20x20'}
     ];
-    $scope.chonNoiDangBai = function (mucDuocChon) {
-        $scope.mucDuocChon = mucDuocChon;
-        if (mucDuocChon.ten === currentUser.tenNguoiDung) { // Kiểm tra nếu chọn "Trang cá nhân"
-            $scope.loaiBaiDang = "caNhan";
-        } else {
-            $scope.loaiBaiDang = "nhom";
-        }
-    };
-
     $scope.tinhThoiGianDang = timeService.tinhThoiGianDang; // Gán hàm từ service
     $scope.baiVietNguoiDung = []; // Dữ liệu bài viết của người dùng
 
-    // lấy bài viết của người dùng, load vào trang cá nhân
-    $scope.layBaiVietCuaUser = function (userId) {
-        const url1 = window.location.href;
-        userId = url1.split("/").pop();
-        var url = `${host_BaiViet}/user/${userId}`;
-        $http.get(url)
-            .then(resp => {
-                $scope.xuLyThongTinBaiViet(resp.data)
-                    .then(baiViet => {
-                        $scope.baiVietCaNhan = baiViet;
-                    });
-            })
-            .catch((error) => {
-                console.error("Error", error);
-            });
-    };
-    $scope.layBaiVietCuaUser(currentUser.id);
-
-// tải tất cả bài viết đã đăng
-    $scope.taiBaiViet = function () {
-        var url = `${host_BaiViet}`;
-        $http.get(url)
-            .then((resp) => {
-                // Lọc ra các bài viết có trạng thái là "DA_DANG"
-                var baiVietDaDang = resp.data.filter(baiViet => baiViet.trangThai === "DA_DANG");
-                $scope.xuLyThongTinBaiViet(baiVietDaDang)
-                    .then(baiViet => {
-                        $scope.bangTin = baiViet;
-                    });
-            })
-            .catch((error) => {
-                console.log("Error", error);
-            });
-    };
-
-// tải tất cả bài viết nháp
-    $scope.taiBaiVietNhap = function () {
-        var url = `${host_BaiViet}/${currentUser.id}/nhap`;
-        $http.get(url)
-            .then((resp) => {
-                // Lọc ra các bài viết có trạng thái là "NHAP"
-                var baiVietNhap = resp.data.filter(baiViet => baiViet.trangThai === "NHAP");
-                $scope.xuLyThongTinBaiViet(baiVietNhap)
-                    .then(baiViet => {
-                        $scope.baiVietNhap = baiViet;
-                    });
-            })
-            .catch((error) => {
-                console.log("Error", error);
-            });
-    };
     // code xử lý bài viết
     $scope.xuLyThongTinBaiViet = function (baiViet) {
         var promises = [];
@@ -100,7 +40,18 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             return baiViet; // Trả về mảng bài viết đã xử lý
         });
     };
-
+// đếm số lượt like
+    $scope.demLuotLike = function (idBaiViet) {
+        var url = `${host_BaiViet}/${idBaiViet}/luot-like`;
+        return $http
+            .get(url)
+            .then((resp) => {
+                return resp.data;
+            })
+            .catch((error) => {
+                console.log("Error", error);
+            });
+    };
     // kiểm tra bài có được like
     $scope.kiemTraLike = function (baiViet) {
         if (!baiViet || !baiViet.id) {
@@ -161,6 +112,57 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
+    // lấy bài viết của người dùng, load vào trang cá nhân
+    $scope.layBaiVietCuaUser = function (userId) {
+        const url1 = window.location.href;
+        userId = url1.split("/").pop();
+        var url = `${host_BaiViet}/user/${userId}`;
+        $http.get(url)
+            .then(resp => {
+                $scope.xuLyThongTinBaiViet(resp.data)
+                    .then(baiViet => {
+                        $scope.baiVietCaNhan = baiViet;
+                    });
+            })
+            .catch((error) => {
+                console.error("Error", error);
+            });
+    };
+    $scope.layBaiVietCuaUser(currentUser.id);
+
+// tải tất cả bài viết đã đăng
+    $scope.taiBaiViet = function () {
+        var url = `${host_BaiViet}`;
+        $http.get(url)
+            .then((resp) => {
+                // Lọc ra các bài viết có trạng thái là "DA_DANG"
+                var baiVietDaDang = resp.data.filter(baiViet => baiViet.trangThai === "DA_DANG");
+                $scope.xuLyThongTinBaiViet(baiVietDaDang)
+                    .then(baiViet => {
+                        $scope.bangTin = baiViet;
+                    });
+            })
+            .catch((error) => {
+                console.log("Error", error);
+            });
+    };
+
+// tải tất cả bài viết nháp
+    $scope.taiBaiVietNhap = function () {
+        var url = `${host_BaiViet}/${currentUser.id}/nhap`;
+        $http.get(url)
+            .then((resp) => {
+                // Lọc ra các bài viết có trạng thái là "NHAP"
+                var baiVietNhap = resp.data.filter(baiViet => baiViet.trangThai === "NHAP");
+                $scope.xuLyThongTinBaiViet(baiVietNhap)
+                    .then(baiViet => {
+                        $scope.baiVietNhap = baiViet;
+                    });
+            })
+            .catch((error) => {
+                console.log("Error", error);
+            });
+    };
     $scope.taiDSLuu = function () {
         $http
             .get(`${host_BaiViet}/luu/${currentUser.id}`)
@@ -172,19 +174,16 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             });
     };
 
-    // đếm số lượt like
-    $scope.demLuotLike = function (idBaiViet) {
-        var url = `${host_BaiViet}/${idBaiViet}/luot-like`;
-        return $http
-            .get(url)
-            .then((resp) => {
-                return resp.data;
-            })
-            .catch((error) => {
-                console.log("Error", error);
-            });
-    };
 
+
+    $scope.chonNoiDangBai = function (mucDuocChon) {
+        $scope.mucDuocChon = mucDuocChon;
+        if (mucDuocChon.ten === currentUser.tenNguoiDung) { // Kiểm tra nếu chọn "Trang cá nhân"
+            $scope.loaiBaiDang = "caNhan";
+        } else {
+            $scope.loaiBaiDang = "nhom";
+        }
+    };
     $scope.demLuotBinhLuan = function (idBaiViet) {
         var url = `${host_BaiViet}/${idBaiViet}/luot-binh-luan`;
         return $http

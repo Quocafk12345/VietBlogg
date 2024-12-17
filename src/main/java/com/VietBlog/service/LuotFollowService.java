@@ -48,14 +48,11 @@ public class LuotFollowService {
 		}
 	}
 
-
-
-
-	// Kiểm tra xem một người dùng đã follow người dùng khác chưa
-	public boolean daFollow(Long userId, Long userFollowId) {
-		LuotFollowId luotFollowId = new LuotFollowId(userId, userFollowId);
+	// Kiểm tra trạng thái follow
+	public boolean checkFollowStatus(LuotFollowId luotFollowId) {
 		return luotFollowRepository.existsById(luotFollowId);
 	}
+
 
 	// Đếm số lượng người dùng mà một người dùng đang follow
 	public int demSoLuongFollowing(Long userId) {
