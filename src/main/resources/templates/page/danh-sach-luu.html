@@ -9,18 +9,18 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 	
-	<!-- css -->
-	<link rel="stylesheet" th:href="@{/css/include/navbar_new.css}">
-	<link rel="stylesheet" th:href="@{/css/include/navbar.css}">
-	<link rel="stylesheet" th:href="@{/css/Page/home.css}">
+	
+	<link rel="stylesheet" th:href="@{/css/Chung.css}">
+	<link rel="stylesheet" th:href="@{/css/include/Menu.css}">
+	<link rel="stylesheet" th:href="@{/css/BaiViet.css}">
 
 </head>
 <body>
-<div class="container-fluid p-0">
-	<div th:replace="~{include/navbar :: navbar}"></div>
-	<main class="row">
-		<div th:replace="~{include/sidebar :: sidebar}" class="col-3"></div>
-		<div class="col-10">
+<div th:replace="~{include/navbar :: navbar}"></div>
+<div class="main">
+	<div th:replace="~{include/sidebar :: sidebar}"></div>
+	<div class="content scrollable-container" ng-controller="BaiVietController">
+		<div class="container">
 			<div class="container mt-4" ng-controller="BaiVietController">
 				<h2>Danh sách đã lưu</h2>
 				
@@ -28,7 +28,7 @@
 				</div>
 				
 				<div class="list-group" ng-if="danhSachLuu.length > 0" ng-repeat="baiViet in danhSachLuu">
-					<a href="#" class="list-group-item list-group-item-action">
+					<a class="list-group-item list-group-item-action" href="#" ng-click="xemChiTietBaiViet(baiViet.id)">
 						<div class="d-flex w-100 justify-content-between">
 							<h5 class="mb-1">{{ baiViet.tieuDe }}</h5>
 							<small>{{ baiViet.thoiGianTao | date:'dd/MM/yyyy' }}</small>

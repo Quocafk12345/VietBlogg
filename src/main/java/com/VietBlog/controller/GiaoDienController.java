@@ -138,7 +138,14 @@ public class GiaoDienController {
 		if (model.getAttribute("currentUser") != null) {
 			return "page/dang-bai";
 		} else return "redirect:/dang-nhap";
+	}
 
+	@GetMapping("/dang-bai/nhap/{id}")
+	public String postBaiNhap(Model model, @PathVariable Long id) {
+		if (model.getAttribute("currentUser") != null) {
+			model.addAttribute("idBaiNhap", id);
+			return "page/dang-bai";
+		} else return "redirect:/dang-nhap";
 	}
 
 	@GetMapping("/bai-viet/chinh-sua/{id}")

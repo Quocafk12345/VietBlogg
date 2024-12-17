@@ -31,6 +31,7 @@
 		<h2>
 			<span ng-if="!chinhSuaBaiViet">Tạo bài viết</span>
 			<span ng-if="chinhSuaBaiViet">Chỉnh sửa bài viết</span>
+			<span ng-if="dayBaiNhap">Chỉnh sửa bài viết nháp</span>
 		</h2>
 		<button aria-expanded="false" class="btn btn-secondary dropdown-toggle"
 		        data-bs-toggle="dropdown"
@@ -95,6 +96,11 @@
 				<button class="btn btn-primary" ng-click="capNhatBaiViet()" ng-if="chinhSuaBaiViet">Cập
 					nhật
 				</button>
+				<button class="btn btn-primary" ng-click="dangBaiNhap()" ng-if="dayBaiNhap">Đăng bài
+				</button>
+				<button class="btn btn-primary" ng-click="capNhatBaiViet()" ng-if="dayBaiNhap">Cập
+					nhật thay đổi
+				</button>
 			</div>
 			<div class="tab-pane fade" id="images">
 				<h3 ng-if="chinhSuaBaiViet">Đa phương tiện hiện có</h3>
@@ -136,6 +142,7 @@
 <script th:inline="javascript">
 	const currentUser = [[${session.currentUser}]];
 	var baiVietId_chinhSua = [[${idBaiViet}]];
+	var baiVietId_nhap = [[${idBaiNhap}]];
 </script>
 <script th:src="@{/js/CKEditor/ckeditor.js}"></script>
 <script>

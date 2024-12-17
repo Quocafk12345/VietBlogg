@@ -17,6 +17,8 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     $scope.coBaiVietMoi = false;
     $scope.baiVietVuaThaoTac = null;
 
+    $scope.dayBaiNhap = false;
+
     $scope.baiViet = {};
     $scope.DSdaPhuongTien = [];
 
@@ -228,6 +230,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
             .get(`${host_BaiViet}/luu/${currentUser.id}`)
             .then((resp) => {
                 $scope.danhSachLuu = resp.data;
+                console.log($scope.danhSachLuu);
             })
             .catch((error) => {
                 console.log("Có lỗi xảy ra", error);
@@ -261,6 +264,8 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
         window.location.href = $event.target.href;
 
     };
+
+
     // tải bài viết trong Chi tiết bài viết
     $scope.taiBaiVietDuocChon = function (baiVietId) {
         var url = `${host_BaiViet}/${baiVietId}`;
@@ -305,7 +310,9 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
 
     // đăng bài kèm hình ảnh
     $scope.xuLyDangBai = function (trangThai) {
-        if ($scope.chinhSuaBaiViet && trangThai === null) {
+        if ($scope.chinhSuaBaiViet && trangThai === 'DANG_BAI_NHAP') {
+
+        } else if ($scope.chinhSuaBaiViet && trangThai === 'CAP_NHAT') {
             var url = `${host_BaiViet}/${$scope.baiViet.id}`;
 
             // Cập nhật nội dung từ CKEditor
@@ -589,7 +596,7 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
     };
 
     $scope.capNhatBaiViet = function () {
-        $scope.xuLyDangBai(null); // Gọi xuLyDangBai với trangThai = null để cập nhật
+        $scope.xuLyDangBai("CAP_NHAT"); // Gọi xuLyDangBai với trangThai = null để cập nhật
     };
 
     $scope.resetForm = function () {
@@ -621,9 +628,66 @@ mainApp.controller("BaiVietController", function ($scope, $http, $q, timeService
         $scope.chinhSuaBaiViet = false; // Đang tạo mới
     }
 
+
+    if (typeof baiVietId_nhap !== 'undefined' && baiVietId_nhap !== null) {
+        $scope.dayBaiNhap = true; // Đang chỉnh sửa
+    } else {
+        $scope.dayBaiNhap = false; // Đang tạo mới
+    }
+
+
+
     // phần xử lý thông tin đẩy lên form
     if ($scope.chinhSuaBaiViet) { // Nếu đang chỉnh sửa
         $scope.taiBaiVietChinhSua();
+    }
+
+    $scope.dayBaiVietNhapLenForm = function () {
+        $http.get(`${host_BaiViet}/${baiVietId_nhap}`)
+            .then(function (response) {
+                $scope.baiViet = response.data;
+
+                if (response.data.nhom === null) {
+                    $scope.chonNoiDangBai($scope.thongTinUser[0]);
+                } else $scope.chonNoiDangBai($scope.baiViet.nhom);
+
+                // Hiển thị tiêu đề và nội dung
+                $timeout(function () {
+                    document.getElementById('tieuDe').value = $scope.baiViet.tieuDe;
+                    CKEDITOR.instances.editor1.setData($scope.baiViet.noiDung);
+                });
+
+                $scope.dayBaiVietNhap_DaPhuongTien();
+            })
+            .catch(function (error) {
+                console.error("Lỗi khi lấy bài viết:", error);
+            });
+    };
+
+    $scope.dayBaiVietNhap_DaPhuongTien = function () {
+        // Lấy danh sách đa phương tiện
+        $http.get(`${host_BaiViet}/da-phuong-tien/${baiVietId_nhap}`) // Gọi API lấy danh sách đa phương tiện
+            .then(function (response) {
+                $scope.baiViet.DSdaPhuongTien = response.data;
+                console.log($scope.baiViet.DSdaPhuongTien);
+
+                // Tạo objectURL cho mỗi đa phương tiện
+                $scope.baiViet.DSdaPhuongTien.forEach(function (media) {
+                    media.preview = media.duongDan; // Sử dụng đường dẫn hiện có làm preview
+                });
+
+                $timeout(function () {
+                });
+                console.log($scope.baiViet);
+            })
+            .catch(function (error) {
+                console.error("Lỗi khi lấy danh sách đa phương tiện:", error);
+            });
+    };
+
+    // phần xử lý thông tin đẩy lên form
+    if ($scope.dayBaiNhap) { // Nếu đang chỉnh sửa
+        $scope.dayBaiVietNhapLenForm();
     }
 
     $scope.xoaDaPhuongTien = function (media) {
