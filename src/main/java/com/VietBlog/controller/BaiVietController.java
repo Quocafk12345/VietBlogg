@@ -24,7 +24,7 @@ public class BaiVietController {
     private final LuotLike_BaiViet_Service luotLike_BaiViet_Service;
     private final BinhLuanService binhLuanService;
     private final NhomService nhomService;
-	private final BaiVietRepository baiVietRepository;
+    private final BaiVietRepository baiVietRepository;
 
     @Autowired
     public BaiVietController(BaiVietService baiVietService, LuotLike_BaiViet_Service luotLike_BaiViet_Service, LuuBaiVietService luuBaiVietService, BinhLuanService binhLuanService, NhomService nhomService, BaiVietRepository baiVietRepository) {
@@ -33,7 +33,7 @@ public class BaiVietController {
         this.luuBaiVietService = luuBaiVietService;
         this.binhLuanService = binhLuanService;
         this.nhomService = nhomService;
-	    this.baiVietRepository = baiVietRepository;
+        this.baiVietRepository = baiVietRepository;
     }
 
     /**
@@ -74,14 +74,14 @@ public class BaiVietController {
         }
     }
 
-	@GetMapping("/{id}/nhap")
-	public ResponseEntity<List<BaiViet>> layDanhSachBaiVietNhapCuaUser(@PathVariable Long id) {
-		try {
-			return ResponseEntity.ok(baiVietRepository.findBaiVietNhapCuaUser(id));
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
-	}
+    @GetMapping("/{id}/nhap")
+    public ResponseEntity<List<BaiViet>> layDanhSachBaiVietNhapCuaUser(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(baiVietRepository.findBaiVietNhapCuaUser(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
     /**
      * Phương thức đếm số lượt like của một bài viết
