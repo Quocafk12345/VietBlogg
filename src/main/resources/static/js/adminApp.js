@@ -10,7 +10,7 @@ mainApp.controller('quanLyController', function($scope, $http, $window) {
 
     // ... (Các hàm khác)
 
-// Lấy danh sách bài viết và vẽ biểu đồ
+    // Lấy danh sách bài viết và vẽ biểu đồ cột
     $http.get(`${host_DangNhap}/api/bai-viet`)
         .then(function(response) {
             $scope.baiViets = response.data;
@@ -18,39 +18,111 @@ mainApp.controller('quanLyController', function($scope, $http, $window) {
             // Khởi tạo biến để lưu số lượng bài viết theo trạng thái
             var trangThaiCounts = {
                 "NHAP": 0,
-                "DA_DANG": 0
+                "DA_DANG": 0,
+                "CHO_DUYET": 0
             };
 
             // Duyệt qua danh sách bài viết
             $scope.baiViets.forEach(function(baiViet) {
-                // Tăng biến đếm tương ứng với trạng thái của bài viết
                 trangThaiCounts[baiViet.trangThai]++;
             });
 
-            // Vẽ biểu đồ tròn cho trạng thái bài viết
+            // Vẽ biểu đồ cột cho trạng thái bài viết
             var ctx = document.getElementById('baiVietChart').getContext('2d');
             var myChart = new Chart(ctx, {
-                type: 'pie',
+                type: 'bar',
                 data: {
-                    labels: ['NHÁP', 'ĐÃ ĐĂNG'],
+                    labels: ['NHÁP', 'ĐÃ ĐĂNG', 'CHỜ DUYỆT'],
                     datasets: [{
-                        label: 'Số lượng',
-                        data: [trangThaiCounts['NHAP'], trangThaiCounts['DA_DANG']],
+                        label: 'Số lượng Bài Viết trạng thái',
+                        data: [trangThaiCounts['NHAP'], trangThaiCounts['DA_DANG'], trangThaiCounts['CHO_DUYET']],
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)'
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)'
                         ],
                         borderColor: [
                             'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)'
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)'
                         ],
-                        borderWidth: 1
+                        borderWidth: 1,
+                        barThickness: 20
                     }]
                 },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }]
+                    },
+                    datasets: {
+                        bar: {
+                            barThickness: 20
+                        }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
             });
         });
 
-// ... (Các hàm khác)
+// Lấy danh sách Admin và vẽ biểu đồ
+    $http.get(`${host_DangNhap}/api/user/admin`)
+        .then(function (response) {
+            $scope.admins = response.data;
+
+            Promise.all([
+                $http.get(`${host_DangNhap}/api/user/user`),
+                $http.get(`${host_DangNhap}/api/user/admin`),
+                $http.get(`${host_DangNhap}/api/bai-viet`) // Lấy thêm dữ liệu bài viết
+            ])
+                .then(function (results) {
+                    $scope.users = results[0].data;
+                    $scope.admins = results[1].data;
+                    $scope.baiViets = results[2].data; // Lưu dữ liệu bài viết
+
+                    // ... (Code vẽ biểu đồ User và Admin)
+
+                    // Tạo object để lưu trữ số lượng bài viết của mỗi user
+                    var baiVietUserCounts = {};
+                    $scope.baiViets.forEach(function(baiViet) {
+                        var userId = baiViet.user.id;
+                        baiVietUserCounts[userId] = (baiVietUserCounts[userId] || 0) + 1;
+                    });
+
+                    // Chuyển đổi dữ liệu thành dạng mảng cho Chart.js
+                    var chartLabels = Object.keys(baiVietUserCounts); // Lấy danh sách user ID
+                    var chartData = Object.values(baiVietUserCounts); // Lấy số lượng bài viết tương ứng
+
+                    // Vẽ biểu đồ cột
+                    var ctx = document.getElementById('userBaiVietChart').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: chartLabels, // User ID
+                            datasets: [{
+                                label: 'Số lượng bài viết theo UserID',
+                                data: chartData,
+                                barThickness: 10
+                            }]
+                        },
+                        options: {
+                            // ... (Các thiết lập cho biểu đồ)
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true,
+                                        stepSize: 1
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                });
+        });
 
     // Lấy danh sách Admin và vẽ biểu đồ
     $http.get(`${host_DangNhap}/api/user/admin`)

@@ -168,7 +168,6 @@
             <th>Tên người dùng</th>
             <th>Email</th>
             <th>Vai trò</th>
-            <th>Hành động</th>
           </tr>
           </thead>
           <tbody>
@@ -177,10 +176,6 @@
             <td>{{ admin.tenNguoiDung }}</td>
             <td>{{ admin.email }}</td>
             <td>{{ admin.vaiTro }}</td>
-            <td>
-              <button ng-click="editUser(admin)">Sửa</button>
-              <button ng-click="deleteUser(admin.id)">Xóa</button>
-            </td>
           </tr>
           </tbody>
         </table>
@@ -215,9 +210,14 @@
       </tr>
       </tbody>
     </table>
-    <div style="width: 300px; height: 150px">
+    <div style="display: flex;">
+    <div style="width: 300px; height: 150px; margin-right: 20px; flex-grow: 1;">
       <canvas id="baiVietChart"></canvas>
     </div>
+    <div style="width: 300px; height: 150px; flex-grow: 1;">
+      <canvas id="userBaiVietChart"></canvas>
+    </div>
+  </div>
   </div>
 
   <div id="nhom" class="tabcontent">
