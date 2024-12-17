@@ -3,6 +3,7 @@ body {
     display: flex;
     height: 100vh;
     flex-direction: column;
+    font-family: 'Bahnschrift', "sans-serifs";
 }
 
 
@@ -68,6 +69,10 @@ body {
     border-radius: 0px;
 }
 
+.content .container {
+    width: 100%;
+    max-width: 800px;
+}
 .scrollable-container {
     height: 95vh;
     overflow-y: auto;

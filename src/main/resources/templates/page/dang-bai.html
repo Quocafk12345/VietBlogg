@@ -109,7 +109,8 @@
 						<video class="img-fluid" controls ng-if="media.loai === 'VIDEO'"
 						       ng-src="{{media.duongDan}}"></video>
 						<span ng-if="media.loai === 'KHAC'">File khác: {{ media.ten }}</span>
-						<input class="form-control mt-2" ng-model="media.moTa" placeholder="Mô tả" type="text">
+						<input class="form-control mt-2" ng-change="capNhatMoTaDaPhuongTien(media)" ng-model="media.moTa"
+						       placeholder="Mô tả" type="text">
 						<button class="btn btn-danger mt-2" ng-click="xoaDaPhuongTien(media)">Xóa</button>
 					</div>
 				</div>

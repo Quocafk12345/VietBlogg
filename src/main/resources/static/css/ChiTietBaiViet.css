@@ -1,0 +1,33 @@
+.scrollable-container {
+    width: 1500px;
+    background: none;
+}
+
+.comments-container {
+    height: 650px;
+}
+
+.comments-container .card-body {
+    height: 650px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.comments-container a {
+    text-decoration: none;
+    color: #000;
+}
+
+.comments-container .card-footer {
+    background: none;
+}
+
+.comments-container .card-footer button {
+    height: 100%;
+    max-height: 50px;
+    margin-left: 10px;
+}
+
+.comments-container .card-footer textarea {
+    min-height: 50px;
+}
