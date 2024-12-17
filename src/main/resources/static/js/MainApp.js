@@ -46,15 +46,8 @@ mainApp.filter('truncate', function () {
     };
 });
 
-// Tạo service
-mainApp.service('BaiVietService', function () {
-    this.baiViet = null;
-
-    this.setBaiViet = function (baiViet) {
-        this.baiViet = baiViet;
-    };
-
-    this.getBaiViet = function () {
-        return this.baiViet;
+mainApp.service('ChuyenTrangService', function ($window) {
+    this.chuyenTrang = function (id, duongDan) {
+        $window.location.href = duongDan + id;
     };
 });

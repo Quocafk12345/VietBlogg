@@ -1,25 +1,10 @@
 let host_Follow = "http://localhost:8080/api/user";
 mainApp.controller("UserController", function ($scope, $http) {
-    $scope.isFollowing = false;
-    $scope.isBlock = false;
-    $scope.userProfile={};
-    $scope.followers = {};
-    $scope.following = {};
-    const url = window.location.href;
-    const userFollowerId = url.split("/").pop(); // Lấy phần cuối URL , người dùng cần follow
-    const userFollowId = currentUser;// Ngươi dùng đăng nhập
-    let socket = new WebSocket("ws://localhost:8080/ws/follow-status");
-    const blockUserId = currentUser;// Ngươi dùng đăng nhập
-
-    socket.onmessage = function (event) {
-        const data = JSON.parse(event.data);
-        if (data.userId === parseInt(userId)) {
-            $scope.isFollowing = data.isFollowing;
-            $scope.$apply();
-        }
-    }
-    // Kiểm tra nếu là trang cá nhân
-    $scope.isOwnProfile = currentUser === userFollowId;
+    // $scope.isFollowing = false;
+    // $scope.isBlock = false;
+    // $scope.userProfile={};
+    // $scope.followers = {};
+    // $scope.following = {};
 
     // Lấy trạng thái follow ban đầu
     const checkFollowStatus = function() {

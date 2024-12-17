@@ -4,7 +4,6 @@ import com.VietBlog.entity.BlockUser_ID;
 import com.VietBlog.entity.LuotFollow;
 import com.VietBlog.entity.LuotFollowId;
 import com.VietBlog.entity.User;
-import com.VietBlog.handle.FollowStatusWebSocketHandler;
 import com.VietBlog.repository.BaiVietRepository;
 import com.VietBlog.repository.BlockUserRepository;
 import com.VietBlog.repository.LuotFollowRepository;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,16 +31,14 @@ public class UserController {
 	private final UserService userService;
 	private final LuotFollowService luotFollowService;
 	private final LuotFollowRepository luotFollowRepository;
-	private final FollowStatusWebSocketHandler webSocketHandler;
 	private final BlockUserService blockUserService;
 	private final BlockUserRepository blockUserRepository;
 
 	@Autowired
-	public UserController(UserService userService, LuotFollowService luotFollowService, LuotFollowRepository luotFollowRepository, BaiVietRepository baiVietRepository, BaiVietService baiVietService, LuotLike_BaiViet_Service luotLike_BaiViet_Service, UserRepository userRepository, FollowStatusWebSocketHandler webSocketHandler, BlockUserService blockUserService, BlockUserRepository blockUserRepository) {
+	public UserController(UserService userService, LuotFollowService luotFollowService, LuotFollowRepository luotFollowRepository, BaiVietRepository baiVietRepository, BaiVietService baiVietService, LuotLike_BaiViet_Service luotLike_BaiViet_Service, UserRepository userRepository, BlockUserService blockUserService, BlockUserRepository blockUserRepository) {
 		this.userService = userService;
 		this.luotFollowService = luotFollowService;
 		this.luotFollowRepository = luotFollowRepository;
-        this.webSocketHandler = webSocketHandler;
 		this.blockUserService = blockUserService;
 		this.blockUserRepository = blockUserRepository;
 	}
@@ -91,48 +87,34 @@ public class UserController {
 		}
 	}
 
-	@PostMapping("/{userId}/toggleFollow")
+	@PostMapping("/{userId}/theo-doi")
 	public ResponseEntity<?> toggleFollow(@PathVariable("userId") Long userId, @RequestParam Long userFollowId) {
 		try {
-			boolean isFollowing = luotFollowService.toggleFollow(userId,userFollowId);
-			webSocketHandler.sendFollowStatusChange(userId, !isFollowing);
-			return ResponseEntity.ok(isFollowing);
+			return ResponseEntity.ok(luotFollowService.toggleFollow(userId, userFollowId));
 		}catch (RuntimeException e){
-			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
 
-	@PostMapping("/{userId}/toggleBlock")
+	@PostMapping("/{userId}/chan")
 	public ResponseEntity<?> toggleBlock(@PathVariable("userId") Long userId, @RequestParam Long blockUserId){
 		try {
-			boolean isBlocking = blockUserService.toggleBlock(blockUserId,userId);
-			webSocketHandler.sendFollowStatusChange(userId, !isBlocking);
-			return ResponseEntity.ok(isBlocking);
+			return ResponseEntity.ok(blockUserService.toggleBlock(blockUserId, userId));
 		}catch (RuntimeException e){
-			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
 
-	@GetMapping("/{userId}/checkBlockStatus")
-	public ResponseEntity<?> checkBlockStatus(@PathVariable("userId") Long userId, @RequestParam Long blockUserId){
+	@GetMapping("/{userId}/chan/kiem-tra")
+	public ResponseEntity<Boolean> checkBlockStatus(@PathVariable("userId") Long userId, @RequestParam Long blockUserId) {
 		BlockUser_ID blockUserID = new BlockUser_ID(userId,blockUserId);
-		boolean isBlocking = blockUserRepository.existsById(blockUserID);
-
-		Map<String, Boolean> response = new HashMap<>();
-		response.put("isBlocking", isBlocking);
-		return ResponseEntity.ok(response);
+		return ResponseEntity.ok(blockUserRepository.existsById(blockUserID));
 	}
 
-	@GetMapping("/{userId}/checkFollowStatus")
-	public ResponseEntity<Map<String, Boolean>> checkFollowStatus(@PathVariable Long userId, @RequestParam Long userFollowId) {
+	@GetMapping("/{userId}/theo-doi/kiem-tra")
+	public ResponseEntity<Boolean> checkFollowStatus(@PathVariable Long userId, @RequestParam Long userFollowId) {
 		LuotFollowId followId = new LuotFollowId(userFollowId, userId);
-		boolean isFollowing = luotFollowRepository.existsById(followId);
-
-		Map<String, Boolean> response = new HashMap<>();
-		response.put("isFollowing", isFollowing);
-		return ResponseEntity.ok(response);
+		return ResponseEntity.ok(luotFollowRepository.existsById(followId));
 	}
 
 	@Operation(summary = "Đếm số lượt follow", description = "Đếm số lượt follow của một người dung")
@@ -140,7 +122,7 @@ public class UserController {
 	@ApiResponse(responseCode = "404", description = "Không tìm thấy người dùng")
 	@GetMapping("/{id}/luot-follow")
 	public ResponseEntity<Integer> demLuotFollow(@PathVariable Long id) {
-		Integer luotFollow = luotFollowRepository.countFollowersByUserId(id);
+		Integer luotFollow = luotFollowRepository.demSoLuongNguoiDuocTheoDoi(id);
 		return ResponseEntity.ok(luotFollow);
 	}
 
@@ -152,7 +134,7 @@ public class UserController {
 
 	@GetMapping("/follower/{userId}")
 	public ResponseEntity<List<User>> getFollower(@PathVariable Long userId) {
-		List<User> followere = luotFollowService.layDanhSachFollowers(userId);
-		return ResponseEntity.ok(followere);
+		List<User> follower = luotFollowService.layDanhSachFollowers(userId);
+		return ResponseEntity.ok(follower);
 	}
 }

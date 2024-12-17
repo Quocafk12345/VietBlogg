@@ -6,7 +6,6 @@ mainApp.controller('BinhLuanController', function($scope, $http, timeService) {
     $scope.tinhThoiGianDang = timeService.tinhThoiGianDang; // Gán hàm từ service
 
     $scope.chuyenTrang = function($event, userId) {
-        console.log(userId);
         $event.preventDefault();
         $event.target.href = '/trang-ca-nhan/' + userId;
         window.location.href = $event.target.href;
