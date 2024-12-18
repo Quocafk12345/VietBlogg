@@ -102,18 +102,14 @@ public class GiaoDienController {
 
 
 	@GetMapping("/dang-ky")
-	public String sign_up(Model model) {
-		if (model.getAttribute("currentUser") != null) {
-			return "account/dang-ky";
-		} else return "redirect:/dang-nhap";
+	public String sign_up() {
+		return "account/dang-ky";
 
 	}
 
 	@GetMapping("/quen-mat-khau")
-	public String forgot_pass(Model model) {
-		if (model.getAttribute("currentUser") != null) {
-			return "account/quen-mat-khau";
-		} else return "redirect:/dang-nhap";
+	public String forgot_pass() {
+		return "account/quen-mat-khau";
 
 	}
 
