@@ -1,4 +1,4 @@
-let host_DangNhap = "http://localhost:8080";
+let host_DangNhap = "http://170.64.207.86:8080";
 mainApp.controller('DangNhapController', function ($scope, $http, $window) {
 
     $scope.login = function() {
@@ -10,7 +10,7 @@ mainApp.controller('DangNhapController', function ($scope, $http, $window) {
 
         $http.post(`${host_DangNhap}/api/user/dang-nhap`, duLieu_dangNhap, {
             transformRequest: angular.identity, // Không serialize dữ liệu
-            headers: {'Content-Type': undefined} // Để browser tự set Content-Type
+            headers: {'Content-Type': 'application/json'} // Để browser tự set Content-Type
         }).then(function successCallback(response) {
             var user = response.data; // Lấy User từ response
 
