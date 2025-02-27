@@ -9,7 +9,7 @@ mainApp.controller('DangNhapController', function ($scope, $http, $window) {
         duLieu_dangNhap.append('password', $scope.password);
 
         $http.post(`${host_DangNhap}/api/user/dang-nhap`, duLieu_dangNhap, {
-            transformRequest: angular.identity, // Không serialize dữ liệu
+            transformRequest: angular.identifiers, // Không serialize dữ liệu
             headers: {'Content-Type': 'application/json'} // Để browser tự set Content-Type
         }).then(function successCallback(response) {
             var user = response.data; // Lấy User từ response
